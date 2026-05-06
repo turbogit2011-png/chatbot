@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Słowa kluczowe{% endblock %}
+{% block page_title %}Baza słów kluczowych{% endblock %}
+{% block page_subtitle %}Frazy kluczowe dla sklepu turbosprężarek — rynek PL + EU{% endblock %}
+
+{% block content %}
+<!-- KEYWORD GENERATOR FORM -->
+<div class="card mb-6">
+  <h2 class="font-bold text-white mb-4">Generator fraz kluczowych dla produktu</h2>
+  <form method="POST" action="/keywords/generate" class="flex gap-3">
+    <input name="product_name" type="text" placeholder="np. Turbosprężarka BMW 320d GT1749V"
+           class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    <input name="sku" type="text" placeholder="SKU/OEM (opcjonalne)"
+           class="w-48 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    <button type="submit" class="btn-primary">Generuj frazy</button>
+  </form>
+</div>
+
+{% if keywords %}
+<div class="card mb-6">
+  <h2 class="font-bold text-white mb-1">Wygenerowane frazy dla: <span class="text-orange-400">{{ query }}</span></h2>
+  <p class="text-xs text-gray-400 mb-4">{{ keywords|length }} fraz · Posortowane wg wartości komercyjnej</p>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fraza kluczowa</th>
+        <th>Typ</th>
+        <th>Wolumen</th>
+        <th>Intencja</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for kw in keywords %}
+      <tr>
+        <td class="text-gray-500 text-xs">{{ loop.index }}</td>
+        <td class="text-white font-medium">{{ kw.keyword }}</td>
+        <td><span class="badge-info">{{ kw.type }}</span></td>
+        <td>
+          <span class="badge-{{ 'ok' if kw.volume == 'high' else ('info' if kw.volume == 'medium' else 'warning') }}">{{ kw.volume }}</span>
+        </td>
+        <td>
+          <span class="badge-{{ 'ok' if kw.intent == 'transactional' else ('info' if kw.intent == 'commercial' else 'warning') }}">{{ kw.intent }}</span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<!-- STATIC KEYWORD DATABASE -->
+<div class="grid md:grid-cols-2 gap-6">
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Top frazy sprzedażowe (PL)</h2>
+    <div class="space-y-2">
+      {% set top_kws = [
+        ("turbosprężarka BMW 320d", "transakcyjna", "high"),
+        ("turbosprężarka Audi A4 2.0 TDI", "transakcyjna", "high"),
+        ("turbosprężarka VW Golf TDI", "transakcyjna", "high"),
+        ("GT1749V turbosprężarka", "transakcyjna", "medium"),
+        ("regeneracja turbo BMW", "usługowa", "high"),
+        ("nowa turbosprężarka Mercedes CDI", "transakcyjna", "medium"),
+        ("turbosprężarka Ford 2.0 TDCI", "transakcyjna", "medium"),
+        ("CHRA turbo regeneracja", "transakcyjna", "medium"),
+        ("turbo Opel 1.9 CDTI", "transakcyjna", "medium"),
+        ("turbosprężarka online sklep", "komercyjna", "high"),
+      ] %}
+      {% for kw, intent, vol in top_kws %}
+      <div class="flex items-center justify-between text-sm py-1 border-b border-gray-700">
+        <span class="text-gray-200">{{ kw }}</span>
+        <div class="flex gap-1.5">
+          <span class="badge-{{ 'ok' if vol == 'high' else 'info' }}">{{ vol }}</span>
+          <span class="badge-ok">{{ intent }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Long-tail frazy (wysoka konwersja)</h2>
+    <div class="space-y-2">
+      {% set longtail = [
+        "gdzie kupić turbosprężarkę BMW E46",
+        "turbosprężarka Audi A6 2.7 TDI numer OEM",
+        "turbosprężarka VW Passat B6 2.0 TDI regenerowana",
+        "naprawa turbiny Opel Astra H 1.9 CDTI cena",
+        "GT1749V turbosprężarka cena dostawa",
+        "turbo do BMW 330d E46 ile kosztuje",
+        "wymiana turbosprężarki Ford Focus 1.6 TDCi",
+        "turbosprężarka Toyota Avensis 2.0 D4D oryginał",
+        "regenerowana turbina Mercedes C220 CDI cena",
+        "turbo 53039880062 gdzie kupić tanio",
+      ] %}
+      {% for kw in longtail %}
+      <div class="text-sm py-1 border-b border-gray-700 text-gray-300">
+        <span class="text-orange-400 mr-2">▸</span>{{ kw }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Frazy niszowe / OEM / numery</h2>
+    <div class="space-y-2">
+      {% set oem = [
+        "GT1749V", "GT1752S", "GT2260V", "KP39 turbo",
+        "K03 turbo VW", "BV39 Skoda", "TF035 Mercedes",
+        "CT16V Toyota", "53039880062", "724930 turbo",
+        "721021-5006S", "753519-5005S", "767835-2",
+      ] %}
+      {% for kw in oem %}
+      <div class="text-sm py-1 border-b border-gray-700 flex items-center gap-2">
+        <span class="text-blue-400 font-mono text-xs bg-blue-950 px-2 py-0.5 rounded">OEM</span>
+        <span class="text-gray-200">{{ kw }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Frazy EU / rynek europejski</h2>
+    <div class="space-y-2">
+      {% set eu = [
+        ("Turbolader BMW kaufen", "DE", "high"),
+        ("turbocompressore BMW ricambi", "IT", "medium"),
+        ("turbocompresor VW comprar", "ES", "medium"),
+        ("turbosprężarka regenerovany", "CZ/SK", "medium"),
+        ("turbina felújított BMW", "HU", "low"),
+        ("turbina BMW regenerata", "RO", "low"),
+        ("turbocharger BMW 320d buy", "EN EU", "high"),
+        ("turbo VW Golf TDI online", "EN EU", "medium"),
+      ] %}
+      {% for kw, market, vol in eu %}
+      <div class="flex items-center justify-between text-sm py-1 border-b border-gray-700">
+        <span class="text-gray-200">{{ kw }}</span>
+        <div class="flex gap-1.5">
+          <span class="badge-info text-xs">{{ market }}</span>
+          <span class="badge-{{ 'ok' if vol == 'high' else ('info' if vol == 'medium' else 'warning') }}">{{ vol }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

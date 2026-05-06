@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Historia zmian{% endblock %}
+{% block page_title %}Historia optymalizacji{% endblock %}
+{% block page_subtitle %}{{ total }} zastosowanych zmian{% endblock %}
+
+{% block content %}
+<div class="card">
+  {% if optimizations %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Produkt / Kategoria</th>
+        <th>Pole</th>
+        <th>Przed</th>
+        <th>Po</th>
+        <th>Metoda</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for opt in optimizations %}
+      <tr>
+        <td class="text-xs text-gray-500 whitespace-nowrap">{{ opt.applied_at[:16] }}</td>
+        <td>
+          <div class="text-white text-sm">{{ opt.item_name[:40] }}</div>
+          <div class="text-xs text-gray-500">{{ opt.scope }} #{{ opt.item_id }}</div>
+        </td>
+        <td><span class="badge-info">{{ opt.field }}</span></td>
+        <td class="text-xs text-gray-500 max-w-xs">
+          <div class="truncate max-w-[200px]">{{ opt.old_value[:100] if opt.old_value else '—' }}</div>
+        </td>
+        <td class="text-xs text-green-300 max-w-xs">
+          <div class="truncate max-w-[200px]">{{ opt.new_value[:100] if opt.new_value else '—' }}</div>
+        </td>
+        <td>
+          <span class="badge-{{ 'ok' if opt.method == 'ai' else 'info' }}">{{ opt.method }}</span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="text-center py-12 text-gray-500">
+    <div class="text-4xl mb-3">📋</div>
+    <p>Brak historii — uruchom optymalizację, aby zobaczyć zmiany</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

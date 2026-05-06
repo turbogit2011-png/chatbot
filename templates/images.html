@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Obrazy i ALT{% endblock %}
+{% block page_title %}Optymalizacja obrazów — ALT teksty{% endblock %}
+{% block page_subtitle %}Napraw brakujące ALT teksty dla wszystkich zdjęć produktów{% endblock %}
+
+{% block header_actions %}
+<button onclick="fixAllAlts()" class="btn-primary">
+  ⚡ Napraw wszystkie ALT teksty
+</button>
+{% endblock %}
+
+{% block content %}
+<div id="action-progress" class="hidden card mb-4 border-orange-800">
+  <div class="flex items-center gap-3">
+    <svg class="animate-spin w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+    <span class="text-sm text-orange-300">Naprawiam ALT teksty...</span>
+  </div>
+</div>
+<div id="action-result" class="hidden card mb-4 border-green-800">
+  <div class="text-green-400 font-bold mb-2 text-sm">✓ Zakończono</div>
+  <pre id="action-result-text" class="text-xs text-gray-300 max-h-32 overflow-auto"></pre>
+</div>
+
+<!-- SEO Rules for Images -->
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+  <div class="card">
+    <div class="text-3xl mb-2">🏷️</div>
+    <h3 class="font-bold text-white text-sm mb-1">Format ALT tekstu</h3>
+    <p class="text-xs text-gray-400">
+      <span class="text-orange-400">[Nazwa produktu] — turbosprężarka | [Sklep]</span><br>
+      np. "Turbosprężarka BMW 320d GT1749V — turbosprężarka | TurboShop"
+    </p>
+  </div>
+  <div class="card">
+    <div class="text-3xl mb-2">📁</div>
+    <h3 class="font-bold text-white text-sm mb-1">Nazwa pliku</h3>
+    <p class="text-xs text-gray-400">
+      <span class="text-orange-400">turbosprężarka-bmw-320d-gt1749v.jpg</span><br>
+      Tylko małe litery, myślniki zamiast spacji, bez polskich znaków
+    </p>
+  </div>
+  <div class="card">
+    <div class="text-3xl mb-2">🖼️</div>
+    <h3 class="font-bold text-white text-sm mb-1">Rozmiar i format</h3>
+    <p class="text-xs text-gray-400">
+      WebP lub JPEG, maks. 100KB na zdjęcie.<br>
+      Min. 800x600px. Białe tło dla produktów.
+    </p>
+  </div>
+</div>
+
+<!-- Products with images -->
+<div class="card">
+  <h2 class="font-bold text-white mb-4">Produkty z brakującymi ALT tekstami</h2>
+  {% if products_missing_alt %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Produkt</th>
+        <th>Brakujące ALT</th>
+        <th>Sugerowany ALT</th>
+        <th>Akcja</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products_missing_alt %}
+      <tr>
+        <td>
+          <div class="text-white text-sm font-medium">{{ p.name }}</div>
+          <div class="text-xs text-gray-500">ID: {{ p.id }}</div>
+        </td>
+        <td>
+          <span class="badge-critical">{{ p.missing_count }} brak ALT</span>
+        </td>
+        <td class="text-xs text-green-300 max-w-xs">
+          {{ p.suggested_alt[:80] }}...
+        </td>
+        <td>
+          <a href="/products/{{ p.id }}/optimize" class="btn-primary text-xs py-1 px-2">Napraw</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="text-center py-8 text-gray-500">
+    <div class="text-4xl mb-2">✅</div>
+    <p>Wszystkie zdjęcia mają ALT teksty lub produkty nie są jeszcze załadowane.</p>
+    <p class="text-xs mt-1">Uruchom audyt, aby sprawdzić stan zdjęć.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function fixAllAlts() {
+  const progress = document.getElementById('action-progress');
+  const result = document.getElementById('action-result');
+  const resultText = document.getElementById('action-result-text');
+  progress.classList.remove('hidden');
+  result.classList.add('hidden');
+  try {
+    const r = await fetch('/api/images/fix-alts', { method: 'POST' });
+    const data = await r.json();
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    resultText.textContent = `Naprawiono ALT tekstów: ${data.images_fixed}\n\n` + JSON.stringify(data, null, 2);
+  } catch (e) {
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    resultText.textContent = 'Błąd: ' + e.message;
+  }
+}
+</script>
+{% endblock %}

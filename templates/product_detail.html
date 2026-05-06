@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Optymalizacja{% endblock %}
+{% block page_title %}{{ product.name }}{% endblock %}
+{% block page_subtitle %}Optymalizacja produktu #{{ product.id }}{% endblock %}
+
+{% block header_actions %}
+{% if product.permalink %}
+<a href="{{ product.permalink }}" target="_blank" class="btn-secondary text-xs">↗ Zobacz w sklepie</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="grid md:grid-cols-3 gap-6">
+
+  <!-- LEFT: Issues + Generated Content -->
+  <div class="md:col-span-2 space-y-6">
+
+    <!-- SEO SCORE -->
+    <div class="card">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="score-circle text-2xl {{ 'score-low' if score < 40 else ('score-mid' if score < 70 else 'score-high') }}">{{ score }}</div>
+        <div>
+          <div class="font-bold text-white">SEO Score: {{ score }}/100</div>
+          <div class="text-xs text-gray-400">{{ issues|length }} problemów do naprawienia</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill bg-{{ 'red' if score < 40 else ('yellow' if score < 70 else 'green') }}-500" style="width:{{ score }}%"></div>
+      </div>
+    </div>
+
+    <!-- ISSUES LIST -->
+    {% if issues %}
+    <div class="card">
+      <h2 class="font-bold text-white mb-4">Znalezione problemy</h2>
+      <div class="space-y-3">
+        {% for iss in issues %}
+        <div class="rounded-lg p-3 {% if iss.severity == 'critical' %}bg-red-950 border border-red-800{% elif iss.severity == 'warning' %}bg-yellow-950 border border-yellow-800{% else %}bg-gray-800 border border-gray-700{% endif %}">
+          <div class="flex items-start gap-2">
+            <span class="badge-{{ iss.severity }}">{{ iss.severity | upper }}</span>
+            <div class="text-sm text-gray-200">{{ iss.msg }}</div>
+          </div>
+          <div class="text-xs text-gray-400 mt-1.5 ml-1">
+            <strong class="text-gray-300">Pole:</strong> {{ iss.field }}
+          </div>
+          {% if iss.fix %}
+          <div class="text-xs text-green-400 mt-1 ml-1">
+            <strong>→ Fix:</strong> {{ iss.fix }}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- GENERATED CONTENT PREVIEW -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-white">Wygenerowana optymalizacja</h2>
+        <form method="POST" action="/products/{{ product.id }}/apply">
+          <button type="submit" class="btn-success">
+            ✓ Zastosuj WSZYSTKO w WooCommerce
+          </button>
+        </form>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-orange-400 uppercase tracking-wider">SEO Title ({{ generated.seo_title|length }} znaków)</label>
+          <div class="mt-1 bg-gray-700 rounded p-3 text-sm text-white font-medium">{{ generated.seo_title }}</div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-orange-400 uppercase tracking-wider">Meta Description ({{ generated.meta_desc|length }} znaków)</label>
+          <div class="mt-1 bg-gray-700 rounded p-3 text-sm text-gray-300">{{ generated.meta_desc }}</div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-orange-400 uppercase tracking-wider">Sugerowany Slug URL</label>
+          <div class="mt-1 bg-gray-700 rounded p-3 text-sm text-blue-300 font-mono">/{{ generated.slug }}</div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-orange-400 uppercase tracking-wider">Krótki opis</label>
+          <div class="mt-1 bg-gray-700 rounded p-3 text-sm text-gray-300">{{ generated.short_desc }}</div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-orange-400 uppercase tracking-wider">Słowa kluczowe (focus)</label>
+          <div class="mt-1 flex flex-wrap gap-2">
+            {% for kw in generated.keywords %}
+            <span class="bg-orange-900 text-orange-300 text-xs px-2 py-1 rounded">{{ kw }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEMA PREVIEW -->
+    <div class="card">
+      <h2 class="font-bold text-white mb-4">Schema Markup (JSON-LD)</h2>
+      <div class="flex gap-2 mb-3">
+        <span class="badge-ok">Product Schema</span>
+        <span class="badge-ok">FAQPage Schema</span>
+        <span class="badge-ok">HowTo Schema</span>
+        <span class="badge-ok">BreadcrumbList</span>
+      </div>
+      <pre class="bg-gray-950 rounded p-4 text-xs text-green-400 overflow-auto max-h-72">{{ schema_preview }}</pre>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sidebar -->
+  <div class="space-y-4">
+
+    <!-- PRODUCT INFO -->
+    <div class="card text-sm">
+      <h3 class="font-bold text-white mb-3">Dane produktu</h3>
+      <dl class="space-y-2">
+        <div class="flex justify-between">
+          <dt class="text-gray-400">ID:</dt>
+          <dd class="text-gray-300">#{{ product.id }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">SKU:</dt>
+          <dd class="text-gray-300 font-mono">{{ product.sku or '—' }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">Cena:</dt>
+          <dd class="text-gray-300">{{ product.price or '—' }} zł</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">Status:</dt>
+          <dd class="text-gray-300">{{ product.status }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">Zdjęcia:</dt>
+          <dd class="text-gray-300">{{ product.images|length }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">Kategorie:</dt>
+          <dd class="text-gray-300">{{ product.categories|length }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-gray-400">Atrybuty:</dt>
+          <dd class="text-gray-300">{{ product.attributes|length }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- KEYWORD SUGGESTIONS -->
+    <div class="card">
+      <h3 class="font-bold text-white mb-3 text-sm">Frazy kluczowe</h3>
+      <div class="space-y-2">
+        {% for kw in all_keywords[:12] %}
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-gray-300">{{ kw.keyword }}</span>
+          <div class="flex items-center gap-2">
+            <span class="badge-{{ 'ok' if kw.volume == 'high' else ('info' if kw.volume == 'medium' else 'warning') }}">{{ kw.volume }}</span>
+            <span class="badge-{{ 'ok' if kw.intent == 'transactional' else 'info' }}">{{ kw.intent[:6] }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- FAQ PREVIEW -->
+    <div class="card">
+      <h3 class="font-bold text-white mb-3 text-sm">FAQ (Schema)</h3>
+      <div class="space-y-2">
+        {% for faq in faq_items[:3] %}
+        <div class="text-xs bg-gray-700 rounded p-2">
+          <div class="text-white font-medium mb-1">{{ faq.question[:70] }}...</div>
+          <div class="text-gray-400">{{ faq.answer[:80] }}...</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

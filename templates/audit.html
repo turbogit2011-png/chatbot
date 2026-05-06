@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Audyt SEO{% endblock %}
+{% block page_title %}Pełny audyt SEO{% endblock %}
+{% block page_subtitle %}Wyniki analizy sklepu: {{ report.summary.total_products }} produktów, {{ report.summary.total_categories }} kategorii{% endblock %}
+
+{% block header_actions %}
+<a href="/audit" class="btn-secondary">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+  Odśwież audyt
+</a>
+<a href="/products" class="btn-primary">Napraw wszystko →</a>
+{% endblock %}
+
+{% block content %}
+{% if not report %}
+<div class="text-center py-16">
+  <div class="text-5xl mb-4">🔍</div>
+  <p class="text-gray-400 mb-4">Trwa analiza sklepu...</p>
+  <p class="text-xs text-gray-500">Czas zależy od liczby produktów — może potrwać 1-2 minuty</p>
+</div>
+{% else %}
+
+<!-- SUMMARY CARDS -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <div class="card border-red-800 text-center">
+    <div class="text-4xl font-black text-red-400 mb-1">{{ report.summary.critical_issues }}</div>
+    <div class="text-xs text-red-300 font-semibold uppercase">Błędy krytyczne</div>
+    <div class="text-xs text-gray-500 mt-1">blokują sprzedaż i SEO</div>
+  </div>
+  <div class="card border-yellow-800 text-center">
+    <div class="text-4xl font-black text-yellow-400 mb-1">{{ report.summary.warnings }}</div>
+    <div class="text-xs text-yellow-300 font-semibold uppercase">Ostrzeżenia</div>
+    <div class="text-xs text-gray-500 mt-1">obniżają wyniki SEO</div>
+  </div>
+  <div class="card border-blue-800 text-center">
+    <div class="text-4xl font-black text-blue-400 mb-1">{{ report.summary.avg_product_score }}</div>
+    <div class="text-xs text-blue-300 font-semibold uppercase">Avg SEO score</div>
+    <div class="text-xs text-gray-500 mt-1">cel: powyżej 80</div>
+  </div>
+  <div class="card border-orange-800 text-center">
+    <div class="text-4xl font-black text-orange-400 mb-1">{{ report.summary.products_below_50 }}</div>
+    <div class="text-xs text-orange-300 font-semibold uppercase">Produktów &lt; 50 pkt</div>
+    <div class="text-xs text-gray-500 mt-1">wymagają pilnej uwagi</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="mb-6" x-data="{tab:'products'}">
+  <div class="flex border-b border-gray-700 mb-6">
+    <button onclick="showTab('products')" id="tab-products"
+            class="tab-btn px-5 py-2.5 text-sm font-medium border-b-2 border-orange-500 text-orange-400 mr-1">
+      Produkty ({{ report.summary.total_products }})
+    </button>
+    <button onclick="showTab('categories')" id="tab-categories"
+            class="tab-btn px-5 py-2.5 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white mr-1">
+      Kategorie ({{ report.summary.total_categories }})
+    </button>
+  </div>
+
+  <!-- PRODUCTS TAB -->
+  <div id="pane-products">
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-sm text-gray-400">Posortowane od najgorszych SEO Score</div>
+      <form method="POST" action="/api/optimize/products/all" class="inline">
+        <button type="submit" class="btn-primary text-xs py-1.5">
+          ⚡ Napraw wszystkie produkty
+        </button>
+      </form>
+    </div>
+    <div class="space-y-3">
+      {% for p in report.products | sort(attribute='score') %}
+      <div class="card {% if p.score < 40 %}border-red-800{% elif p.score < 70 %}border-yellow-800{% else %}border-green-800{% endif %} hover:border-orange-600 transition-colors">
+        <div class="flex items-start gap-4">
+          <div class="score-circle {{ 'score-low' if p.score < 40 else ('score-mid' if p.score < 70 else 'score-high') }} flex-shrink-0">
+            {{ p.score }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <span class="font-semibold text-white text-sm">{{ p.name }}</span>
+                {% if p.permalink %}
+                  <a href="{{ p.permalink }}" target="_blank" class="text-gray-500 text-xs ml-2 hover:text-gray-300">↗</a>
+                {% endif %}
+              </div>
+              <a href="/products/{{ p.id }}/optimize" class="btn-primary text-xs py-1 px-3 flex-shrink-0">Napraw</a>
+            </div>
+            {% if p.issues %}
+            <div class="flex flex-wrap gap-1.5">
+              {% for iss in p.issues %}
+              <span class="badge-{{ iss.severity }}">
+                {{ iss.severity | upper }}: {{ iss.msg[:60] }}{% if iss.msg|length > 60 %}...{% endif %}
+              </span>
+              {% endfor %}
+            </div>
+            {% else %}
+            <span class="badge-ok">✓ Brak problemów</span>
+            {% endif %}
+          </div>
+        </div>
+        {% if p.issues %}
+        <div class="mt-3 ml-16 space-y-1">
+          {% for iss in p.issues %}
+          {% if iss.severity == 'critical' %}
+          <div class="text-xs text-red-300 bg-red-950 rounded px-3 py-1.5">
+            <strong>{{ iss.field }}:</strong> {{ iss.msg }}<br>
+            <span class="text-red-400">→ Fix: {{ iss.fix }}</span>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- CATEGORIES TAB -->
+  <div id="pane-categories" class="hidden">
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-sm text-gray-400">Stan SEO kategorii produktów</div>
+      <form method="POST" action="/api/optimize/categories/all" class="inline">
+        <button type="submit" class="btn-primary text-xs py-1.5">
+          ⚡ Napraw wszystkie kategorie
+        </button>
+      </form>
+    </div>
+    <div class="space-y-3">
+      {% for c in report.categories | sort(attribute='score') %}
+      <div class="card {% if c.score < 40 %}border-red-800{% elif c.score < 70 %}border-yellow-800{% else %}border-green-800{% endif %}">
+        <div class="flex items-start gap-4">
+          <div class="score-circle {{ 'score-low' if c.score < 40 else ('score-mid' if c.score < 70 else 'score-high') }} flex-shrink-0">
+            {{ c.score }}
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-white text-sm">{{ c.name }}</span>
+              <a href="/categories/{{ c.id }}/optimize" class="btn-primary text-xs py-1 px-3">Napraw</a>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              {% if c.issues %}
+                {% for iss in c.issues %}
+                <span class="badge-{{ iss.severity }}">{{ iss.field }}: {{ iss.msg[:60] }}</span>
+                {% endfor %}
+              {% else %}
+                <span class="badge-ok">✓ OK</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showTab(name) {
+  ['products','categories'].forEach(t => {
+    document.getElementById('pane-'+t).classList.toggle('hidden', t !== name);
+    const btn = document.getElementById('tab-'+t);
+    if (t === name) {
+      btn.classList.add('border-orange-500','text-orange-400');
+      btn.classList.remove('border-transparent','text-gray-400');
+    } else {
+      btn.classList.remove('border-orange-500','text-orange-400');
+      btn.classList.add('border-transparent','text-gray-400');
+    }
+  });
+}
+</script>
+{% endblock %}
