@@ -67,6 +67,38 @@
     </div>
   </div>
 
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">VIN Decoder API <span class="text-xs text-gray-500 font-normal">(opcjonalne — dla pełnego dekodowania EU)</span></h2>
+    <form method="POST" action="/settings" class="space-y-4">
+      <div class="bg-gray-700 rounded-lg p-4 text-sm text-gray-300 mb-2">
+        <p class="mb-2">Bez klucza API dekoder rozpoznaje tylko markę i kraj (WMI offline).</p>
+        <p>Aby uzyskać model, kod silnika i rok — dodaj klucz API:</p>
+        <ul class="mt-2 space-y-1 list-disc list-inside text-xs text-gray-400">
+          <li><strong class="text-gray-200">AutoDNA</strong> (polecane dla EU) — <span class="text-orange-400">autodna.com/api</span> — 100 zapytań/mies. gratis</li>
+          <li><strong class="text-gray-200">NHTSA</strong> — darmowe, tylko USA</li>
+        </ul>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">Klucz API VIN</label>
+          <input name="vin_api_key" type="password" value="{{ config.vin_api_key or '' }}"
+                 placeholder="Klucz AutoDNA / NHTSA"
+                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">Dostawca API</label>
+          <select name="vin_api_provider"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+            <option value="autodna" {% if (config.vin_api_provider or 'autodna') == 'autodna' %}selected{% endif %}>AutoDNA (EU)</option>
+            <option value="nhtsa" {% if config.vin_api_provider == 'nhtsa' %}selected{% endif %}>NHTSA (US, darmowy)</option>
+            <option value="carmd" {% if config.vin_api_provider == 'carmd' %}selected{% endif %}>CarMD</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Zapisz</button>
+    </form>
+  </div>
+
   <div class="card border-red-900">
     <h2 class="font-bold text-white mb-4">Strefa niebezpieczna</h2>
     <div class="flex items-center justify-between">

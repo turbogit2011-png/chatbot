@@ -147,12 +147,19 @@ def _exec_search_turbo(inputs: dict) -> dict:
 
 
 def _exec_decode_vin(inputs: dict) -> dict:
-    from chatbot.vin_decoder import decode_vin, extract_search_terms
+    from chatbot.vin_decoder import decode_vin, extract_search_terms, format_for_chat
+    from database import get_config
     vin = inputs.get("vin", "")
-    result = decode_vin(vin)
+    api_key = get_config("vin_api_key", "")
+    api_provider = get_config("vin_api_provider", "autodna")
+
+    result = decode_vin(vin, api_key=api_key, api_provider=api_provider)
+    result["chat_summary"] = format_for_chat(result)
+
     if result.get("brand"):
-        from chatbot.product_finder import search_by_brand_model
-        products = search_by_brand_model(result["brand"], limit=3)
+        from chatbot.product_finder import search_products
+        search_query = extract_search_terms(result)
+        products = search_products(search_query, limit=3)
         result["suggested_products"] = products
     return result
 

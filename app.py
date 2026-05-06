@@ -83,7 +83,8 @@ def connect():
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
     if request.method == "POST":
-        for f in ["store_name", "seo_plugin", "anthropic_key", "opt_mode"]:
+        for f in ["store_name", "seo_plugin", "anthropic_key", "opt_mode",
+                  "vin_api_key", "vin_api_provider"]:
             val = request.form.get(f, "").strip()
             if val:
                 set_config(f, val)
@@ -94,7 +95,8 @@ def settings():
         return redirect(url_for("settings"))
 
     cfg = {k: get_config(k, "") for k in
-           ["woo_url", "store_name", "seo_plugin", "anthropic_key", "opt_mode"]}
+           ["woo_url", "store_name", "seo_plugin", "anthropic_key", "opt_mode",
+            "vin_api_key", "vin_api_provider"]}
     return render_template("settings.html", config=cfg)
 
 @app.route("/settings/clear-db", methods=["POST"])
