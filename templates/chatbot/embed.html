@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Kod osadzania{% endblock %}
+{% block page_title %}Osadź TurboChat na sklepie{% endblock %}
+{% block page_subtitle %}Jeden tag &lt;script&gt; — chatbot działa na całej stronie{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+
+  <!-- EMBED CODE -->
+  <div class="card border-orange-800">
+    <h2 class="font-bold text-white mb-3">Kod do wklejenia w WordPress</h2>
+    <p class="text-sm text-gray-400 mb-4">
+      Wklej ten kod w: <strong class="text-gray-300">Wygląd → Edytor motywów → functions.php</strong>
+      lub przez wtyczkę <strong class="text-gray-300">"Insert Headers and Footers"</strong> (sekcja FOOTER).
+    </p>
+    <div class="relative">
+      <pre id="embed-code" class="bg-gray-950 rounded-lg p-4 text-sm text-green-400 overflow-auto whitespace-pre-wrap"><script src="{{ engine_url }}/chatbot/widget.js" defer></script></pre>
+      <button onclick="copyEmbed()" class="absolute top-3 right-3 btn-secondary text-xs py-1">Kopiuj</button>
+    </div>
+  </div>
+
+  <!-- WORDPRESS INSTRUCTIONS -->
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Instrukcja instalacji (WordPress)</h2>
+    <div class="space-y-4 text-sm">
+      <div class="flex gap-4">
+        <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm">1</div>
+        <div>
+          <div class="text-white font-medium">Zainstaluj wtyczkę "Insert Headers and Footers"</div>
+          <div class="text-gray-400 text-xs mt-1">WordPress → Wtyczki → Dodaj nową → szukaj "Insert Headers and Footers" → Zainstaluj i aktywuj</div>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm">2</div>
+        <div>
+          <div class="text-white font-medium">Otwórz wtyczkę</div>
+          <div class="text-gray-400 text-xs mt-1">Ustawienia → Insert Headers and Footers → zakładka "Scripts in Footer"</div>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm">3</div>
+        <div>
+          <div class="text-white font-medium">Wklej kod powyżej i zapisz</div>
+          <div class="text-gray-400 text-xs mt-1">Chatbot pojawi się natychmiast na każdej podstronie sklepu jako pływający przycisk w prawym dolnym rogu.</div>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm">✓</div>
+        <div>
+          <div class="text-white font-medium">Gotowe — testuj!</div>
+          <div class="text-gray-400 text-xs mt-1">Otwórz sklep, kliknij pomarańczowy przycisk czatu i napisz "BMW 320d" — AI znajdzie produkty w Twoim sklepie.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="card">
+    <h2 class="font-bold text-white mb-3">Podgląd widgetu (live)</h2>
+    <p class="text-sm text-gray-400 mb-4">Widget działa poniżej — możesz go przetestować.</p>
+    <div class="bg-gray-900 rounded-xl h-64 flex items-center justify-center border border-gray-700 relative overflow-hidden">
+      <div class="text-center text-gray-600">
+        <div class="text-4xl mb-2">🛒</div>
+        <div class="text-sm">Symulacja strony sklepu</div>
+      </div>
+      <div class="absolute text-xs text-gray-700 bottom-3 right-3">
+        ↘ Kliknij pomarańczowy przycisk
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Co potrafi TurboChat AI</h2>
+    <div class="grid grid-cols-2 gap-3 text-sm">
+      {% set features = [
+        ("🔍", "Wyszukuje produkty", "Szuka turbosprężarek w Twoim sklepie po marce, modelu, silniku i numerze OEM"),
+        ("🚗", "Dekoduje VIN", "Automatycznie identyfikuje markę auta i sugeruje pasujące turbiny"),
+        ("🔧", "Diagnozuje awarie", "Rozpoznaje objawy uszkodzonej turbo i doradza co kupić"),
+        ("💬", "3 języki", "Odpowiada po polsku, angielsku i niemiecku — obsługuje rynek EU"),
+        ("⚡", "24/7 bez przerwy", "Działa w nocy i weekendy — nie traci żadnego klienta"),
+        ("📊", "Loguje rozmowy", "Pełna historia czatów w panelu administracyjnym"),
+      ] %}
+      {% for icon, title, desc in features %}
+      <div class="flex items-start gap-3">
+        <span class="text-xl flex-shrink-0">{{ icon }}</span>
+        <div>
+          <div class="font-semibold text-white text-xs">{{ title }}</div>
+          <div class="text-gray-400 text-xs">{{ desc }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyEmbed() {
+  const code = document.getElementById('embed-code').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    event.target.textContent = 'Skopiowano!';
+    setTimeout(() => event.target.textContent = 'Kopiuj', 2000);
+  });
+}
+</script>
+{% endblock %}

@@ -22,6 +22,10 @@ app.secret_key = Config.SECRET_KEY
 # Initialise DB on first run
 init_db()
 
+# Register TurboChat blueprint
+from chatbot_routes import chatbot_bp
+app.register_blueprint(chatbot_bp)
+
 # ─────────────────────────────────────────────────────────────────────────────
 # CONTEXT PROCESSOR
 # ─────────────────────────────────────────────────────────────────────────────
