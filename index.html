@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TURBO-GIT — Turbosprężarki Premium</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --accent: #ff7433;
+      --bg: #07070f;
+      --bg2: #0f0f1c;
+      --text: #e8e8f5;
+      --muted: #6060a0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(7,7,15,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,116,51,.12);
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 9px 20px; background: var(--accent); color: #fff;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: all .2s;
+    }
+    .nav-cta:hover { background: #e86020; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; overflow: hidden;
+      min-height: 92vh; display: flex; align-items: center;
+      padding: 80px 24px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255,116,51,.1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 30% 80%, rgba(120,60,200,.08) 0%, transparent 50%),
+        linear-gradient(160deg, #07070f 0%, #0f0f1c 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: .06;
+      background-image:
+        linear-gradient(rgba(255,116,51,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,116,51,.5) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(255,116,51,.1); border: 1px solid rgba(255,116,51,.25);
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 20px;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: hBlink 2s ease infinite; }
+    @keyframes hBlink { 0%,100%{opacity:1} 50%{opacity:.4} }
+    h1 {
+      font-size: clamp(36px, 5vw, 60px); font-weight: 900; line-height: 1.08;
+      letter-spacing: -1px; margin-bottom: 20px;
+    }
+    h1 .hl { color: var(--accent); }
+    .hero-desc { font-size: 17px; color: var(--muted); line-height: 1.65; margin-bottom: 32px; max-width: 480px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 14px 28px; background: var(--accent); color: #fff;
+      border: none; border-radius: 12px; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+      box-shadow: 0 6px 24px rgba(255,116,51,.4);
+    }
+    .btn-primary:hover { background: #e86020; transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,116,51,.55); }
+    .btn-secondary {
+      padding: 14px 28px; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1); color: var(--text);
+      border-radius: 12px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all .2s; text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.2); }
+
+    /* Hero visual */
+    .hero-visual {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .turbo-circle {
+      width: 340px; height: 340px; border-radius: 50%; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .turbo-circle::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(255,116,51,.15), rgba(255,116,51,.02), rgba(255,116,51,.15));
+      animation: tcSpin 8s linear infinite;
+    }
+    .turbo-circle::after {
+      content: ''; position: absolute; inset: 20px; border-radius: 50%;
+      border: 1px solid rgba(255,116,51,.12);
+    }
+    @keyframes tcSpin { to { transform: rotate(360deg); } }
+    .turbo-inner {
+      width: 200px; height: 200px; border-radius: 50%; z-index: 1;
+      background: radial-gradient(circle, rgba(255,116,51,.15) 0%, rgba(255,116,51,.02) 70%);
+      border: 1px solid rgba(255,116,51,.25);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 60px rgba(255,116,51,.15), inset 0 0 30px rgba(255,116,51,.05);
+    }
+    .turbo-svg { animation: tcSpin 4s linear infinite; }
+    .turbo-orbit {
+      position: absolute; width: 300px; height: 300px; border-radius: 50%;
+      border: 1px dashed rgba(255,116,51,.1);
+    }
+    .turbo-dot {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      top: -4px; left: 50%; transform: translateX(-50%);
+      box-shadow: 0 0 8px var(--accent);
+      animation: tcSpin 3s linear infinite;
+      transform-origin: 4px 154px;
+    }
+
+    /* Stats */
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 36px; flex-wrap: wrap;
+    }
+    .stat { display: flex; flex-direction: column; gap: 3px; }
+    .stat-n { font-size: 26px; font-weight: 800; color: #fff; }
+    .stat-l { font-size: 12px; color: var(--muted); }
+
+    /* ── FEATURES ── */
+    .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .section-title { font-size: clamp(28px,4vw,42px); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+    .section-desc { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 520px; margin-bottom: 48px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .feature-card {
+      background: var(--bg2); border: 1px solid rgba(255,255,255,.05);
+      border-radius: 16px; padding: 24px;
+      transition: border-color .2s, transform .2s;
+    }
+    .feature-card:hover { border-color: rgba(255,116,51,.25); transform: translateY(-3px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(255,116,51,.1); border: 1px solid rgba(255,116,51,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 14px;
+    }
+    .feature-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-text { font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+
+    /* ── HOW IT WORKS ── */
+    .hiw-section { padding: 80px 24px; background: var(--bg2); }
+    .hiw-inner { max-width: 1100px; margin: 0 auto; }
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+    .step-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.05);
+      border-radius: 16px; padding: 24px; position: relative; overflow: hidden;
+    }
+    .step-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .step-n {
+      font-size: 36px; font-weight: 900; color: rgba(255,116,51,.15);
+      line-height: 1; margin-bottom: 14px;
+    }
+    .step-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .step-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      padding: 80px 24px; text-align: center;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,116,51,.08) 0%, transparent 70%);
+    }
+    .cta-section h2 { font-size: clamp(28px,4vw,44px); font-weight: 800; margin-bottom: 14px; }
+    .cta-section p { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto 32px; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 40px 24px; text-align: center;
+      font-size: 13px; color: var(--muted);
+    }
+    footer strong { color: var(--accent); }
+
+    /* ── CHATBOT HINT ── */
+    .chat-hint {
+      position: fixed; bottom: 106px; right: 26px; z-index: 2147483640;
+      background: #1c1c2a; border: 1px solid rgba(255,116,51,.2);
+      border-radius: 14px; padding: 12px 16px;
+      font-size: 13px; color: #c0c0e0; line-height: 1.5;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      max-width: 240px; pointer-events: none;
+      animation: chatHintIn .4s ease both, chatHintOut .4s ease 5s both;
+    }
+    .chat-hint::after {
+      content: ''; position: absolute; bottom: -7px; right: 24px;
+      width: 14px; height: 7px; overflow: hidden;
+    }
+    .chat-hint::after {
+      content: ''; position: absolute;
+      bottom: -6px; right: 22px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-top: 7px solid rgba(255,116,51,.2);
+    }
+    @keyframes chatHintIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes chatHintOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(8px);pointer-events:none} }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .features-grid { grid-template-columns: repeat(2,1fr); }
+      .steps-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .features-grid, .steps-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-logo">TURBO<span>-GIT</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Oferta</a></li>
+      <li><a href="#">Dobór turbo</a></li>
+      <li><a href="#">Regeneracja</a></li>
+      <li><a href="#">Kontakt</a></li>
+    </ul>
+    <a href="tel:+48123456789" class="nav-cta">📞 Zadzwoń</a>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Ekspert od turbosprężarek</div>
+        <h1>Precyzyjny dobór<br><span class="hl">turbosprężarki</span><br>dla Twojego auta</h1>
+        <p class="hero-desc">
+          Profesjonalne doradztwo, fachowy dobór i gwarancja prawidłowego dopasowania.
+          Nasz asystent AI poprowadzi Cię krok po kroku.
+        </p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="window.TurboGitChatbotInstance && window.TurboGitChatbotInstance.open()">
+            🔧 Dobierz turbosprężarkę
+          </button>
+          <a href="tel:+48123456789" class="btn-secondary">📞 Zadzwoń teraz</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-n">10k+</span><span class="stat-l">Dobranych turbin</span></div>
+          <div class="stat"><span class="stat-n">98%</span><span class="stat-l">Trafnych dopasowań</span></div>
+          <div class="stat"><span class="stat-n">24h</span><span class="stat-l">Czas realizacji</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="turbo-circle">
+          <div class="turbo-orbit">
+            <div class="turbo-dot"></div>
+          </div>
+          <div class="turbo-inner">
+            <svg class="turbo-svg" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="14" fill="#ff7433" opacity=".9"/>
+              <path d="M60 46C60 28 73 21 79 29C73 33 66 39 60 46Z" fill="#ff7433" opacity=".85"/>
+              <path d="M74 60C92 60 99 73 91 79C87 73 81 66 74 60Z" fill="#ff7433" opacity=".85"/>
+              <path d="M60 74C60 92 47 99 41 91C47 87 54 81 60 74Z" fill="#ff7433" opacity=".85"/>
+              <path d="M46 60C28 60 21 47 29 41C33 47 39 54 46 60Z" fill="#ff7433" opacity=".85"/>
+              <circle cx="60" cy="60" r="22" stroke="rgba(255,116,51,.3)" stroke-width="1" fill="none"/>
+              <circle cx="60" cy="60" r="36" stroke="rgba(255,116,51,.15)" stroke-width="1" fill="none" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <div style="padding:80px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="section-label">Dlaczego TURBO-GIT</div>
+      <h2 class="section-title">Fachowe doradztwo<br>na każdym etapie</h2>
+      <p class="section-desc">Dobór turbosprężarki to sprawa wymagająca precyzji. Pomagamy uniknąć kosztownych pomyłek.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Bezbłędny dobór</div>
+          <div class="feature-text">Weryfikujemy numer VIN, kod silnika lub numer turbiny — zebyś miał pewność, że dostajesz właściwy model.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Szybka realizacja</div>
+          <div class="feature-text">Większość zamówień realizujemy w 24h. Doradca oddzwania jeszcze tego samego dnia.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <div class="feature-title">Identyfikacja po zdjęciu</div>
+          <div class="feature-text">Wyślij zdjęcie tabliczki znamionowej turbiny — nasz ekspert odczyta numer i dobierze właściwy model.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">♻️</div>
+          <div class="feature-title">Regeneracja turbin</div>
+          <div class="feature-text">Profesjonalna regeneracja turbosprężarek. Alternatywa dla zakupu nowej — tańsza, równie skuteczna.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-title">Gwarancja jakości</div>
+          <div class="feature-text">Sprzedajemy wyłącznie sprawdzone, wysokiej jakości turbosprężarki — nowe i regenerowane.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🔧</div>
+          <div class="feature-title">Ekspert w zasięgu</div>
+          <div class="feature-text">Nasz doradca techniczny jest dostępny pn–pt 8:00–17:00 i odpowie na każde pytanie techniczne.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="hiw-section">
+    <div class="hiw-inner">
+      <div class="section-label">Jak to działa</div>
+      <h2 class="section-title">Dobór w 4 krokach</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-n">01</div>
+          <div class="step-title">Otwórz asystenta</div>
+          <div class="step-text">Kliknij przycisk czatu w prawym dolnym rogu. Asystent wita Cię i pyta o potrzeby.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-n">02</div>
+          <div class="step-title">Podaj dane auta</div>
+          <div class="step-text">Marka, model, rocznik, silnik. Opcjonalnie numer turbiny, VIN lub kod silnika.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-n">03</div>
+          <div class="step-title">Zostaw kontakt</div>
+          <div class="step-text">Imię i telefon — doradca TURBO-GIT oddzwoni z potwierdzeniem i konkretną ofertą.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-n">04</div>
+          <div class="step-title">Odbierz telefon</div>
+          <div class="step-text">Potwierdzamy dostępność i cenę. Realizacja w 24h. Wysyłka kurierem lub odbiór osobisty.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ── -->
+  <div class="cta-section">
+    <h2>Gotowy na właściwą<br>turbosprężarkę?</h2>
+    <p>Nie ryzykuj pomyłki. Nasz asystent AI poprowadzi Cię krok po kroku — bezpłatnie i bez zobowiązań.</p>
+    <div class="cta-btns">
+      <button class="btn-primary" onclick="window.TurboGitChatbotInstance && window.TurboGitChatbotInstance.open()">
+        🔧 Zacznij dobór teraz
+      </button>
+      <a href="tel:+48123456789" class="btn-secondary">📞 Zadzwoń bezpośrednio</a>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2025 <strong>TURBO-GIT</strong> · Profesjonalny dobór i sprzedaż turbosprężarek</p>
+    <p style="margin-top:6px">📞 +48 123 456 789 · ✉️ info@turbo-git.com</p>
+  </footer>
+
+  <!-- ── CHATBOT HINT ── -->
+  <div class="chat-hint" id="chatHint">
+    Cześć! 👋 Pomogę dobrać<br>turbosprężarkę do Twojego auta.
+  </div>
+
+  <!-- ── CHATBOT WIDGET ── -->
+  <script src="turbo-git-chatbot.js"></script>
+  <script>
+    // Usuń dymek po kliknięciu przycisku czatu
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('#tgw-fab')) {
+        var h = document.getElementById('chatHint');
+        if (h) h.style.display = 'none';
+      }
+    });
+
+    // Opcjonalnie: endpoint do którego będą wysyłane leady
+    // window.TurboGitLeadEndpoint = 'https://turbo-git.com/api/leads';
+
+    // Opcjonalnie: callback po wysłaniu leada
+    // window.TurboGitLeadCallback = function(data) { console.log('Lead:', data); };
+  </script>
+</body>
+</html>
