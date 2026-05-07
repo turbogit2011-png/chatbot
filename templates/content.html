@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+{% block title %}Generator treści AI{% endblock %}
+{% block page_title %}Generator treści AI{% endblock %}
+{% block page_subtitle %}Generuj zoptymalizowane opisy, meta, FAQ dla produktów turbo{% endblock %}
+
+{% block content %}
+<div class="grid md:grid-cols-2 gap-6">
+  <!-- GENERATOR FORM -->
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Generuj treść dla produktu</h2>
+    <form id="gen-form" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Nazwa produktu <span class="text-red-400">*</span></label>
+        <input id="gen-name" type="text" placeholder="Turbosprężarka BMW 320d GT1749V"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">SKU / Numer OEM</label>
+          <input id="gen-sku" type="text" placeholder="GT1749V"
+                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">Cena (PLN)</label>
+          <input id="gen-price" type="text" placeholder="1299"
+                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Typ treści</label>
+        <select id="gen-type"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+          <option value="full">Pełny opis produktu (SEO)</option>
+          <option value="short">Krótki opis (100-140 znaków)</option>
+          <option value="title">SEO Title</option>
+          <option value="meta">Meta Description</option>
+          <option value="faq">FAQ (6 pytań + odpowiedzi)</option>
+          <option value="category">Opis kategorii</option>
+        </select>
+      </div>
+      <button type="button" onclick="generateContent()" class="btn-primary w-full py-2.5">
+        Generuj z Claude AI
+      </button>
+      <p class="text-xs text-gray-500 text-center">
+        {% if ai_enabled %}
+        ✓ Claude AI aktywny — generowanie z API Anthropic
+        {% else %}
+        ⚠ Brak klucza API — używam generatora szablonowego.
+        <a href="/settings" class="text-orange-400 hover:text-orange-300">Dodaj klucz Claude →</a>
+        {% endif %}
+      </p>
+    </form>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Wynik</h2>
+    <div id="gen-loading" class="hidden text-center py-8">
+      <svg class="animate-spin w-8 h-8 text-orange-500 mx-auto mb-2" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      <div class="text-sm text-gray-400">Claude generuje treść...</div>
+    </div>
+    <div id="gen-empty" class="text-center py-8 text-gray-500 text-sm">
+      Wypełnij formularz i kliknij "Generuj"
+    </div>
+    <div id="gen-result" class="hidden">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs text-green-400 font-semibold">✓ Wygenerowano</span>
+        <button onclick="copyResult()" class="text-xs text-gray-400 hover:text-white border border-gray-600 px-2 py-1 rounded">Kopiuj</button>
+      </div>
+      <div id="gen-result-text" class="bg-gray-700 rounded-lg p-4 text-sm text-gray-200 max-h-96 overflow-y-auto whitespace-pre-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATES SECTION -->
+<div class="card mt-6">
+  <h2 class="font-bold text-white mb-6">Gotowe szablony optymalizacji</h2>
+  <div class="grid md:grid-cols-3 gap-6">
+
+    <!-- IDEAL PRODUCT PAGE TEMPLATE -->
+    <div class="bg-gray-700 rounded-xl p-5">
+      <div class="text-xs font-bold text-orange-400 uppercase tracking-wider mb-3">Idealna strona produktu</div>
+      <div class="space-y-2 text-xs text-gray-300">
+        <div class="border-l-2 border-orange-500 pl-3">
+          <div class="text-white font-semibold">H1: Turbosprężarka [Marka] [Model]</div>
+          <div class="text-gray-400">Główna fraza kluczowa w H1</div>
+        </div>
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">Krótki opis (100-140 znaków)</div>
+          <div class="text-gray-400">USP + CTA + główna fraza</div>
+        </div>
+        <div class="border-l-2 border-green-500 pl-3">
+          <div class="text-white font-semibold">Galeria: min. 3-5 zdjęć z ALT</div>
+          <div class="text-gray-400">ALT = "[Produkt] | [Sklep]"</div>
+        </div>
+        <div class="border-l-2 border-purple-500 pl-3">
+          <div class="text-white font-semibold">Cena + Dostępność + CTA "Kup teraz"</div>
+          <div class="text-gray-400">Widoczne bez scrollowania</div>
+        </div>
+        <div class="border-l-2 border-yellow-500 pl-3">
+          <div class="text-white font-semibold">H2: Zastosowanie i kompatybilność</div>
+          <div class="text-gray-400">Tabela modeli aut + wyszukiwarka VIN</div>
+        </div>
+        <div class="border-l-2 border-red-500 pl-3">
+          <div class="text-white font-semibold">H2: Dane techniczne</div>
+          <div class="text-gray-400">Tabela HTML: OEM, parametry, typ</div>
+        </div>
+        <div class="border-l-2 border-orange-500 pl-3">
+          <div class="text-white font-semibold">H2: Gwarancja + Zwroty</div>
+        </div>
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">H2: FAQ (6 pytań) → Schema FAQPage</div>
+        </div>
+        <div class="border-l-2 border-green-500 pl-3">
+          <div class="text-white font-semibold">H2: Jak wymienić turbo → Schema HowTo</div>
+        </div>
+        <div class="border-l-2 border-purple-500 pl-3">
+          <div class="text-white font-semibold">Produkty powiązane (cross-sell)</div>
+        </div>
+        <div class="border-l-2 border-gray-500 pl-3">
+          <div class="text-white font-semibold">JSON-LD: Product + FAQPage + HowTo + Breadcrumb</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEAL CATEGORY PAGE TEMPLATE -->
+    <div class="bg-gray-700 rounded-xl p-5">
+      <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Idealna strona kategorii</div>
+      <div class="space-y-2 text-xs text-gray-300">
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">H1: Turbosprężarki [Marka/Typ]</div>
+          <div class="text-gray-400">Główna fraza kategorii</div>
+        </div>
+        <div class="border-l-2 border-orange-500 pl-3">
+          <div class="text-white font-semibold">Baner z USP (1200x400px)</div>
+          <div class="text-gray-400">Zdjęcie + text + CTA</div>
+        </div>
+        <div class="border-l-2 border-green-500 pl-3">
+          <div class="text-white font-semibold">Filtry: Marka, Model, Silnik, Typ, Cena</div>
+          <div class="text-gray-400">Ajax filtering dla UX</div>
+        </div>
+        <div class="border-l-2 border-yellow-500 pl-3">
+          <div class="text-white font-semibold">Grid produktów (9-12 per page)</div>
+          <div class="text-gray-400">Cena, zdjęcie, dostępność, CTA</div>
+        </div>
+        <div class="border-l-2 border-red-500 pl-3">
+          <div class="text-white font-semibold">Opis kategorii 200+ słów (SEO)</div>
+          <div class="text-gray-400">Po siatce produktów (SEO friendly)</div>
+        </div>
+        <div class="border-l-2 border-purple-500 pl-3">
+          <div class="text-white font-semibold">H2: Dlaczego warto kupić u nas?</div>
+          <div class="text-gray-400">USP lista + ikony</div>
+        </div>
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">H2: FAQ kategorii (4-6 pytań)</div>
+        </div>
+        <div class="border-l-2 border-gray-500 pl-3">
+          <div class="text-white font-semibold">JSON-LD: FAQPage + BreadcrumbList</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMEPAGE TEMPLATE -->
+    <div class="bg-gray-700 rounded-xl p-5">
+      <div class="text-xs font-bold text-green-400 uppercase tracking-wider mb-3">Idealna strona główna</div>
+      <div class="space-y-2 text-xs text-gray-300">
+        <div class="border-l-2 border-green-500 pl-3">
+          <div class="text-white font-semibold">Hero: H1 + Podtytuł + CTA</div>
+          <div class="text-gray-400">H1: "Turbosprężarki — Sklep Online"</div>
+        </div>
+        <div class="border-l-2 border-orange-500 pl-3">
+          <div class="text-white font-semibold">Trust bar: Gwarancja | Dostawa 24h | Zwroty</div>
+        </div>
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">Wyszukiwarka po VIN / numerze turbo</div>
+          <div class="text-gray-400">Kluczowy element CRO</div>
+        </div>
+        <div class="border-l-2 border-purple-500 pl-3">
+          <div class="text-white font-semibold">Top kategorie: 8-12 kafelków</div>
+          <div class="text-gray-400">BMW, Audi, VW, Mercedes itd.</div>
+        </div>
+        <div class="border-l-2 border-yellow-500 pl-3">
+          <div class="text-white font-semibold">Bestsellery i Nowości</div>
+        </div>
+        <div class="border-l-2 border-red-500 pl-3">
+          <div class="text-white font-semibold">USP sekcja: ikony + zalety</div>
+        </div>
+        <div class="border-l-2 border-green-500 pl-3">
+          <div class="text-white font-semibold">Opinie klientów (Reviews)</div>
+          <div class="text-gray-400">Schema AggregateRating</div>
+        </div>
+        <div class="border-l-2 border-blue-500 pl-3">
+          <div class="text-white font-semibold">Blog: Ostatnie artykuły</div>
+          <div class="text-gray-400">Content SEO + expertise</div>
+        </div>
+        <div class="border-l-2 border-gray-500 pl-3">
+          <div class="text-white font-semibold">JSON-LD: LocalBusiness + FAQPage</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generateContent() {
+  const name = document.getElementById('gen-name').value.trim();
+  const sku = document.getElementById('gen-sku').value.trim();
+  const price = document.getElementById('gen-price').value.trim();
+  const type = document.getElementById('gen-type').value;
+
+  if (!name) { alert('Podaj nazwę produktu'); return; }
+
+  document.getElementById('gen-empty').classList.add('hidden');
+  document.getElementById('gen-result').classList.add('hidden');
+  document.getElementById('gen-loading').classList.remove('hidden');
+
+  try {
+    const r = await fetch('/api/content/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, sku, price, type })
+    });
+    const data = await r.json();
+    document.getElementById('gen-loading').classList.add('hidden');
+    document.getElementById('gen-result').classList.remove('hidden');
+    document.getElementById('gen-result-text').textContent = data.content || data.error || 'Brak odpowiedzi';
+  } catch (e) {
+    document.getElementById('gen-loading').classList.add('hidden');
+    document.getElementById('gen-result').classList.remove('hidden');
+    document.getElementById('gen-result-text').textContent = 'Błąd: ' + e.message;
+  }
+}
+
+function copyResult() {
+  const text = document.getElementById('gen-result-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Skopiowano!';
+    setTimeout(() => btn.textContent = 'Kopiuj', 2000);
+  });
+}
+</script>
+{% endblock %}

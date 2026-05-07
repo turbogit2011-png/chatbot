@@ -1,0 +1,146 @@
+{
+  "brands": {
+    "BMW": {
+      "models": {
+        "Seria 1": ["116d", "118d", "120d", "123d"],
+        "Seria 3": ["316d", "318d", "320d", "325d", "330d", "335d"],
+        "Seria 5": ["520d", "525d", "530d", "535d"],
+        "Seria 7": ["730d", "740d"],
+        "X1": ["X1 18d", "X1 20d"],
+        "X3": ["X3 20d", "X3 30d"],
+        "X5": ["X5 30d", "X5 40d"],
+        "X6": ["X6 30d", "X6 40d"]
+      },
+      "engines": ["N47", "M47", "M57", "B47", "B57", "N57"],
+      "turbo_codes": ["GT1749V", "GT2256V", "GT2260V", "GT2052ES", "TF035"]
+    },
+    "Audi": {
+      "models": {
+        "A3": ["A3 1.9 TDI", "A3 2.0 TDI"],
+        "A4": ["A4 1.9 TDI", "A4 2.0 TDI", "A4 2.7 TDI", "A4 3.0 TDI"],
+        "A5": ["A5 2.0 TDI", "A5 3.0 TDI"],
+        "A6": ["A6 2.0 TDI", "A6 2.7 TDI", "A6 3.0 TDI"],
+        "A7": ["A7 3.0 TDI"],
+        "A8": ["A8 3.0 TDI", "A8 4.2 TDI"],
+        "Q3": ["Q3 2.0 TDI"],
+        "Q5": ["Q5 2.0 TDI", "Q5 3.0 TDI"],
+        "Q7": ["Q7 3.0 TDI", "Q7 4.2 TDI"]
+      },
+      "engines": ["BKD", "BMN", "BJB", "BLS", "CBAB", "CDUC", "CRCA"],
+      "turbo_codes": ["K03", "K04", "GT1749V", "BorgWarner KP39", "GT2052ELS"]
+    },
+    "Volkswagen": {
+      "models": {
+        "Golf": ["Golf IV 1.9 TDI", "Golf V 1.9 TDI", "Golf V 2.0 TDI", "Golf VI 2.0 TDI"],
+        "Passat": ["Passat B5 1.9 TDI", "Passat B6 2.0 TDI", "Passat B7 2.0 TDI"],
+        "Tiguan": ["Tiguan 2.0 TDI"],
+        "Touareg": ["Touareg 2.5 TDI", "Touareg 3.0 TDI"],
+        "Sharan": ["Sharan 1.9 TDI", "Sharan 2.0 TDI"],
+        "Transporter": ["T5 1.9 TDI", "T5 2.0 TDI", "T6 2.0 TDI"]
+      },
+      "engines": ["ASZ", "AVF", "AXR", "BXE", "BJB", "CBAB", "CLJA"],
+      "turbo_codes": ["GT1749V", "KP39", "K03", "BV39", "GT1749MV"]
+    },
+    "Mercedes": {
+      "models": {
+        "Klasa C": ["C200 CDI", "C220 CDI", "C250 CDI", "C300 CDI"],
+        "Klasa E": ["E200 CDI", "E220 CDI", "E250 CDI", "E300 CDI", "E350 CDI"],
+        "Klasa S": ["S320 CDI", "S350 CDI"],
+        "Sprinter": ["Sprinter 2.2 CDI", "Sprinter 2.7 CDI"],
+        "Vito": ["Vito 111 CDI", "Vito 115 CDI"],
+        "ML": ["ML 280 CDI", "ML 300 CDI", "ML 350 CDI"]
+      },
+      "engines": ["OM611", "OM612", "OM646", "OM651", "OM642"],
+      "turbo_codes": ["GT1749V", "GT2256V", "TF035HM", "OM611 turbo"]
+    },
+    "Ford": {
+      "models": {
+        "Focus": ["Focus 1.6 TDCi", "Focus 2.0 TDCi"],
+        "Mondeo": ["Mondeo 1.8 TDCi", "Mondeo 2.0 TDCi", "Mondeo 2.2 TDCi"],
+        "Galaxy": ["Galaxy 1.9 TDI", "Galaxy 2.0 TDCi"],
+        "Transit": ["Transit 2.0 TDCi", "Transit 2.2 TDCi", "Transit 2.4 TDCi"],
+        "Ranger": ["Ranger 2.2 TDCi", "Ranger 3.2 TDCi"],
+        "S-Max": ["S-Max 2.0 TDCi", "S-Max 2.2 TDCi"]
+      },
+      "engines": ["HHJA", "HHJB", "UFBA", "G6DA", "QXBA"],
+      "turbo_codes": ["GT1544V", "GT1749V", "GT2052EL", "Garrett GT15"]
+    },
+    "Opel": {
+      "models": {
+        "Astra": ["Astra H 1.7 CDTI", "Astra H 1.9 CDTI", "Astra J 2.0 CDTI"],
+        "Vectra": ["Vectra C 1.9 CDTI", "Vectra C 2.2 DTI"],
+        "Insignia": ["Insignia 2.0 CDTI", "Insignia 2.0 BiTurbo"],
+        "Zafira": ["Zafira B 1.9 CDTI"],
+        "Vivaro": ["Vivaro 2.0 CDTI"]
+      },
+      "engines": ["Z17DTH", "Z19DTH", "A20DTH", "A20DTJ"],
+      "turbo_codes": ["GT1749V", "GT2052ELS", "BorgWarner BV43"]
+    },
+    "Toyota": {
+      "models": {
+        "Avensis": ["Avensis 2.0 D-4D", "Avensis 2.2 D-4D"],
+        "Corolla": ["Corolla Verso 2.0 D-4D"],
+        "RAV4": ["RAV4 2.0 D-4D", "RAV4 2.2 D-4D"],
+        "Land Cruiser": ["Land Cruiser 3.0 D-4D"],
+        "HiLux": ["HiLux 2.5 D-4D", "HiLux 3.0 D-4D"]
+      },
+      "engines": ["1CD-FTV", "2AD-FHV", "1KD-FTV", "2KD-FTV"],
+      "turbo_codes": ["CT16V", "CT20V", "CT12B", "CT26"]
+    },
+    "Renault": {
+      "models": {
+        "Megane": ["Megane II 1.5 dCi", "Megane II 1.9 dCi", "Megane III 1.5 dCi"],
+        "Laguna": ["Laguna II 2.0 dCi", "Laguna III 2.0 dCi"],
+        "Espace": ["Espace IV 2.0 dCi"],
+        "Traffic": ["Traffic 2.0 dCi"],
+        "Master": ["Master 2.3 dCi"]
+      },
+      "engines": ["K9K", "M9R", "R9M"],
+      "turbo_codes": ["GT1544V", "GT1749V", "GT2052EL", "Garrett GT15-23V"]
+    },
+    "Peugeot": {
+      "models": {
+        "207": ["207 1.6 HDi"],
+        "307": ["307 1.6 HDi", "307 2.0 HDi"],
+        "308": ["308 1.6 HDi", "308 2.0 HDi"],
+        "406": ["406 2.0 HDi"],
+        "407": ["407 2.0 HDi"],
+        "508": ["508 2.0 HDi"],
+        "Partner": ["Partner 1.6 HDi"],
+        "Boxer": ["Boxer 2.2 HDi"]
+      },
+      "engines": ["DV6", "DW10", "DW12"],
+      "turbo_codes": ["GT1544V", "GT2052EL", "Garrett GT1544V-5"]
+    },
+    "Citroen": {
+      "models": {
+        "C3": ["C3 1.6 HDi"],
+        "C4": ["C4 1.6 HDi", "C4 2.0 HDi"],
+        "C5": ["C5 2.0 HDi"],
+        "Berlingo": ["Berlingo 1.6 HDi"],
+        "Jumper": ["Jumper 2.2 HDi"]
+      },
+      "engines": ["DV6", "DW10"],
+      "turbo_codes": ["GT1544V", "GT2052EL"]
+    },
+    "Skoda": {
+      "models": {
+        "Octavia": ["Octavia I 1.9 TDI", "Octavia II 2.0 TDI", "Octavia III 2.0 TDI"],
+        "Superb": ["Superb I 1.9 TDI", "Superb II 2.0 TDI"],
+        "Fabia": ["Fabia 1.9 TDI"],
+        "Yeti": ["Yeti 2.0 TDI"]
+      },
+      "engines": ["ASV", "ARL", "BJB", "CBAB"],
+      "turbo_codes": ["GT1749V", "KP39", "K03"]
+    }
+  },
+  "turbo_brands": ["Garrett", "BorgWarner", "Holset", "IHI", "Mitsubishi", "KKK", "MHI", "Schwitzer"],
+  "turbo_types": [
+    "turbosprężarka nowa",
+    "turbosprężarka regenerowana",
+    "turbosprężarka oryginalna",
+    "turbosprężarka zamiennik",
+    "CHRA (kartridż turbo)",
+    "kompresja turbo"
+  ]
+}

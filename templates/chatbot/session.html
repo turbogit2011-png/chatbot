@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Rozmowa{{ session_id[:8] }}{% endblock %}
+{% block page_title %}Rozmowa — {{ session_id[:12] }}...{% endblock %}
+{% block page_subtitle %}Pełna historia czatu{% endblock %}
+
+{% block header_actions %}
+<a href="/chatbot/admin" class="btn-secondary">← Wróć</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-3">
+  {% for msg in messages %}
+  <div class="flex {% if msg.role == 'user' %}justify-end{% endif %}">
+    <div class="max-w-md">
+      <div class="text-xs text-gray-500 mb-1 {% if msg.role == 'user' %}text-right{% endif %}">
+        {% if msg.role == 'user' %}Klient{% else %}Turbo AI{% endif %} · {{ msg.ts }}
+      </div>
+      <div class="rounded-xl px-4 py-3 text-sm
+        {% if msg.role == 'user' %}bg-orange-600 text-white{% else %}bg-gray-700 text-gray-200{% endif %}">
+        {{ msg.content | replace('\n', '<br>') | safe }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

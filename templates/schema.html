@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Schema Markup{% endblock %}
+{% block page_title %}Schema Markup{% endblock %}
+{% block page_subtitle %}Generuj i wdrażaj JSON-LD dla wszystkich produktów{% endblock %}
+
+{% block header_actions %}
+<button onclick="runSchemaAll()" class="btn-primary">
+  ⚡ Wdróż schema na wszystkich produktach
+</button>
+{% endblock %}
+
+{% block content %}
+<div id="action-progress" class="hidden card mb-4 border-orange-800">
+  <div class="flex items-center gap-3">
+    <svg class="animate-spin w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+    <span class="text-sm text-orange-300">Wdrażam schema markup...</span>
+  </div>
+</div>
+<div id="action-result" class="hidden card mb-4 border-green-800">
+  <div class="text-green-400 font-bold mb-2 text-sm">✓ Schema wdrożona</div>
+  <pre id="action-result-text" class="text-xs text-gray-300 max-h-40 overflow-auto"></pre>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 mb-6">
+  <!-- Schema Types -->
+  {% set schema_types = [
+    ("Product Schema", "ok", "Cena, dostępność, zdjęcia, opinie, sklep", "Wszystkie produkty"),
+    ("FAQPage Schema", "ok", "6 pytań Q&A na każdym produkcie — widoczne w Google AI", "Wszystkie produkty"),
+    ("HowTo Schema", "ok", "Instrukcja wymiany turbo krok po kroku", "Wszystkie produkty"),
+    ("BreadcrumbList", "ok", "Okruszki nawigacyjne w wynikach Google", "Wszystkie strony"),
+    ("LocalBusiness", "info", "Dane firmy, godziny, obszar obsługi", "Strona główna"),
+    ("AggregateRating", "warning", "Oceny produktów — wymaga recenzji w WooCommerce", "Produkty z oceną"),
+  ] %}
+  {% for name, badge, desc, scope in schema_types %}
+  <div class="card flex items-start gap-4">
+    <div class="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-400 font-black text-sm">{}</div>
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="font-semibold text-white text-sm">{{ name }}</span>
+        <span class="badge-{{ badge }}">{{ scope }}</span>
+      </div>
+      <p class="text-xs text-gray-400">{{ desc }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- LocalBusiness Config -->
+<div class="card mb-6">
+  <h2 class="font-bold text-white mb-4">Konfiguracja LocalBusiness Schema</h2>
+  <form method="POST" action="/schema/local-business" class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-xs font-medium text-gray-300 mb-1">Telefon</label>
+      <input name="phone" type="text" placeholder="+48 123 456 789"
+             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-300 mb-1">E-mail</label>
+      <input name="email" type="email" placeholder="kontakt@turboshop.pl"
+             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-300 mb-1">Ulica i numer</label>
+      <input name="street" type="text" placeholder="ul. Przemysłowa 15"
+             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Kod pocztowy</label>
+        <input name="postal" type="text" placeholder="00-000"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Miasto</label>
+        <input name="city" type="text" placeholder="Warszawa"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+    </div>
+    <div class="md:col-span-2 flex justify-end">
+      <button type="submit" class="btn-primary">Zapisz i wygeneruj LocalBusiness Schema</button>
+    </div>
+  </form>
+</div>
+
+<!-- Schema Preview -->
+<div class="card">
+  <h2 class="font-bold text-white mb-4">Przykład — Product Schema (JSON-LD)</h2>
+  <pre class="bg-gray-950 rounded-lg p-4 text-xs text-green-400 overflow-auto max-h-80">{{ sample_schema }}</pre>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function runSchemaAll() {
+  const progress = document.getElementById('action-progress');
+  const result = document.getElementById('action-result');
+  const resultText = document.getElementById('action-result-text');
+  progress.classList.remove('hidden');
+  result.classList.add('hidden');
+  try {
+    const r = await fetch('/api/schema/all', { method: 'POST' });
+    const data = await r.json();
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    const ok = data.filter(d => d.status === 'ok').length;
+    resultText.textContent = `Wdrożono schema na ${ok}/${data.length} produktach.\n\n` + JSON.stringify(data.slice(0,5), null, 2);
+  } catch (e) {
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    resultText.textContent = 'Błąd: ' + e.message;
+  }
+}
+</script>
+{% endblock %}

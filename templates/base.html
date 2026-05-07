@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}TurboSEO Engine{% endblock %} | TurboSEO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        turbo: { 50:'#fff7ed',100:'#ffedd5',500:'#f97316',600:'#ea580c',700:'#c2410c',900:'#7c2d12' }
+      }
+    }
+  }
+}
+</script>
+<style>
+  .nav-item { @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors; }
+  .nav-item:hover { @apply bg-orange-600 text-white; }
+  .nav-item.active { @apply bg-orange-600 text-white; }
+  .btn-primary { @apply inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors text-sm; }
+  .btn-secondary { @apply inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-colors text-sm; }
+  .btn-success { @apply inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm; }
+  .btn-danger { @apply inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors text-sm; }
+  .card { @apply bg-gray-800 rounded-xl border border-gray-700 p-6; }
+  .badge-critical { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-red-900 text-red-300; }
+  .badge-warning { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-yellow-900 text-yellow-300; }
+  .badge-ok { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-green-900 text-green-300; }
+  .badge-info { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-900 text-blue-300; }
+  .score-circle { display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;font-weight:700;font-size:0.9rem; }
+  .score-high { background:#166534;color:#bbf7d0; }
+  .score-mid { background:#854d0e;color:#fef9c3; }
+  .score-low { background:#7f1d1d;color:#fecaca; }
+  .progress-bar { @apply h-2 rounded-full bg-gray-700 overflow-hidden; }
+  .progress-fill { height:100%;border-radius:9999px;transition:width .4s; }
+  .flash-success { @apply bg-green-900 border border-green-700 text-green-300 px-4 py-3 rounded-lg mb-4 text-sm; }
+  .flash-error { @apply bg-red-900 border border-red-700 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm; }
+  .flash-info { @apply bg-blue-900 border border-blue-700 text-blue-300 px-4 py-3 rounded-lg mb-4 text-sm; }
+  table.data-table { @apply w-full text-sm; }
+  table.data-table th { @apply text-left px-3 py-2 text-gray-400 font-medium border-b border-gray-700; }
+  table.data-table td { @apply px-3 py-2 border-b border-gray-800 text-gray-300 align-top; }
+  table.data-table tr:hover td { @apply bg-gray-750; }
+</style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex">
+
+<!-- SIDEBAR -->
+<aside class="w-64 bg-gray-950 border-r border-gray-800 flex flex-col fixed h-full z-20">
+  <div class="p-5 border-b border-gray-800">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-orange-600 rounded-lg flex items-center justify-center font-black text-white text-sm">T</div>
+      <div>
+        <div class="font-bold text-white text-sm">TurboSEO Engine</div>
+        <div class="text-xs text-gray-500">WooCommerce Optimizer</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-2">Główne</div>
+    <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="/connect" class="nav-item {% if '/connect' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      Połącz sklep
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">Audyt</div>
+    <a href="/audit" class="nav-item {% if request.path == '/audit' %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+      Pełny audyt SEO
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">Optymalizacja</div>
+    <a href="/products" class="nav-item {% if '/products' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Produkty
+    </a>
+    <a href="/categories" class="nav-item {% if '/categories' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+      Kategorie
+    </a>
+    <a href="/schema" class="nav-item {% if '/schema' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+      Schema Markup
+    </a>
+    <a href="/keywords" class="nav-item {% if '/keywords' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      Słowa kluczowe
+    </a>
+    <a href="/images" class="nav-item {% if '/images' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      Obrazy / ALT
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">AI / Treści</div>
+    <a href="/content" class="nav-item {% if '/content' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      Generator treści AI
+    </a>
+    <a href="/llms-txt" class="nav-item {% if '/llms' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      llms.txt / AI SEO
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">AI Sales Agent</div>
+    <a href="/chatbot/admin" class="nav-item {% if '/chatbot' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+      TurboChat AI
+      <span class="ml-auto text-xs bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold">NEW</span>
+    </a>
+    <a href="/chatbot/embed" class="nav-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+      Kod osadzania
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">Historia</div>
+    <a href="/history" class="nav-item {% if '/history' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Historia zmian
+    </a>
+
+    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1 mt-3">Konfiguracja</div>
+    <a href="/settings" class="nav-item {% if '/settings' in request.path %}active{% endif %}">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Ustawienia
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-gray-800">
+    <div class="text-xs text-gray-500 text-center">TurboSEO Engine v2.0</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="ml-64 flex-1 min-h-screen">
+  <header class="sticky top-0 z-10 bg-gray-900/90 backdrop-blur border-b border-gray-800 px-8 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-lg font-bold text-white">{% block page_title %}Dashboard{% endblock %}</h1>
+      <p class="text-xs text-gray-400">{% block page_subtitle %}{% endblock %}</p>
+    </div>
+    <div class="flex items-center gap-3">
+      {% block header_actions %}{% endblock %}
+      <div class="flex items-center gap-2 text-xs text-gray-400">
+        {% if store_connected %}
+          <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> Połączony
+        {% else %}
+          <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span> Niepołączony
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <div class="p-8">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+</main>
+
+<script>
+function showLoading(btn, text) {
+  if (btn) { btn.disabled = true; btn.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>' + text; }
+}
+function scoreClass(s) { return s >= 70 ? 'score-high' : s >= 40 ? 'score-mid' : 'score-low'; }
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

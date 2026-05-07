@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Przegląd stanu optymalizacji sklepu{% endblock %}
+
+{% block header_actions %}
+{% if store_connected %}
+<a href="/audit" class="btn-primary">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+  Uruchom audyt
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if not store_connected %}
+<div class="max-w-lg mx-auto mt-16 text-center">
+  <div class="text-6xl mb-4">🔌</div>
+  <h2 class="text-2xl font-bold text-white mb-3">Połącz swój sklep WooCommerce</h2>
+  <p class="text-gray-400 mb-6">Aby uruchomić audyt i optymalizację, wprowadź dane API swojego sklepu.</p>
+  <a href="/connect" class="btn-primary text-base px-6 py-3">Połącz sklep →</a>
+</div>
+{% else %}
+
+<!-- STATS ROW -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="card text-center">
+    <div class="text-3xl font-black text-orange-400 mb-1">{{ stats.total_audits }}</div>
+    <div class="text-xs text-gray-400">Wyników audytu</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-red-400 mb-1">{{ stats.critical }}</div>
+    <div class="text-xs text-gray-400">Błędów krytycznych</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-yellow-400 mb-1">{{ stats.warnings }}</div>
+    <div class="text-xs text-gray-400">Ostrzeżeń</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-green-400 mb-1">{{ stats.optimizations }}</div>
+    <div class="text-xs text-gray-400">Optymalizacji</div>
+  </div>
+</div>
+
+<!-- TURBOCHAT HERO BANNER -->
+<div class="card border-orange-600 bg-gradient-to-r from-gray-800 to-gray-900 mb-8 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-r from-orange-600/5 to-transparent pointer-events-none"></div>
+  <div class="flex items-center justify-between gap-6">
+    <div class="flex items-start gap-4">
+      <div class="w-14 h-14 bg-orange-600 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">💬</div>
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <h2 class="font-black text-white text-lg">TurboChat AI — Sales Agent</h2>
+          <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded font-bold animate-pulse">NOWE</span>
+        </div>
+        <p class="text-gray-300 text-sm mb-2">
+          AI doradca osadzony na Twoim sklepie — pomaga klientom znaleźć właściwe turbo po marce/modelu/VIN.
+          Działa <strong class="text-white">24/7</strong>, mówi po polsku i angielsku, pokazuje produkty z Twojego sklepu.
+          <strong class="text-orange-400">Żaden sklep turbo w Europie tego nie ma.</strong>
+        </p>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded">🔍 Wyszukiwanie VIN</span>
+          <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded">🚗 Marka/Model/Silnik</span>
+          <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded">🔧 Diagnoza awarii</span>
+          <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded">💳 Linki "Kup teraz"</span>
+          <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded">📊 Historia rozmów</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 flex-shrink-0">
+      <a href="/chatbot/embed" class="btn-primary whitespace-nowrap">Dodaj do sklepu →</a>
+      <a href="/chatbot/admin" class="btn-secondary text-center text-xs">Panel rozmów</a>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8">
+
+  <div class="card hover:border-orange-600 transition-colors cursor-pointer group" onclick="runAction('/api/optimize/products/all', 'Optymalizuję produkty...')">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-orange-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-orange-700 transition-colors">
+        <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">Optymalizuj WSZYSTKIE produkty</h3>
+        <p class="text-xs text-gray-400">Tytuły SEO, opisy, meta description, slug, ALT — wszystko automatycznie przez AI</p>
+        <span class="inline-block mt-2 text-xs text-orange-400 font-semibold">Uruchom →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hover:border-blue-600 transition-colors cursor-pointer group" onclick="runAction('/api/schema/all', 'Generuję schema markup...')">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-700 transition-colors">
+        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">Wdróż Schema Markup</h3>
+        <p class="text-xs text-gray-400">JSON-LD: Product, FAQ, HowTo, BreadcrumbList — dla wszystkich produktów</p>
+        <span class="inline-block mt-2 text-xs text-blue-400 font-semibold">Uruchom →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hover:border-green-600 transition-colors cursor-pointer group" onclick="runAction('/api/images/fix-alts', 'Naprawiam ALT texty...')">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-green-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-green-700 transition-colors">
+        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">Napraw ALT teksty zdjęć</h3>
+        <p class="text-xs text-gray-400">Uzupełnij brakujące ALT teksty zdjęć produktów o słowa kluczowe</p>
+        <span class="inline-block mt-2 text-xs text-green-400 font-semibold">Uruchom →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hover:border-purple-600 transition-colors cursor-pointer group" onclick="runAction('/api/optimize/categories/all', 'Optymalizuję kategorie...')">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-purple-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-purple-700 transition-colors">
+        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">Optymalizuj kategorie</h3>
+        <p class="text-xs text-gray-400">Opisy, slug, meta dla wszystkich kategorii produktów</p>
+        <span class="inline-block mt-2 text-xs text-purple-400 font-semibold">Uruchom →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hover:border-yellow-600 transition-colors cursor-pointer group" onclick="runAction('/api/seo-meta/all', 'Aktualizuję meta SEO...')">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-yellow-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-yellow-700 transition-colors">
+        <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">Aktualizuj SEO Meta (Yoast/RankMath)</h3>
+        <p class="text-xs text-gray-400">Zapisz zoptymalizowane title + meta do wtyczki SEO</p>
+        <span class="inline-block mt-2 text-xs text-yellow-400 font-semibold">Uruchom →</span>
+      </div>
+    </div>
+  </div>
+
+  <a href="/llms-txt" class="card hover:border-pink-600 transition-colors group block">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 bg-pink-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-pink-700 transition-colors">
+        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-1">AI SEO — llms.txt</h3>
+        <p class="text-xs text-gray-400">Wygeneruj plik llms.txt i zoptymalizuj treści pod ChatGPT, Perplexity, Google AI</p>
+        <span class="inline-block mt-2 text-xs text-pink-400 font-semibold">Otwórz →</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- PROGRESS BAR -->
+<div id="action-progress" class="hidden card mb-6">
+  <div class="flex items-center gap-4">
+    <div>
+      <svg class="animate-spin w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-white" id="action-text">Przetwarzam...</div>
+      <div class="text-xs text-gray-400">Proszę czekać — trwa optymalizacja produktów</div>
+    </div>
+  </div>
+</div>
+
+<div id="action-result" class="hidden card mb-6 border-green-700">
+  <div class="text-green-400 font-bold mb-2">✓ Gotowe!</div>
+  <pre id="action-result-text" class="text-xs text-gray-300 overflow-auto max-h-48"></pre>
+</div>
+
+<!-- QUICK SEO CHECKLIST -->
+<div class="card">
+  <h2 class="text-base font-bold text-white mb-4">30-dniowy plan optymalizacji</h2>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div>
+      <div class="text-xs font-bold text-orange-400 uppercase tracking-wider mb-3">Dni 1-10 — Fundament</div>
+      <ul class="space-y-2 text-sm text-gray-300">
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Połącz sklep z TurboSEO Engine</li>
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Uruchom pełny audyt SEO</li>
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Napraw błędy krytyczne (brak opisów, meta)</li>
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Wdróż Schema Markup na produktach</li>
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Napraw ALT teksty zdjęć</li>
+        <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">▸</span>Zoptymalizuj slugi URL produktów</li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-3">Dni 11-20 — Treści</div>
+      <ul class="space-y-2 text-sm text-gray-300">
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Wygeneruj opisy AI dla wszystkich produktów</li>
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Zoptymalizuj opisy kategorii (200+ słów)</li>
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Zaktualizuj SEO title i meta description</li>
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Wdróż FAQ na stronach kategorii</li>
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Dodaj sekcje "Do jakiego auta pasuje"</li>
+        <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">▸</span>Dodaj mapowanie VIN na produktach</li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Dni 21-30 — Dominacja</div>
+      <ul class="space-y-2 text-sm text-gray-300">
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Wdróż llms.txt dla AI Search</li>
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Zoptymalizuj strukturę linkowania wewnętrznego</li>
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Uruchom kampanie na frazy long-tail</li>
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Monitoruj pozycje fraz kluczowych</li>
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Weryfikuj Core Web Vitals</li>
+        <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">▸</span>Buduj profil linków zewnętrznych</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function runAction(url, loadingText) {
+  const progress = document.getElementById('action-progress');
+  const result = document.getElementById('action-result');
+  const actionText = document.getElementById('action-text');
+  const resultText = document.getElementById('action-result-text');
+
+  progress.classList.remove('hidden');
+  result.classList.add('hidden');
+  actionText.textContent = loadingText;
+
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+    const data = await r.json();
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    resultText.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    document.querySelector('#action-result .text-green-400').textContent = '✗ Błąd!';
+    document.querySelector('#action-result .text-green-400').className = 'text-red-400 font-bold mb-2';
+    resultText.textContent = e.message;
+  }
+}
+</script>
+{% endblock %}

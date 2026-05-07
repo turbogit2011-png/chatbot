@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}TurboChat Admin{% endblock %}
+{% block page_title %}TurboChat — Panel doradcy AI{% endblock %}
+{% block page_subtitle %}Rozmowy klientów i statystyki{% endblock %}
+
+{% block header_actions %}
+<a href="/chatbot/embed" class="btn-primary">Kod osadzania</a>
+{% endblock %}
+
+{% block content %}
+<!-- STATS -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <div class="card text-center">
+    <div class="text-3xl font-black text-blue-400 mb-1">{{ stats.total_sessions }}</div>
+    <div class="text-xs text-gray-400">Wszystkich rozmów</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-green-400 mb-1">{{ stats.sessions_today }}</div>
+    <div class="text-xs text-gray-400">Dzisiaj</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-orange-400 mb-1">{{ stats.total_messages }}</div>
+    <div class="text-xs text-gray-400">Wszystkich wiadomości</div>
+  </div>
+  <div class="card text-center">
+    <div class="text-3xl font-black text-purple-400 mb-1">{{ stats.conversion_rate }}%</div>
+    <div class="text-xs text-gray-400">Konwersja (kliknięcia)</div>
+  </div>
+</div>
+
+<!-- SESSIONS TABLE -->
+<div class="card">
+  <h2 class="font-bold text-white mb-4">Ostatnie rozmowy</h2>
+  {% if sessions %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Czas</th>
+        <th>Pierwsza wiadomość</th>
+        <th>Auto</th>
+        <th>Wiadomości</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sessions %}
+      <tr>
+        <td class="text-xs text-gray-500 whitespace-nowrap">{{ s.last_active_dt or '—' }}</td>
+        <td class="max-w-xs">
+          <div class="text-sm text-gray-300 truncate">{{ (s.first_msg or 'brak')[:60] }}</div>
+          <div class="text-xs text-gray-600 font-mono">{{ s.session_id[:16] }}...</div>
+        </td>
+        <td class="text-sm text-gray-300">
+          {% if s.car_brand %}
+            <span class="badge-info">{{ s.car_brand }} {{ s.car_model }}</span>
+          {% else %}
+            <span class="text-gray-600">—</span>
+          {% endif %}
+        </td>
+        <td class="text-center text-sm text-gray-300">{{ s.message_count }}</td>
+        <td>
+          {% if s.converted %}
+            <span class="badge-ok">Konwersja</span>
+          {% else %}
+            <span class="badge-info">Aktywna</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="/chatbot/admin/session/{{ s.session_id }}" class="text-xs text-orange-400 hover:text-orange-300">Podgląd →</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="text-center py-12 text-gray-500">
+    <div class="text-4xl mb-3">💬</div>
+    <p>Brak rozmów — osadź widget na sklepie, aby zaczął zbierać konwersje.</p>
+    <a href="/chatbot/embed" class="btn-primary mt-4 inline-flex">Pobierz kod osadzania →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

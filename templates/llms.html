@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}AI SEO — llms.txt{% endblock %}
+{% block page_title %}AI SEO — Optymalizacja pod sztuczną inteligencję{% endblock %}
+{% block page_subtitle %}ChatGPT, Google AI Overview, Perplexity, Bing AI{% endblock %}
+
+{% block content %}
+<div class="grid md:grid-cols-2 gap-6 mb-6">
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-3">Co to jest llms.txt?</h2>
+    <p class="text-sm text-gray-300 mb-4">
+      Plik <code class="text-orange-400">/llms.txt</code> to standard informujący modele AI
+      (ChatGPT, Claude, Perplexity) o zawartości i polityce cytowania Twojej strony.
+      Umieszczony w katalogu głównym domeny pozwala AI lepiej indeksować i cytować
+      Twój sklep w odpowiedziach na pytania użytkowników.
+    </p>
+    <h3 class="font-semibold text-white mb-2 text-sm">Gdzie umieścić plik?</h3>
+    <div class="bg-gray-700 rounded p-3 text-sm font-mono text-green-400 mb-4">
+      https://twojsklep.pl/llms.txt
+    </div>
+    <h3 class="font-semibold text-white mb-2 text-sm">Jak wgrać do WordPress?</h3>
+    <ol class="text-xs text-gray-400 space-y-1 list-decimal list-inside">
+      <li>Pobierz plik llms.txt poniżej</li>
+      <li>Wgraj przez FTP/SFTP do katalogu głównego <code>public_html/</code></li>
+      <li>Sprawdź dostęp: https://twojadomenda.pl/llms.txt</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-3">Optymalizacja pod Google AI Overview</h2>
+    <div class="space-y-3 text-sm">
+      <div class="flex items-start gap-3">
+        <span class="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="text-white font-medium">Krótkie, konkretne odpowiedzi</div>
+          <div class="text-gray-400 text-xs">Każda sekcja produktu odpowiada na jedno konkretne pytanie. AI Overview cytuje takie fragmenty najchętniej.</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="text-white font-medium">FAQ na każdym produkcie</div>
+          <div class="text-gray-400 text-xs">6 pytań w formacie Q&A ze Schema FAQPage. Google AI bezpośrednio cytuje te sekcje.</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="text-white font-medium">Tabele z danymi technicznymi</div>
+          <div class="text-gray-400 text-xs">Ustrukturyzowane dane (OEM, parametry, kompatybilność) są łatwe do parsowania przez AI.</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="text-white font-medium">Encje: marka, model, typ silnika</div>
+          <div class="text-gray-400 text-xs">Jasne nazwy encji pomagają AI rozpoznać kontekst i cytować właściwy produkt.</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-yellow-400 mt-0.5 flex-shrink-0">→</span>
+        <div>
+          <div class="text-white font-medium">Wdrożone przez TurboSEO Engine</div>
+          <div class="text-gray-400 text-xs">Wszystkie powyższe elementy generujemy i wdrażamy automatycznie.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- llms.txt FILE -->
+<div class="card mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="font-bold text-white">Twój plik llms.txt</h2>
+    <div class="flex gap-2">
+      <button onclick="copyLlms()" class="btn-secondary text-xs py-1.5">Kopiuj</button>
+      <a href="/llms-txt/download" class="btn-primary text-xs py-1.5">Pobierz plik</a>
+    </div>
+  </div>
+  <pre id="llms-content" class="bg-gray-950 rounded-lg p-4 text-sm text-gray-300 overflow-auto max-h-80 whitespace-pre-wrap">{{ llms_content }}</pre>
+</div>
+
+<!-- AI CHECKLIST -->
+<div class="card">
+  <h2 class="font-bold text-white mb-4">Checklista AI SEO</h2>
+  <div class="grid md:grid-cols-3 gap-6 text-sm">
+    <div>
+      <div class="text-xs font-bold text-green-400 uppercase tracking-wider mb-3">Content AI-friendly</div>
+      <ul class="space-y-2">
+        {% set checklist1 = [
+          ("FAQ 6+ pytań na każdym produkcie", True),
+          ("Schema FAQPage na produktach", True),
+          ("Schema HowTo (montaż turbo)", True),
+          ("Tabele danych technicznych HTML", True),
+          ("Sekcja 'Do jakich aut pasuje'", True),
+          ("Odpowiedź na pytanie o cenę", True),
+          ("Definicja co to turbosprężarka", False),
+          ("Sekcja 'Jak sprawdzić VIN'", False),
+        ] %}
+        {% for item, done in checklist1 %}
+        <li class="flex items-start gap-2">
+          <span class="{{ 'text-green-400' if done else 'text-gray-600' }}">{{ '✓' if done else '○' }}</span>
+          <span class="{{ 'text-gray-200' if done else 'text-gray-500' }}">{{ item }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Schema & Struktura</div>
+      <ul class="space-y-2">
+        {% set checklist2 = [
+          ("Product Schema JSON-LD", True),
+          ("LocalBusiness Schema", False),
+          ("AggregateRating Schema", False),
+          ("BreadcrumbList Schema", True),
+          ("HowTo Schema", True),
+          ("llms.txt w katalogu głównym", False),
+          ("robots.txt — brak blokad AI botów", False),
+          ("Sitemap XML — zaktualizowany", False),
+        ] %}
+        {% for item, done in checklist2 %}
+        <li class="flex items-start gap-2">
+          <span class="{{ 'text-green-400' if done else 'text-gray-600' }}">{{ '✓' if done else '○' }}</span>
+          <span class="{{ 'text-gray-200' if done else 'text-gray-500' }}">{{ item }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs font-bold text-orange-400 uppercase tracking-wider mb-3">Encje i Cytowania</div>
+      <ul class="space-y-2">
+        {% set checklist3 = [
+          ("Marki turbosprężarek w treści", True),
+          ("Numery OEM w opisach", True),
+          ("Modele aut w nagłówkach", True),
+          ("Ceny widoczne w treści", False),
+          ("Gwarancja wyrażona w tekście", True),
+          ("Strona 'O firmie' z historią", False),
+          ("Autorstwo artykułów (E-E-A-T)", False),
+          ("Certyfikaty / nagrody", False),
+        ] %}
+        {% for item, done in checklist3 %}
+        <li class="flex items-start gap-2">
+          <span class="{{ 'text-green-400' if done else 'text-gray-600' }}">{{ '✓' if done else '○' }}</span>
+          <span class="{{ 'text-gray-200' if done else 'text-gray-500' }}">{{ item }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyLlms() {
+  const text = document.getElementById('llms-content').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Skopiowano!';
+    setTimeout(() => btn.textContent = 'Kopiuj', 2000);
+  });
+}
+</script>
+{% endblock %}

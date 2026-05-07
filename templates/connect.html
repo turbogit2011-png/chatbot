@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Połącz sklep{% endblock %}
+{% block page_title %}Połącz sklep WooCommerce{% endblock %}
+{% block page_subtitle %}Wprowadź dane dostępowe API swojego sklepu{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+  <div class="card mb-6">
+    <h2 class="font-bold text-white mb-1">Jak uzyskać klucze API WooCommerce?</h2>
+    <ol class="text-sm text-gray-400 space-y-1 mt-3 list-decimal list-inside">
+      <li>Zaloguj się do panelu WordPress → WooCommerce → Ustawienia</li>
+      <li>Zakładka: <strong class="text-gray-300">Zaawansowane → REST API</strong></li>
+      <li>Kliknij <strong class="text-gray-300">Dodaj klucz</strong>, opis: "TurboSEO Engine", Uprawnienia: <strong class="text-gray-300">Odczyt/Zapis</strong></li>
+      <li>Skopiuj Consumer Key (ck_...) i Consumer Secret (cs_...)</li>
+    </ol>
+  </div>
+
+  <form method="POST" action="/connect" class="card space-y-5">
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">URL sklepu <span class="text-red-400">*</span></label>
+      <input name="woo_url" type="url" required placeholder="https://twojsklep.pl"
+             value="{{ config.woo_url or '' }}"
+             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Consumer Key (ck_...) <span class="text-red-400">*</span></label>
+        <input name="woo_ck" type="text" required placeholder="ck_xxxxxxxx"
+               value="{{ config.woo_ck or '' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Consumer Secret (cs_...) <span class="text-red-400">*</span></label>
+        <input name="woo_cs" type="password" required placeholder="cs_xxxxxxxx"
+               value="{{ config.woo_cs or '' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+    </div>
+
+    <hr class="border-gray-700">
+    <p class="text-xs text-gray-500">Do aktualizacji meta SEO (Yoast/RankMath) i stron WordPress potrzebne są dane logowania WP:</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Login WordPress (admin)</label>
+        <input name="wp_user" type="text" placeholder="admin"
+               value="{{ config.wp_user or '' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Hasło aplikacji WP</label>
+        <input name="wp_pass" type="password" placeholder="Hasło aplikacji (nie hasło logowania)"
+               value="{{ config.wp_pass or '' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+        <p class="text-xs text-gray-500 mt-1">WordPress → Użytkownicy → Twój profil → Hasła aplikacji</p>
+      </div>
+    </div>
+
+    <hr class="border-gray-700">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Nazwa sklepu</label>
+        <input name="store_name" type="text" placeholder="TurboShop"
+               value="{{ config.store_name or '' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Wtyczka SEO</label>
+        <select name="seo_plugin"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+          <option value="yoast" {% if config.seo_plugin == 'yoast' %}selected{% endif %}>Yoast SEO</option>
+          <option value="rankmath" {% if config.seo_plugin == 'rankmath' %}selected{% endif %}>RankMath SEO</option>
+          <option value="unknown" {% if config.seo_plugin == 'unknown' %}selected{% endif %}>Inna / Nieznana</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="border-gray-700">
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">Klucz API Anthropic (Claude AI)</label>
+      <input name="anthropic_key" type="password" placeholder="sk-ant-xxxx (opcjonalne — wymagane do generowania treści AI)"
+             value="{{ config.anthropic_key or '' }}"
+             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      <p class="text-xs text-gray-500 mt-1">Bez klucza AI działa w trybie szablonowym (bez Claude). Pobierz klucz: console.anthropic.com</p>
+    </div>
+
+    <div class="flex items-center gap-3 pt-2">
+      <button type="submit" class="btn-primary px-6 py-2.5">
+        Zapisz i połącz sklep
+      </button>
+      {% if store_connected %}
+        <span class="text-green-400 text-sm">✓ Aktualnie połączony</span>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

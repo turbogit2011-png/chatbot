@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Ustawienia{% endblock %}
+{% block page_title %}Ustawienia{% endblock %}
+{% block page_subtitle %}Konfiguracja TurboSEO Engine{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Dane sklepu</h2>
+    <form method="POST" action="/settings" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Nazwa sklepu</label>
+        <input name="store_name" type="text" value="{{ config.store_name or 'TurboShop' }}"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Wtyczka SEO</label>
+        <select name="seo_plugin"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+          <option value="yoast" {% if config.seo_plugin == 'yoast' %}selected{% endif %}>Yoast SEO</option>
+          <option value="rankmath" {% if config.seo_plugin == 'rankmath' %}selected{% endif %}>RankMath SEO</option>
+          <option value="unknown" {% if config.seo_plugin == 'unknown' %}selected{% endif %}>Inna</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Klucz API Anthropic (Claude AI)</label>
+        <input name="anthropic_key" type="password" value="{{ config.anthropic_key or '' }}"
+               placeholder="sk-ant-xxxx"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">Tryb optymalizacji domyślny</label>
+        <select name="opt_mode"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+          <option value="ai" {% if (config.opt_mode or 'ai') == 'ai' %}selected{% endif %}>AI (Claude) — najlepsza jakość</option>
+          <option value="rule" {% if config.opt_mode == 'rule' %}selected{% endif %}>Szablonowy — bez API, szybszy</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Zapisz ustawienia</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">Status połączenia</h2>
+    <div class="space-y-3 text-sm">
+      <div class="flex items-center justify-between py-2 border-b border-gray-700">
+        <span class="text-gray-400">WooCommerce API</span>
+        {% if store_connected %}
+          <span class="badge-ok">✓ Połączony</span>
+        {% else %}
+          <span class="badge-critical">✗ Niepołączony</span>
+        {% endif %}
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-700">
+        <span class="text-gray-400">Claude AI (Anthropic)</span>
+        {% if ai_enabled %}
+          <span class="badge-ok">✓ Klucz aktywny</span>
+        {% else %}
+          <span class="badge-warning">Brak klucza</span>
+        {% endif %}
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-gray-400">URL sklepu</span>
+        <span class="text-gray-300 text-xs font-mono">{{ config.woo_url or '—' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold text-white mb-4">VIN Decoder API <span class="text-xs text-gray-500 font-normal">(opcjonalne — dla pełnego dekodowania EU)</span></h2>
+    <form method="POST" action="/settings" class="space-y-4">
+      <div class="bg-gray-700 rounded-lg p-4 text-sm text-gray-300 mb-2">
+        <p class="mb-2">Bez klucza API dekoder rozpoznaje tylko markę i kraj (WMI offline).</p>
+        <p>Aby uzyskać model, kod silnika i rok — dodaj klucz API:</p>
+        <ul class="mt-2 space-y-1 list-disc list-inside text-xs text-gray-400">
+          <li><strong class="text-gray-200">AutoDNA</strong> (polecane dla EU) — <span class="text-orange-400">autodna.com/api</span> — 100 zapytań/mies. gratis</li>
+          <li><strong class="text-gray-200">NHTSA</strong> — darmowe, tylko USA</li>
+        </ul>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">Klucz API VIN</label>
+          <input name="vin_api_key" type="password" value="{{ config.vin_api_key or '' }}"
+                 placeholder="Klucz AutoDNA / NHTSA"
+                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1">Dostawca API</label>
+          <select name="vin_api_provider"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-orange-500">
+            <option value="autodna" {% if (config.vin_api_provider or 'autodna') == 'autodna' %}selected{% endif %}>AutoDNA (EU)</option>
+            <option value="nhtsa" {% if config.vin_api_provider == 'nhtsa' %}selected{% endif %}>NHTSA (US, darmowy)</option>
+            <option value="carmd" {% if config.vin_api_provider == 'carmd' %}selected{% endif %}>CarMD</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Zapisz</button>
+    </form>
+  </div>
+
+  <div class="card border-red-900">
+    <h2 class="font-bold text-white mb-4">Strefa niebezpieczna</h2>
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="text-sm text-gray-300">Wyczyść bazę danych</div>
+        <div class="text-xs text-gray-500">Usuwa historię audytów i optymalizacji (nie modyfikuje sklepu)</div>
+      </div>
+      <form method="POST" action="/settings/clear-db" onsubmit="return confirm('Na pewno wyczyścić bazę?')">
+        <button type="submit" class="btn-danger text-xs">Wyczyść DB</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

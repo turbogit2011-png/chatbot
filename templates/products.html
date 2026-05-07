@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Produkty{% endblock %}
+{% block page_title %}Optymalizacja produktów{% endblock %}
+{% block page_subtitle %}{{ products|length }} produktów w sklepie{% endblock %}
+
+{% block header_actions %}
+<button onclick="runAction('/api/optimize/products/all','Optymalizuję wszystkie produkty AI...')" class="btn-primary">
+  ⚡ AI: Optimalizuj wszystkie
+</button>
+<button onclick="runAction('/api/optimize/products/all?use_ai=false','Optymalizuję (tryb szablonowy)...')" class="btn-secondary">
+  Szablonowy (bez AI)
+</button>
+{% endblock %}
+
+{% block content %}
+<div id="action-progress" class="hidden card mb-4 border-orange-800">
+  <div class="flex items-center gap-3">
+    <svg class="animate-spin w-5 h-5 text-orange-400 flex-shrink-0" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+    </svg>
+    <span id="action-text" class="text-sm text-orange-300">Przetwarzam...</span>
+  </div>
+</div>
+<div id="action-result" class="hidden card mb-4 border-green-800">
+  <div class="text-green-400 font-bold mb-2 text-sm">✓ Zakończono</div>
+  <pre id="action-result-text" class="text-xs text-gray-300 max-h-40 overflow-auto"></pre>
+</div>
+
+<div class="card">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Score</th>
+        <th>Produkt</th>
+        <th>SKU</th>
+        <th>Cena</th>
+        <th>Problemy</th>
+        <th class="text-right">Akcja</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>
+          <div class="score-circle {{ 'score-low' if p.score < 40 else ('score-mid' if p.score < 70 else 'score-high') }}">
+            {{ p.score }}
+          </div>
+        </td>
+        <td>
+          <div class="text-white font-medium text-sm">{{ p.name }}</div>
+          {% if p.permalink %}
+          <a href="{{ p.permalink }}" target="_blank" class="text-xs text-gray-500 hover:text-orange-400">{{ p.permalink[:50] }}...</a>
+          {% endif %}
+        </td>
+        <td class="text-gray-400 text-xs font-mono">{{ p.sku or '—' }}</td>
+        <td class="text-gray-300 text-sm">{{ p.price or '—' }} zł</td>
+        <td>
+          {% for iss in p.issues[:3] %}
+          <span class="badge-{{ iss.severity }} mr-1 mb-1 block">{{ iss.field }}</span>
+          {% endfor %}
+          {% if p.issues|length > 3 %}
+          <span class="text-xs text-gray-500">+{{ p.issues|length - 3 }} więcej</span>
+          {% endif %}
+        </td>
+        <td class="text-right">
+          <a href="/products/{{ p.id }}/optimize" class="btn-primary text-xs py-1 px-3">Napraw</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function runAction(url, loadingText) {
+  const progress = document.getElementById('action-progress');
+  const result = document.getElementById('action-result');
+  const actionText = document.getElementById('action-text');
+  const resultText = document.getElementById('action-result-text');
+  progress.classList.remove('hidden');
+  result.classList.add('hidden');
+  actionText.textContent = loadingText;
+  try {
+    const r = await fetch(url, { method: 'POST' });
+    const data = await r.json();
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    const ok = data.filter ? data.filter(d => !d.error).length : '?';
+    const err = data.filter ? data.filter(d => d.error).length : 0;
+    resultText.textContent = `Optymalizacje: ${ok} OK${err ? ', '+err+' błędów' : ''}.\n\n` + JSON.stringify(data.slice(0,5), null, 2) + (data.length > 5 ? '\n...' : '');
+  } catch (e) {
+    progress.classList.add('hidden');
+    result.classList.remove('hidden');
+    resultText.textContent = 'Błąd: ' + e.message;
+  }
+}
+</script>
+{% endblock %}
