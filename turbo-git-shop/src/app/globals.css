@@ -105,3 +105,36 @@ body {
 .animate-float { animation: float 5s ease-in-out infinite; }
 .animate-pulse-warm { animation: pulse-warm 2s ease-in-out infinite; }
 .animate-spin-ring { animation: spin-ring 12s linear infinite; }
+
+/* Marquee */
+@keyframes marquee { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }
+.animate-marquee { animation: marquee 35s linear infinite; display: flex; width: max-content; will-change: transform; }
+.marquee-track { overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%); }
+
+/* Shimmer on hover */
+@keyframes shimmer-move { 0% { left: -100% } 100% { left: 200% } }
+.card-shimmer { position: relative; overflow: hidden; }
+.card-shimmer::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: none; pointer-events: none; }
+.card-shimmer:hover::after { animation: shimmer-move 1.4s ease-in-out; }
+
+/* Breathe glow */
+@keyframes breathe { 0%,100% { opacity: 0.5; transform: scale(1) } 50% { opacity: 0.9; transform: scale(1.08) } }
+.animate-breathe { animation: breathe 7s ease-in-out infinite; }
+
+/* Spin slow */
+@keyframes spin-slow { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+@keyframes spin-slow-reverse { from { transform: rotate(360deg) } to { transform: rotate(0deg) } }
+.animate-spin-slow { animation: spin-slow 30s linear infinite; }
+.animate-spin-slow-rev { animation: spin-slow-reverse 20s linear infinite; }
+
+/* Scan line */
+@keyframes scan-down { 0% { transform: translateY(-150%) } 100% { transform: translateY(250%) } }
+.animate-scan { animation: scan-down 5s ease-in-out infinite; }
+
+/* Gradient text animated */
+@keyframes gradient-shift { 0%,100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
+.text-gradient-animated { background: linear-gradient(135deg, #FF7A00, #FFB800, #FF3D00, #FF7A00); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradient-shift 4s ease infinite; }
+
+/* Neon border pulse */
+@keyframes neon-pulse { 0%,100% { box-shadow: 0 0 10px rgba(255,122,0,0.3), 0 0 20px rgba(255,122,0,0.1) } 50% { box-shadow: 0 0 20px rgba(255,122,0,0.6), 0 0 40px rgba(255,122,0,0.2), 0 0 80px rgba(255,122,0,0.1) } }
+.animate-neon { animation: neon-pulse 2.5s ease-in-out infinite; }
