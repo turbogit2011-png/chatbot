@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
-const repo = "turbo-git-shop";
+const repo = "chatbot";
 
 const nextConfig: NextConfig = {
   output: "export",
