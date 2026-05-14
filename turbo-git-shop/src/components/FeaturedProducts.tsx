@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { products } from "@/lib/data";
 import ProductCard from "./ProductCard";
 
-const tabs = ["Wszystkie", "Audi", "BMW", "Ford", "Mercedes", "Volkswagen"];
+const tabs = ["Wszystkie", "Audi", "Ford", "Volkswagen", "Opel", "Mercedes", "BMW"];
 
 export default function FeaturedProducts() {
   const ref = useRef<HTMLDivElement>(null);
@@ -15,7 +15,7 @@ export default function FeaturedProducts() {
   const filtered = active === "Wszystkie" ? products.slice(0, 6) : products.filter(p => p.brand === active).slice(0, 6);
 
   return (
-    <section id="produkty" className="py-24 sm:py-32 relative overflow-hidden">
+    <section id="sklep" className="py-24 sm:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-[#0E1420]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
       <div className="absolute inset-0 dot-matrix opacity-30" />
