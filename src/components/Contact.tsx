@@ -3,12 +3,18 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { CONTACT } from "@/lib/brand";
 
-const contactInfo = [
-  { icon: Phone, label: "Telefon", value: "+48 000 000 000", href: "tel:+48000000000" },
-  { icon: Mail, label: "Email", value: "kontakt@turbodiesel.cc", href: "mailto:kontakt@turbodiesel.cc" },
-  { icon: MapPin, label: "Adres", value: "ul. Przykładowa 1, 00-000 Miasto", href: "#" },
-  { icon: Clock, label: "Godziny pracy", value: "Pn–Pt: 8:00–18:00 / Sob: 9:00–13:00", href: null },
+const contactInfo: { icon: typeof Phone; label: string; value: string; href: string | null }[] = [
+  { icon: Phone, label: "Telefon", value: CONTACT.phoneDisplay, href: CONTACT.phoneTel },
+  { icon: Mail, label: "Email", value: CONTACT.email, href: CONTACT.emailMailto },
+  {
+    icon: MapPin,
+    label: "Adres",
+    value: `${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city}`,
+    href: null,
+  },
+  { icon: Clock, label: "Godziny pracy", value: CONTACT.hours.full, href: null },
 ];
 
 type FormState = "idle" | "loading" | "success" | "error";
@@ -47,17 +53,16 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="section-label mx-auto justify-center mb-4">
-            <span>Skontaktuj się</span>
-          </div>
-          <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] text-white leading-none mb-4 tracking-wide">
-            BEZPŁATNA
-            <br />
-            <span className="text-gradient">WYCENA</span>
+          <span className="hud-label text-[var(--orange)] block mb-3">
+            Kontakt · 30 min response
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight tracking-tight mb-4">
+            Wyślij <span className="text-gradient">numer turbo / VIN</span> —
+            oddzwonimy w 30 minut.
           </h2>
-          <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto">
-            Opisz problem i model pojazdu — oddzwonimy lub odpiszemy w ciągu 30 minut
-            w godzinach pracy z bezpłatną wyceną.
+          <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-2xl mx-auto">
+            Opisz model pojazdu, podaj numer OEM lub VIN — przygotujemy
+            bezpłatną wycenę i potwierdzimy dopasowanie w 100%. Bez zobowiązań.
           </p>
         </motion.div>
 
@@ -166,7 +171,7 @@ export default function Contact() {
                         onChange={handleChange}
                         required
                         type="tel"
-                        placeholder="+48 000 000 000"
+                        placeholder="+48 600 000 000"
                         className="input-field"
                       />
                     </div>
@@ -186,7 +191,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
-                      Opis problemu i marka pojazdu *
+                      Marka, model, numer OEM / VIN *
                     </label>
                     <textarea
                       name="message"
@@ -194,7 +199,7 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       rows={5}
-                      placeholder="Opisz swój problem – model pojazdu, rok produkcji, objawy usterki..."
+                      placeholder="np. Audi A4 B8 2.0 TDI 170 KM, OEM 03L253056T albo VIN WAUZZZ8K..."
                       className="input-field resize-none"
                     />
                   </div>

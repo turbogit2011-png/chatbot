@@ -1,277 +1,275 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Shield, Award, Clock } from "lucide-react";
+import { ArrowRight, Phone, ShieldCheck, Gauge, Wind, Truck } from "lucide-react";
+import { CONTACT, USP } from "@/lib/brand";
 
-function ParticleCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+/**
+ * HUD-style data panel that simulates a live diagnostic readout.
+ * Values "drift" to suggest a running turbo on a balancing rig.
+ */
+function HudPanel() {
+  const [rpm, setRpm] = useState(248_000);
+  const [boost, setBoost] = useState(1.82);
+  const [balance, setBalance] = useState(0.05);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    interface Particle {
-      x: number; y: number; vx: number; vy: number;
-      size: number; opacity: number; decay: number; color: string;
-    }
-
-    const particles: Particle[] = [];
-    const colors = ["#FF6B1A", "#FF8C3A", "#FF3D00", "#FFB347", "#FF6B1A"];
-
-    const spawn = () => {
-      const side = Math.floor(Math.random() * 4);
-      let x = 0, y = 0;
-      const w = canvas.width, h = canvas.height;
-      if (side === 0) { x = Math.random() * w; y = h; }
-      else if (side === 1) { x = 0; y = Math.random() * h; }
-      else if (side === 2) { x = Math.random() * w; y = 0; }
-      else { x = w; y = Math.random() * h; }
-
-      const angle = Math.atan2(h / 2 - y, w / 2 - x) + (Math.random() - 0.5) * 1.2;
-      const speed = 0.3 + Math.random() * 0.8;
-      particles.push({
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: 0.5 + Math.random() * 1.5,
-        opacity: 0.3 + Math.random() * 0.4,
-        decay: 0.003 + Math.random() * 0.004,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    };
-
-    let animId: number;
-    let frame = 0;
-    const animate = () => {
-      animId = requestAnimationFrame(animate);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      frame++;
-      if (frame % 3 === 0 && particles.length < 120) spawn();
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.opacity -= p.decay;
-
-        if (p.opacity <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.floor(p.opacity * 255).toString(16).padStart(2, "0");
-        ctx.fill();
-      }
-
-      // Draw connection lines for nearby particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 80) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255,107,26,${0.04 * (1 - dist / 80)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
-    animate();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
+    const id = setInterval(() => {
+      setRpm(240_000 + Math.round(Math.random() * 16_000));
+      setBoost(+(1.6 + Math.random() * 0.5).toFixed(2));
+      setBalance(+(0.03 + Math.random() * 0.05).toFixed(2));
+    }, 1800);
+    return () => clearInterval(id);
   }, []);
 
+  const rows: { label: string; value: string; unit: string }[] = [
+    { label: "RPM", value: rpm.toLocaleString("pl-PL"), unit: "obr/min" },
+    { label: "BOOST", value: boost.toFixed(2), unit: "bar" },
+    { label: "BALANCE", value: `±${balance.toFixed(2)}`, unit: "g" },
+  ];
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-60"
-      style={{ zIndex: 1 }}
-    />
+    <div className="font-mono-tech text-[11px] leading-tight rounded-sm border border-white/10 bg-black/40 backdrop-blur-sm p-3 sm:p-4 min-w-[180px]">
+      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
+        <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse" />
+        <span className="hud-label text-[var(--green)]">VSR301 · LIVE</span>
+      </div>
+      <div className="space-y-2">
+        {rows.map((r) => (
+          <div key={r.label} className="flex items-baseline justify-between gap-3">
+            <span className="hud-label text-[var(--steel-light)]">{r.label}</span>
+            <span className="text-white text-sm tabular-nums">
+              {r.value}
+              <span className="text-[var(--steel-light)] text-[10px] ml-1">{r.unit}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
-const badges = [
-  { icon: Shield, label: "Gwarancja 12 miesięcy" },
-  { icon: Award, label: "10+ lat doświadczenia" },
-  { icon: Clock, label: "Czas realizacji 24-48h" },
+/**
+ * Inline SVG turbo rotor — animates infinitely.
+ * Stylised compressor wheel with 9 curved blades.
+ */
+function TurboRotor({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 200 200" className={className} aria-hidden="true">
+      <defs>
+        <radialGradient id="turbo-hub" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FF7A47" />
+          <stop offset="60%" stopColor="#FF5A1F" />
+          <stop offset="100%" stopColor="#7A2A0A" />
+        </radialGradient>
+        <linearGradient id="blade-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#3A3F49" />
+          <stop offset="50%" stopColor="#8A93A3" />
+          <stop offset="100%" stopColor="#1A1D24" />
+        </linearGradient>
+      </defs>
+      <g className="animate-rotor" style={{ transformOrigin: "100px 100px" }}>
+        {Array.from({ length: 9 }).map((_, i) => {
+          const angle = (i * 360) / 9;
+          return (
+            <path
+              key={i}
+              d="M100 100 Q 130 60 165 90 Q 140 95 100 100 Z"
+              fill="url(#blade-gradient)"
+              stroke="#0A0B0D"
+              strokeWidth="1"
+              transform={`rotate(${angle} 100 100)`}
+            />
+          );
+        })}
+        <circle cx="100" cy="100" r="28" fill="url(#turbo-hub)" />
+        <circle cx="100" cy="100" r="8" fill="#0A0B0D" />
+      </g>
+      <circle
+        cx="100"
+        cy="100"
+        r="92"
+        fill="none"
+        stroke="rgba(255, 90, 31, 0.15)"
+        strokeWidth="1"
+        strokeDasharray="2 4"
+      />
+    </svg>
+  );
+}
+
+const heroBadges = [
+  { icon: ShieldCheck, label: USP.warrantyShort },
+  { icon: Gauge, label: "Nowy CHRA" },
+  { icon: Wind, label: "VSR301 · G3-Min-Flow" },
+  { icon: Truck, label: "Wysyłka 24h" },
 ];
 
 export default function Hero() {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, 150]);
+  const y = useTransform(scrollY, [0, 600], [0, 120]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-  const handleContact = () => {
-    document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleServices = () => {
-    document.querySelector("#uslugi")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-[100svh] flex items-center overflow-hidden pt-24 pb-16 sm:pt-28 lg:pt-32"
+    >
       {/* Background layers */}
-      <div className="absolute inset-0 bg-[#07090E]" />
+      <div className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="absolute inset-0 bg-grid opacity-100" />
 
-      {/* Gradient orbs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#FF6B1A]/8 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#FF3D00]/6 blur-[100px] pointer-events-none" />
-      <div className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-[#FF6B1A]/5 blur-[80px] pointer-events-none" />
-
-      {/* Particles */}
-      <ParticleCanvas />
+      {/* Boost glow */}
+      <div className="absolute top-[-15%] left-[-5%] w-[640px] h-[640px] rounded-full bg-[var(--orange)]/10 blur-[140px] pointer-events-none animate-boost" />
+      <div className="absolute bottom-[-25%] right-[-15%] w-[560px] h-[560px] rounded-full bg-[var(--red)]/8 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[35%] right-[18%] w-[280px] h-[280px] rounded-full bg-[var(--blue)]/5 blur-[90px] pointer-events-none" />
 
       {/* Radial spotlight */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,107,26,0.06) 0%, transparent 70%)",
+          background:
+            "radial-gradient(ellipse 70% 50% at 30% 35%, rgba(255,90,31,0.10) 0%, transparent 70%)",
           zIndex: 1,
         }}
       />
 
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-20 w-full"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full"
       >
-        <div className="max-w-4xl">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="badge mb-8 w-fit"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#FF6B1A] animate-pulse" />
-            Profesjonalny serwis turbosprężarek od 2014 roku
-          </motion.div>
-
-          {/* Main headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="font-display text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] tracking-wide text-white mb-6"
-          >
-            REGENERACJA
-            <br />
-            <span className="text-gradient glow-text">TURBO</span>
-            <br />
-            SPRĘŻAREK
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="text-[#8A9BB0] text-lg sm:text-xl max-w-xl mb-10 leading-relaxed"
-          >
-            Przywracamy pełną moc Twojego silnika. Precyzyjna diagnostyka,
-            regeneracja CNC i testy na specjalistycznych stanowiskach.
-            Wszystkie marki i modele.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="flex flex-wrap gap-4 mb-16"
-          >
-            <button onClick={handleContact} className="btn-primary flex items-center gap-2 text-base">
-              Bezpłatna wycena
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button onClick={handleServices} className="btn-secondary flex items-center gap-2 text-base">
-              Nasze usługi
-            </button>
-          </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
-            className="flex flex-wrap gap-6"
-          >
-            {badges.map((badge, i) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg glass-orange flex items-center justify-center flex-shrink-0">
-                  <badge.icon className="w-4 h-4 text-[#FF6B1A]" />
-                </div>
-                <span className="text-sm font-medium text-[#8A9BB0]">{badge.label}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Floating stat cards */}
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-4"
-        >
-          {[
-            { value: "5 000+", label: "Zregenerowanych turbo" },
-            { value: "98%", label: "Zadowolonych klientów" },
-            { value: "24h", label: "Czas realizacji" },
-          ].map((stat, i) => (
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-12 items-center">
+          {/* Left — copy + CTA */}
+          <div className="max-w-2xl">
             <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
-              className="glass border-gradient rounded-xl px-6 py-4 min-w-[180px] animate-float"
-              style={{ animationDelay: `${i * 2}s` }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex items-center gap-3 mb-6"
             >
-              <div className="font-display text-3xl text-gradient mb-0.5">{stat.value}</div>
-              <div className="text-xs text-[#8A9BB0] font-medium">{stat.label}</div>
+              <span className="hud-label text-[var(--orange)]">
+                TURBO LAB · WROCŁAW · OD 2010
+              </span>
+              <span className="h-px w-12 bg-[var(--steel)]" />
             </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#07090E] to-transparent pointer-events-none z-10" />
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="font-display text-[clamp(2.4rem,6.5vw,4.75rem)] leading-[1.02] tracking-tight text-white mb-6"
+            >
+              Regeneracja turbosprężarek na poziomie{" "}
+              <span className="text-gradient">technologii premium</span>.
+            </motion.h1>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-      >
-        <span className="text-xs text-[#4A5568] font-medium tracking-widest uppercase">Przewiń</span>
-        <div className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-[var(--text-muted)] text-base sm:text-lg max-w-xl mb-8 leading-relaxed"
+            >
+              Nowe rdzenie <span className="text-white font-medium">CHRA</span>.
+              Wyważanie wysokoobrotowe{" "}
+              <span className="text-white font-medium">
+                TurboTechnics VSR301
+              </span>
+              . Precyzyjny przepływ{" "}
+              <span className="text-white font-medium">G3-Min-Flow</span>.{" "}
+              <span className="text-[var(--green)] font-medium">
+                24 miesiące gwarancji
+              </span>{" "}
+              bez limitu kilometrów.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-wrap gap-3 mb-10"
+            >
+              <a
+                href="#dobor-turbo"
+                className="btn-primary scanline inline-flex items-center gap-2 text-base"
+              >
+                Dobierz turbosprężarkę
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href={CONTACT.phoneTel}
+                className="btn-secondary inline-flex items-center gap-2 text-base"
+                aria-label={`Zadzwoń ${CONTACT.phoneDisplay}`}
+              >
+                <Phone className="w-4 h-4 text-[var(--orange)]" />
+                {CONTACT.phoneDisplay}
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="flex flex-wrap gap-2.5"
+            >
+              {heroBadges.map((b) => (
+                <span key={b.label} className="chip-trust">
+                  <b.icon className="w-3.5 h-3.5" />
+                  {b.label}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right — visual: turbo rotor + HUD panel */}
           <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-            className="w-1.5 h-1.5 rounded-full bg-[#FF6B1A]"
-          />
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            className="relative h-[400px] sm:h-[480px] lg:h-[560px] hidden md:block"
+          >
+            {/* Rotor */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-[360px] h-[360px] lg:w-[460px] lg:h-[460px]">
+                {/* Outer ring */}
+                <div className="absolute inset-0 rounded-full border border-[var(--steel)]/60" />
+                <div
+                  className="absolute inset-4 rounded-full border border-dashed border-[var(--orange)]/20"
+                  aria-hidden
+                />
+                {/* Rim light */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--orange)]/15 via-transparent to-transparent blur-2xl" />
+                {/* Rotor SVG */}
+                <TurboRotor className="absolute inset-0 w-full h-full drop-shadow-[0_0_40px_rgba(255,90,31,0.35)]" />
+              </div>
+            </div>
+
+            {/* HUD panel — top right */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="absolute top-6 right-2 sm:right-4 z-10"
+            >
+              <HudPanel />
+            </motion.div>
+
+            {/* Measurement label — bottom left */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1 }}
+              className="absolute bottom-6 left-2 sm:left-6 z-10 font-mono-tech text-[11px] text-[var(--steel-light)] flex items-center gap-2"
+            >
+              <span className="inline-block w-6 h-px bg-[var(--orange)]" />
+              <span>CHRA · GARRETT GTB1749VK · ±0.05 g</span>
+            </motion.div>
+          </motion.div>
         </div>
       </motion.div>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--bg-primary)] to-transparent pointer-events-none z-10" />
     </section>
   );
 }

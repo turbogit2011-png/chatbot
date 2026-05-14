@@ -17,7 +17,7 @@ const testimonials = [
     name: "Anna Wiśniewska",
     role: "Właścicielka warsztatu",
     content:
-      "Współpracuję z TurboDiesel od 4 lat. Wszystkie turbosprężarki wychodzą perfekcyjnie. Czas realizacji, jakość i cena – wszystko na najwyższym poziomie.",
+      "Współpracuję z TURBO-GIT od 4 lat. Wszystkie turbosprężarki wychodzą perfekcyjnie. Czas realizacji, jakość i cena – wszystko na najwyższym poziomie.",
     rating: 5,
     vehicle: "Warsztat samochodowy",
   },
@@ -25,7 +25,7 @@ const testimonials = [
     name: "Tomasz Nowak",
     role: "Kierowca prywatny",
     content:
-      "VW Passat 2.0 TDI – turbo się posypało. Dzięki TurboDiesel uniknąłem zakupu nowej turbosprężarki za 3500 zł. Regeneracja kosztowała dużo mniej i działa doskonale.",
+      "VW Passat 2.0 TDI – turbo się posypało. Dzięki TURBO-GIT uniknąłem zakupu nowej turbosprężarki za 3500 zł. Regeneracja kosztowała dużo mniej i działa doskonale.",
     rating: 5,
     vehicle: "VW Passat 2.0 TDI",
   },
@@ -33,7 +33,7 @@ const testimonials = [
     name: "Piotr Zając",
     role: "Fleet Manager",
     content:
-      "Zarządzam flotą 20 aut firmowych. TurboDiesel to nasz stały partner serwisowy. Szybkość realizacji i profesjonalizm na najwyższym poziomie – zdecydowanie godne polecenia.",
+      "Zarządzam flotą 20 aut firmowych. TURBO-GIT to nasz stały partner serwisowy. Szybkość realizacji i profesjonalizm na najwyższym poziomie – zdecydowanie godne polecenia.",
     rating: 5,
     vehicle: "Flota firmowa 20 aut",
   },
@@ -41,7 +41,7 @@ const testimonials = [
     name: "Katarzyna Dąbrowska",
     role: "Taksówkarka",
     content:
-      "Toyota Avensis 2.2 D-4D. Turbo zaczęło świszczeć i traciłam moc. Po regeneracji w TurboDiesel auto jest jak nowe. Gwarancja i profesjonalizm – polecam!",
+      "Toyota Avensis 2.2 D-4D. Turbo zaczęło świszczeć i traciłam moc. Po regeneracji w TURBO-GIT auto jest jak nowe. Gwarancja i profesjonalizm – polecam!",
     rating: 5,
     vehicle: "Toyota Avensis 2.2 D-4D",
   },

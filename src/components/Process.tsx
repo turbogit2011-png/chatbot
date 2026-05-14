@@ -2,40 +2,75 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Phone, Search, Wrench, CheckCircle } from "lucide-react";
+import {
+  Phone,
+  Search,
+  Sparkles,
+  CircuitBoard,
+  Wrench,
+  Gauge,
+  Wind,
+  ClipboardCheck,
+  CheckCircle,
+} from "lucide-react";
+import { CONTACT } from "@/lib/brand";
 
 const steps = [
   {
-    icon: Phone,
-    number: "01",
-    title: "Kontakt i wycena",
-    description:
-      "Skontaktuj się z nami telefonicznie lub przez formularz. Opisz problem — przygotujemy bezpłatną, wstępną wycenę jeszcze tego samego dnia.",
-    detail: "Bezpłatna konsultacja",
-  },
-  {
     icon: Search,
-    number: "02",
+    number: "01",
     title: "Przyjęcie i diagnostyka",
     description:
-      "Po przyjęciu turbosprężarki przeprowadzamy kompleksową diagnostykę. Dokładnie analizujemy każdy element i identyfikujemy przyczyny awarii.",
-    detail: "Protokół diagnostyki",
+      "Przyjmujemy turbinę, dokumentujemy stan wstępny, identyfikujemy przyczynę awarii i przygotowujemy plan regeneracji.",
+    detail: "Raport diagnostyczny",
+  },
+  {
+    icon: Sparkles,
+    number: "02",
+    title: "Demontaż i ultradźwięki",
+    description:
+      "Pełny demontaż obudów. Czyszczenie ultradźwiękami i piaskowanie kompresorem szklanym — zero pozostałości.",
+    detail: "Czystość laboratoryjna",
+  },
+  {
+    icon: CircuitBoard,
+    number: "03",
+    title: "Wymiana rdzenia CHRA",
+    description:
+      "Montujemy fabrycznie nowy zespół CHRA. Łożyska, wałek, koło sprężające, pierścienie — wszystko nowe, nie regenerowane.",
+    detail: "100% nowy CHRA",
   },
   {
     icon: Wrench,
-    number: "03",
-    title: "Regeneracja i naprawa",
+    number: "04",
+    title: "Montaż precyzyjny",
     description:
-      "Wymieniamy zużyte elementy na nowe, oryginalne części. Precyzyjna regeneracja na maszynach CNC i dynamiczne balansowanie wirnika.",
-    detail: "Nowe części OEM",
+      "Składamy turbosprężarkę z momentami kontrolowanymi i nowymi uszczelkami. Każde połączenie według procedury producenta.",
+    detail: "Tolerancje fabryczne",
   },
   {
-    icon: CheckCircle,
-    number: "04",
-    title: "Testy i odbiór",
+    icon: Gauge,
+    number: "05",
+    title: "Wyważanie VSR301",
     description:
-      "Każda zregenerowana turbosprężarka przechodzi rygorystyczne testy ciśnienia i szczelności. Wydajemy protokół badań i 12-miesięczną gwarancję.",
-    detail: "Gwarancja 12 mies.",
+      "Wałek wyważany wysokoobrotowo na TurboTechnics VSR301 do 250 000 RPM z tolerancją ±0,05 g. Raport cyfrowy.",
+    detail: "±0.05 g · 250k RPM",
+  },
+  {
+    icon: Wind,
+    number: "06",
+    title: "Przepływ G3-Min-Flow",
+    description:
+      "Indywidualna kalibracja przepływu na stanowisku G3-Min-Flow. Pełne ciśnienie doładowania na każdym obrocie.",
+    detail: "±2% tolerancji",
+  },
+  {
+    icon: ClipboardCheck,
+    number: "07",
+    title: "Kalibracja geometrii + raport",
+    description:
+      "Kalibracja aktuatora i zmiennej geometrii na G3-REA-MASTER. Pełen raport pomiarowy + gwarancja 24 mc do paczki.",
+    detail: "24 mc gwarancji",
   },
 ];
 
@@ -44,119 +79,104 @@ export default function Process() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="proces" className="py-24 sm:py-32 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-[#0C1018]" />
+    <section id="proces" className="py-20 sm:py-28 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(255,107,26,0.05), transparent 70%)" }}
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(255,90,31,0.06), transparent 70%)",
+        }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mb-14"
         >
-          <div className="section-label mx-auto justify-center mb-4">
-            <span>Jak działamy</span>
-          </div>
-          <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] text-white leading-none mb-4 tracking-wide">
-            PROSTY PROCES,
-            <br />
-            <span className="text-gradient">PEWNY REZULTAT</span>
+          <span className="hud-label text-[var(--orange)] block mb-3">
+            Proces regeneracji · 7 kroków
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight tracking-tight mb-4">
+            Siedem kroków. <span className="text-gradient">Zero skrótów.</span>
           </h2>
-          <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto">
-            Przejrzysty 4-etapowy proces realizacji naprawy.
-            Zawsze wiesz co i kiedy robimy z Twoją turbosprężarką.
+          <p className="text-[var(--text-muted)] text-base sm:text-lg">
+            Każda turbo, którą do nas wysyłasz, przechodzi tę samą procedurę —
+            od diagnostyki po raport pomiarowy z numerami wyważenia i
+            przepływu. Raport otrzymujesz razem z turbiną.
           </p>
         </motion.div>
 
-        {/* Steps */}
-        <div className="relative">
-          {/* Connector line – desktop */}
-          <div className="hidden lg:block absolute top-[52px] left-[calc(12.5%+24px)] right-[calc(12.5%+24px)] h-px">
-            <div className="h-full bg-gradient-to-r from-transparent via-[#FF6B1A]/30 to-transparent" />
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={inView ? { scaleX: 1 } : {}}
-              transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-              className="absolute inset-0 origin-left bg-gradient-to-r from-[#FF6B1A]/60 to-[#FF3D00]/30"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 + i * 0.12 }}
-                className="flex flex-col items-center text-center group"
-              >
-                {/* Icon circle */}
-                <div className="relative mb-6">
-                  <div className="w-[104px] h-[104px] rounded-full bg-[#111827] border border-white/8 flex items-center justify-center relative z-10 group-hover:border-[#FF6B1A]/30 transition-all duration-500">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF6B1A]/15 to-[#FF3D00]/10 flex items-center justify-center group-hover:from-[#FF6B1A]/25 group-hover:to-[#FF3D00]/20 transition-all duration-500">
-                      <step.icon className="w-7 h-7 text-[#FF6B1A]" />
-                    </div>
-                  </div>
-                  {/* Number badge */}
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center text-xs font-bold text-white shadow-[0_0_12px_rgba(255,107,26,0.5)]">
-                    {i + 1}
-                  </div>
-                </div>
-
-                <div className="font-display text-5xl text-white/5 leading-none mb-2 -mt-2 select-none">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {steps.map((step, i) => (
+            <motion.article
+              key={step.title}
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: 0.15 + i * 0.06 }}
+              className="card-premium p-5 relative"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <span className="w-10 h-10 rounded-sm flex items-center justify-center bg-[var(--orange)]/12 border border-[var(--orange)]/25">
+                  <step.icon className="w-4 h-4 text-[var(--orange)]" />
+                </span>
+                <span className="font-mono-tech text-xs text-[var(--steel-light)]">
                   {step.number}
-                </div>
-
-                <h3 className="font-semibold text-white text-lg mb-3 group-hover:text-[#FF8C3A] transition-colors">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-[#8A9BB0] leading-relaxed mb-4">
-                  {step.description}
-                </p>
-
-                {/* Detail badge */}
-                <span className="badge text-xs">
-                  <CheckCircle className="w-3 h-3" />
+                </span>
+              </div>
+              <h3 className="font-semibold text-white text-sm mb-2 leading-snug">
+                {step.title}
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-3">
+                {step.description}
+              </p>
+              <div className="pt-3 border-t border-white/5 flex items-center gap-1.5">
+                <CheckCircle className="w-3 h-3 text-[var(--green)] flex-shrink-0" />
+                <span className="font-mono-tech text-[11px] text-[var(--green)]">
                   {step.detail}
                 </span>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.article>
+          ))}
         </div>
 
         {/* Bottom CTA strip */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-20 glass-orange rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6"
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="mt-12 card-premium p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5"
         >
           <div>
-            <h3 className="font-display text-2xl text-white tracking-wide mb-1">
-              GOTOWY DO DZIAŁANIA?
+            <h3 className="font-display text-xl sm:text-2xl text-white tracking-tight mb-1">
+              Wyślij turbo do regeneracji — albo zamów gotową.
             </h3>
-            <p className="text-[#8A9BB0] text-sm">
-              Zadzwoń lub napisz — oddzwonimy w ciągu 30 minut w godzinach pracy.
+            <p className="text-[var(--text-muted)] text-sm">
+              Oddzwaniamy w 30 minut w godzinach pracy. {CONTACT.hours.full}.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 flex-shrink-0">
-            <a href="tel:+48000000000" className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap">
+            <a
+              href={CONTACT.phoneTel}
+              className="btn-primary scanline inline-flex items-center gap-2 text-sm"
+            >
               <Phone className="w-4 h-4" />
-              Zadzwoń teraz
+              {CONTACT.phoneDisplay}
             </a>
             <a
               href="#kontakt"
-              onClick={(e) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="btn-secondary text-sm whitespace-nowrap"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .querySelector("#kontakt")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="btn-secondary text-sm"
             >
-              Formularz kontaktowy
+              Formularz kontaktu
             </a>
           </div>
         </motion.div>

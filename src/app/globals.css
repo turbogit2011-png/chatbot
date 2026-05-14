@@ -1,28 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #07090E;
-  --bg-secondary: #0C1018;
-  --bg-card: #111827;
-  --bg-card-hover: #1a2332;
+  /* TURBO-GIT premium palette — carbon, graphite, anthracite */
+  --bg-primary: #0A0B0D;
+  --bg-secondary: #14161A;
+  --bg-card: #1C1F24;
+  --bg-card-hover: #232730;
+  --steel: #2A2E36;
+  --steel-light: #9AA0AB;
   --border: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(255, 107, 26, 0.4);
-  --orange: #FF6B1A;
-  --orange-light: #FF8C3A;
-  --orange-dark: #CC4D0A;
-  --red: #FF3D00;
-  --text: #F0F4F8;
-  --text-muted: #8A9BB0;
-  --text-subtle: #4A5568;
-  --gradient-orange: linear-gradient(135deg, #FF6B1A 0%, #FF3D00 100%);
-  --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 107, 26, 0.15), transparent);
+  --border-hover: rgba(255, 90, 31, 0.45);
+
+  /* Accents */
+  --orange: #FF5A1F;            /* Boost Orange */
+  --orange-light: #FF7A47;
+  --orange-dark: #CC3F0E;
+  --red: #E11D2A;               /* Heat Red */
+  --blue: #22D3EE;              /* Diagnostic Blue */
+  --green: #10B981;             /* Titanium Green — warranty/trust */
+
+  --text: #F4F5F7;
+  --text-muted: #9AA0AB;
+  --text-subtle: #5A6170;
+
+  --gradient-orange: linear-gradient(135deg, #FF5A1F 0%, #E11D2A 100%);
+  --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 90, 31, 0.18), transparent);
+  --gradient-tech: linear-gradient(135deg, #22D3EE 0%, #0EA5E9 100%);
 }
 
 @theme inline {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text);
   --font-sans: var(--font-inter);
-  --font-display: var(--font-bebas);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -57,8 +68,9 @@ body {
 
 /* Typography */
 .font-display {
-  font-family: var(--font-bebas), 'Impact', sans-serif;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display), 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* Gradient text */
@@ -319,4 +331,132 @@ body {
 .dot-pattern {
   background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* === TURBO-GIT premium additions === */
+
+/* Mono font for OEM numbers, RPM, technical values */
+.font-mono-tech {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: 0.02em;
+}
+
+/* HUD label — small uppercase technical labels */
+.hud-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+
+/* Diagnostic blue accent (technology / measurement) */
+.text-diagnostic { color: var(--blue); }
+.bg-diagnostic { background-color: var(--blue); }
+.text-titanium { color: var(--green); }
+
+/* Premium chip — for trust bar items */
+.chip-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+.chip-trust svg { color: var(--orange); flex-shrink: 0; }
+
+/* Scanline overlay for buttons / cards */
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+.scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transition: left 0.6s ease;
+}
+.scanline:hover::after { left: 100%; }
+
+/* Premium card — sharp corners, anthracite, hover lift + glow corner */
+.card-premium {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--steel);
+  border-radius: 0.25rem;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-premium:hover {
+  border-color: rgba(255, 90, 31, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,90,31,0.15);
+}
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  background:
+    linear-gradient(135deg, transparent 50%, rgba(255, 90, 31, 0.18) 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-top-right-radius: 0.25rem;
+  pointer-events: none;
+}
+.card-premium:hover::before { opacity: 1; }
+
+/* Turbo rotor — slow spin */
+@keyframes rotor-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-rotor { animation: rotor-spin 8s linear infinite; transform-origin: 50% 50%; }
+
+/* Boost pulse — pulsing radial glow */
+@keyframes boost-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.04); }
+}
+.animate-boost { animation: boost-pulse 4s ease-in-out infinite; }
+
+/* Marquee for mobile trust bar */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* HUD scanning border (form focus, hero data panel) */
+@keyframes hud-scan {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 200%; }
+}
+
+/* Sticky mobile bar safe-area padding */
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rotor,
+  .animate-boost,
+  .animate-marquee,
+  .animate-float,
+  .animate-spin-slow,
+  .animate-pulse-glow,
+  .animate-shimmer { animation: none !important; }
+  html { scroll-behavior: auto; }
 }

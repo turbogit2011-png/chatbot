@@ -5,10 +5,10 @@ import { motion, useInView } from "framer-motion";
 import { Star, TrendingUp, Users, Award } from "lucide-react";
 
 const stats = [
-  { icon: TrendingUp, value: 5000, suffix: "+", label: "Zregenerowanych turbosprężarek", color: "#FF6B1A" },
-  { icon: Users, value: 3500, suffix: "+", label: "Zadowolonych klientów", color: "#FF8C3A" },
-  { icon: Star, value: 98, suffix: "%", label: "Pozytywnych opinii", color: "#FF6B1A" },
-  { icon: Award, value: 10, suffix: " lat", label: "Doświadczenia na rynku", color: "#FF8C3A" },
+  { icon: TrendingUp, value: 12000, suffix: "+", label: "Zregenerowanych turbosprężarek", color: "#FF5A1F" },
+  { icon: Users, value: 8500, suffix: "+", label: "Zadowolonych klientów", color: "#FF7A47" },
+  { icon: Star, value: 49, suffix: "/50", label: "Średnia ocen Google · 380+ opinii", color: "#FF5A1F" },
+  { icon: Award, value: 15, suffix: " lat", label: "Doświadczenia na rynku turbo", color: "#FF7A47" },
 ];
 
 function AnimatedCounter({ target, suffix, inView }: { target: number; suffix: string; inView: boolean }) {
