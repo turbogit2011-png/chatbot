@@ -1,46 +1,52 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Bebas_Neue } from "next/font/google";
+import { Inter, Syncopate, Rajdhani } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
+const syncopate = Syncopate({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-bebas",
+  variable: "--font-syncopate",
+  display: "swap",
+});
+
+const rajdhani = Rajdhani({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-rajdhani",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TurboDiesel – Regeneracja Turbosprężarek | Profesjonalny Serwis",
+  title: "TURBO-GIT | Regeneracja Turbosprężarek Premium",
   description:
-    "Profesjonalna regeneracja turbosprężarek, wtryskiwaczy i filtrów DPF. Ponad 10 lat doświadczenia. Gwarancja 12 miesięcy. Diagnostyka CNC. Sprawdź ofertę!",
+    "Profesjonalnie regenerowane turbosprężarki na nowych uszczelkach i najwyższej jakości podzespołach. Filtry DPF. Gwarancja jakości premium.",
   keywords: [
     "regeneracja turbosprężarek",
-    "serwis turbo",
-    "naprawa turbosprężarki",
-    "turbodiesel",
-    "wtryskiwacze",
-    "DPF",
-    "diesel",
-    "turbosprężarka",
+    "turbosprężarka premium",
+    "turbo-git",
+    "filtry DPF",
+    "turbo sklep",
+    "regeneracja turbo",
   ],
-  authors: [{ name: "TurboDiesel" }],
+  authors: [{ name: "TURBO-GIT" }],
   openGraph: {
-    title: "TurboDiesel – Regeneracja Turbosprężarek",
+    title: "TURBO-GIT | Regeneracja Turbosprężarek Premium",
     description:
-      "Profesjonalna regeneracja turbosprężarek z gwarancją 12 miesięcy",
+      "Profesjonalnie regenerowane turbosprężarki premium z gwarancją jakości",
     type: "website",
     locale: "pl_PL",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF6B1A",
+  themeColor: "#D4A843",
 };
 
 export default function RootLayout({
@@ -49,7 +55,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
+    <html
+      lang="pl"
+      className={`${inter.variable} ${syncopate.variable} ${rajdhani.variable}`}
+    >
       <body className="antialiased">{children}</body>
     </html>
   );

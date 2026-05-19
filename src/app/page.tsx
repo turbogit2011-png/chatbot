@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
+import Bestsellers from "@/components/Bestsellers";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import WhyUs from "@/components/WhyUs";
@@ -16,6 +17,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <Stats />
+      <Bestsellers />
       <Services />
       <Process />
       <WhyUs />
