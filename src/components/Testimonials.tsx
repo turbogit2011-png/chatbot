@@ -57,11 +57,11 @@ export default function Testimonials() {
 
   return (
     <section id="opinie" className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#07090E]" />
+      <div className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,107,26,0.05), transparent 60%)" }}
+        style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,168,67,0.05), transparent 60%)" }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
@@ -82,9 +82,9 @@ export default function Testimonials() {
           </h2>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 fill-[#FF6B1A] text-[#FF6B1A]" />
+              <Star key={i} className="w-5 h-5 fill-[var(--gold)] text-[var(--gold)]" />
             ))}
-            <span className="ml-2 text-sm text-[#8A9BB0]">5.0 / 5.0 · 200+ opinii</span>
+            <span className="ml-2 text-sm text-[var(--text-muted)]">5.0 / 5.0 · 200+ opinii</span>
           </div>
         </motion.div>
 
@@ -105,12 +105,12 @@ export default function Testimonials() {
               className="glass-orange rounded-2xl p-8 sm:p-10 relative overflow-hidden"
             >
               {/* Quote icon */}
-              <Quote className="absolute top-6 right-8 w-16 h-16 text-[#FF6B1A]/10" />
+              <Quote className="absolute top-6 right-8 w-16 h-16 text-[var(--gold)]/10" />
 
               {/* Stars */}
               <div className="flex items-center gap-1 mb-6">
                 {[...Array(testimonials[current].rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-[#FF6B1A] text-[#FF6B1A]" />
+                  <Star key={i} className="w-4 h-4 fill-[var(--gold)] text-[var(--gold)]" />
                 ))}
               </div>
 
@@ -121,12 +121,12 @@ export default function Testimonials() {
 
               {/* Author */}
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--copper)] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                   {testimonials[current].name.charAt(0)}
                 </div>
                 <div>
                   <div className="font-semibold text-white">{testimonials[current].name}</div>
-                  <div className="text-sm text-[#8A9BB0]">{testimonials[current].role}</div>
+                  <div className="text-sm text-[var(--text-muted)]">{testimonials[current].role}</div>
                 </div>
                 <div className="ml-auto">
                   <span className="badge text-xs">{testimonials[current].vehicle}</span>
@@ -139,7 +139,7 @@ export default function Testimonials() {
           <div className="flex items-center justify-center gap-4 mt-8">
             <button
               onClick={prev}
-              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 transition-all"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[var(--gold)]/40 hover:bg-[var(--gold)]/10 transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -151,7 +151,7 @@ export default function Testimonials() {
                   key={i}
                   onClick={() => setCurrent(i)}
                   className={`rounded-full transition-all duration-300 ${
-                    i === current ? "w-6 h-2 bg-[#FF6B1A]" : "w-2 h-2 bg-white/20 hover:bg-white/40"
+                    i === current ? "w-6 h-2 bg-[var(--gold)]" : "w-2 h-2 bg-white/20 hover:bg-white/40"
                   }`}
                 />
               ))}
@@ -159,7 +159,7 @@ export default function Testimonials() {
 
             <button
               onClick={next}
-              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 transition-all"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[var(--gold)]/40 hover:bg-[var(--gold)]/10 transition-all"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -173,7 +173,7 @@ export default function Testimonials() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-20 text-center"
         >
-          <p className="text-xs text-[#4A5568] uppercase tracking-widest mb-8 font-medium">
+          <p className="text-xs text-[var(--text-subtle)] uppercase tracking-widest mb-8 font-medium">
             Marki, z którymi pracujemy
           </p>
           <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-4">

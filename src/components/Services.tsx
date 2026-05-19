@@ -77,7 +77,7 @@ export default function Services() {
   return (
     <section id="uslugi" className="py-24 sm:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-[#07090E]" />
+      <div className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div className="absolute inset-0 dot-pattern opacity-30" />
 
@@ -97,7 +97,7 @@ export default function Services() {
             <br />
             <span className="text-gradient">DIESEL</span>
           </h2>
-          <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-[var(--text-muted)] text-lg max-w-xl mx-auto leading-relaxed">
             Specjalizujemy się w diagnostyce i naprawie układów diesla.
             Nowoczesny sprzęt i wieloletnie doświadczenie gwarantują najwyższą jakość.
           </p>
@@ -116,8 +116,8 @@ export default function Services() {
               variants={item}
               className={`relative rounded-2xl p-7 card-hover cursor-pointer group ${
                 service.highlight
-                  ? "border-gradient bg-[#111827]"
-                  : "bg-[#111827] border border-white/5 hover:border-[#FF6B1A]/20"
+                  ? "border-gradient bg-[var(--bg-card)]"
+                  : "bg-[var(--bg-card)] border border-white/5 hover:border-[var(--gold)]/20"
               }`}
             >
               {service.highlight && (
@@ -129,39 +129,39 @@ export default function Services() {
               {/* Icon */}
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 ${
                 service.highlight
-                  ? "bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] shadow-[0_0_20px_rgba(255,107,26,0.4)]"
-                  : "bg-white/5 group-hover:bg-[#FF6B1A]/10"
+                  ? "bg-gradient-to-br from-[var(--gold)] to-[var(--copper)] shadow-[0_0_20px_rgba(212,168,67,0.4)]"
+                  : "bg-white/5 group-hover:bg-[var(--gold)]/10"
               }`}>
-                <service.icon className={`w-6 h-6 ${service.highlight ? "text-white" : "text-[#FF6B1A]"}`} />
+                <service.icon className={`w-6 h-6 ${service.highlight ? "text-white" : "text-[var(--gold)]"}`} />
               </div>
 
               {/* Content */}
-              <h3 className="font-semibold text-lg text-white mb-2 group-hover:text-[#FF8C3A] transition-colors">
+              <h3 className="font-semibold text-lg text-white mb-2 group-hover:text-[var(--gold-light)] transition-colors">
                 {service.title}
               </h3>
-              <p className="text-sm text-[#8A9BB0] leading-relaxed mb-5">
+              <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-5">
                 {service.description}
               </p>
 
               {/* Features */}
               <ul className="flex flex-col gap-2 mb-5">
                 {service.features.map((feat, j) => (
-                  <li key={j} className="flex items-center gap-2 text-xs text-[#8A9BB0]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B1A] flex-shrink-0" />
+                  <li key={j} className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)] flex-shrink-0" />
                     {feat}
                   </li>
                 ))}
               </ul>
 
               {/* CTA */}
-              <div className="flex items-center gap-1.5 text-sm font-medium text-[#FF6B1A] group-hover:gap-3 transition-all">
+              <div className="flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] group-hover:gap-3 transition-all">
                 <span>Dowiedz się więcej</span>
                 <ArrowRight className="w-4 h-4" />
               </div>
 
               {/* Hover glow */}
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(255,107,26,0.06), transparent 60%)" }}
+                style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.06), transparent 60%)" }}
               />
             </motion.div>
           ))}

@@ -32,11 +32,11 @@ export default function Contact() {
 
   return (
     <section id="kontakt" className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#07090E]" />
+      <div className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,107,26,0.06), transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212,168,67,0.06), transparent 70%)" }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
@@ -55,7 +55,7 @@ export default function Contact() {
             <br />
             <span className="text-gradient">WYCENA</span>
           </h2>
-          <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto">
+          <p className="text-[var(--text-muted)] text-lg max-w-xl mx-auto">
             Opisz problem i model pojazdu — oddzwonimy lub odpiszemy w ciągu 30 minut
             w godzinach pracy z bezpłatną wyceną.
           </p>
@@ -79,23 +79,23 @@ export default function Contact() {
                 {info.href && info.href !== "#" ? (
                   <a
                     href={info.href}
-                    className="flex items-start gap-4 bg-[#111827] rounded-xl p-5 border border-white/5 hover:border-[#FF6B1A]/20 transition-all group"
+                    className="flex items-start gap-4 bg-[var(--bg-card)] rounded-xl p-5 border border-white/5 hover:border-[var(--gold)]/20 transition-all group"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#FF6B1A]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#FF6B1A]/20 transition-colors">
-                      <info.icon className="w-5 h-5 text-[#FF6B1A]" />
+                    <div className="w-10 h-10 rounded-lg bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--gold)]/20 transition-colors">
+                      <info.icon className="w-5 h-5 text-[var(--gold)]" />
                     </div>
                     <div>
-                      <div className="text-xs text-[#4A5568] mb-1 font-medium uppercase tracking-wider">{info.label}</div>
+                      <div className="text-xs text-[var(--text-subtle)] mb-1 font-medium uppercase tracking-wider">{info.label}</div>
                       <div className="text-white font-medium text-sm">{info.value}</div>
                     </div>
                   </a>
                 ) : (
-                  <div className="flex items-start gap-4 bg-[#111827] rounded-xl p-5 border border-white/5">
-                    <div className="w-10 h-10 rounded-lg bg-[#FF6B1A]/10 flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-5 h-5 text-[#FF6B1A]" />
+                  <div className="flex items-start gap-4 bg-[var(--bg-card)] rounded-xl p-5 border border-white/5">
+                    <div className="w-10 h-10 rounded-lg bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0">
+                      <info.icon className="w-5 h-5 text-[var(--gold)]" />
                     </div>
                     <div>
-                      <div className="text-xs text-[#4A5568] mb-1 font-medium uppercase tracking-wider">{info.label}</div>
+                      <div className="text-xs text-[var(--text-subtle)] mb-1 font-medium uppercase tracking-wider">{info.label}</div>
                       <div className="text-white font-medium text-sm">{info.value}</div>
                     </div>
                   </div>
@@ -105,8 +105,8 @@ export default function Contact() {
 
             {/* Quick note */}
             <div className="glass-orange rounded-xl p-5 mt-2">
-              <p className="text-sm text-[#FF8C3A] font-medium mb-1">Szybka obsługa gwarantowana</p>
-              <p className="text-xs text-[#8A9BB0] leading-relaxed">
+              <p className="text-sm text-[var(--gold-light)] font-medium mb-1">Szybka obsługa gwarantowana</p>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
                 Odpowiadamy na wszystkie zapytania w ciągu 30 minut w godzinach pracy.
                 Wycena bezpłatna i niezobowiązująca.
               </p>
@@ -120,10 +120,10 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3"
           >
-            <div className="bg-[#111827] rounded-2xl border border-white/5 p-7 sm:p-10 relative overflow-hidden">
+            <div className="bg-[var(--bg-card)] rounded-2xl border border-white/5 p-7 sm:p-10 relative overflow-hidden">
               {/* Corner accent */}
               <div className="absolute top-0 right-0 w-32 h-32 opacity-20 pointer-events-none"
-                style={{ background: "radial-gradient(circle at 100% 0%, rgba(255,107,26,0.4), transparent 70%)" }}
+                style={{ background: "radial-gradient(circle at 100% 0%, rgba(212,168,67,0.4), transparent 70%)" }}
               />
 
               {formState === "success" ? (
@@ -136,7 +136,7 @@ export default function Contact() {
                     <CheckCircle className="w-8 h-8 text-green-400" />
                   </div>
                   <h3 className="font-display text-2xl text-white mb-2 tracking-wide">WYSŁANO!</h3>
-                  <p className="text-[#8A9BB0]">
+                  <p className="text-[var(--text-muted)]">
                     Dziękujemy za wiadomość. Skontaktujemy się z Tobą w ciągu 30 minut.
                   </p>
                 </motion.div>
@@ -144,7 +144,7 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
+                      <label className="block text-xs font-medium text-[var(--text-muted)] mb-2 uppercase tracking-wider">
                         Imię i nazwisko *
                       </label>
                       <input
@@ -157,7 +157,7 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
+                      <label className="block text-xs font-medium text-[var(--text-muted)] mb-2 uppercase tracking-wider">
                         Telefon *
                       </label>
                       <input
@@ -172,7 +172,7 @@ export default function Contact() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
+                    <label className="block text-xs font-medium text-[var(--text-muted)] mb-2 uppercase tracking-wider">
                       Email
                     </label>
                     <input
@@ -185,7 +185,7 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
+                    <label className="block text-xs font-medium text-[var(--text-muted)] mb-2 uppercase tracking-wider">
                       Opis problemu i marka pojazdu *
                     </label>
                     <textarea
@@ -217,7 +217,7 @@ export default function Contact() {
                     )}
                   </button>
 
-                  <p className="text-xs text-[#4A5568] text-center">
+                  <p className="text-xs text-[var(--text-subtle)] text-center">
                     Wysyłając formularz wyrażasz zgodę na kontakt w sprawie wyceny.
                     Twoje dane są bezpieczne.
                   </p>

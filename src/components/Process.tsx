@@ -46,11 +46,11 @@ export default function Process() {
   return (
     <section id="proces" className="py-24 sm:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-[#0C1018]" />
+      <div className="absolute inset-0 bg-[var(--bg-secondary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(255,107,26,0.05), transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(212,168,67,0.05), transparent 70%)" }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
@@ -69,7 +69,7 @@ export default function Process() {
             <br />
             <span className="text-gradient">PEWNY REZULTAT</span>
           </h2>
-          <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto">
+          <p className="text-[var(--text-muted)] text-lg max-w-xl mx-auto">
             Przejrzysty 4-etapowy proces realizacji naprawy.
             Zawsze wiesz co i kiedy robimy z Twoją turbosprężarką.
           </p>
@@ -79,12 +79,12 @@ export default function Process() {
         <div className="relative">
           {/* Connector line – desktop */}
           <div className="hidden lg:block absolute top-[52px] left-[calc(12.5%+24px)] right-[calc(12.5%+24px)] h-px">
-            <div className="h-full bg-gradient-to-r from-transparent via-[#FF6B1A]/30 to-transparent" />
+            <div className="h-full bg-gradient-to-r from-transparent via-[var(--gold)]/30 to-transparent" />
             <motion.div
               initial={{ scaleX: 0 }}
               animate={inView ? { scaleX: 1 } : {}}
               transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-              className="absolute inset-0 origin-left bg-gradient-to-r from-[#FF6B1A]/60 to-[#FF3D00]/30"
+              className="absolute inset-0 origin-left bg-gradient-to-r from-[var(--gold)]/60 to-[var(--copper)]/30"
             />
           </div>
 
@@ -99,13 +99,13 @@ export default function Process() {
               >
                 {/* Icon circle */}
                 <div className="relative mb-6">
-                  <div className="w-[104px] h-[104px] rounded-full bg-[#111827] border border-white/8 flex items-center justify-center relative z-10 group-hover:border-[#FF6B1A]/30 transition-all duration-500">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FF6B1A]/15 to-[#FF3D00]/10 flex items-center justify-center group-hover:from-[#FF6B1A]/25 group-hover:to-[#FF3D00]/20 transition-all duration-500">
-                      <step.icon className="w-7 h-7 text-[#FF6B1A]" />
+                  <div className="w-[104px] h-[104px] rounded-full bg-[var(--bg-card)] border border-white/8 flex items-center justify-center relative z-10 group-hover:border-[var(--gold)]/30 transition-all duration-500">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--gold)]/15 to-[var(--copper)]/10 flex items-center justify-center group-hover:from-[var(--gold)]/25 group-hover:to-[var(--copper)]/20 transition-all duration-500">
+                      <step.icon className="w-7 h-7 text-[var(--gold)]" />
                     </div>
                   </div>
                   {/* Number badge */}
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center text-xs font-bold text-white shadow-[0_0_12px_rgba(255,107,26,0.5)]">
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--copper)] flex items-center justify-center text-xs font-bold text-white shadow-[0_0_12px_rgba(212,168,67,0.5)]">
                     {i + 1}
                   </div>
                 </div>
@@ -114,10 +114,10 @@ export default function Process() {
                   {step.number}
                 </div>
 
-                <h3 className="font-semibold text-white text-lg mb-3 group-hover:text-[#FF8C3A] transition-colors">
+                <h3 className="font-semibold text-white text-lg mb-3 group-hover:text-[var(--gold-light)] transition-colors">
                   {step.title}
                 </h3>
-                <p className="text-sm text-[#8A9BB0] leading-relaxed mb-4">
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
                   {step.description}
                 </p>
 
@@ -142,7 +142,7 @@ export default function Process() {
             <h3 className="font-display text-2xl text-white tracking-wide mb-1">
               GOTOWY DO DZIAŁANIA?
             </h3>
-            <p className="text-[#8A9BB0] text-sm">
+            <p className="text-[var(--text-muted)] text-sm">
               Zadzwoń lub napisz — oddzwonimy w ciągu 30 minut w godzinach pracy.
             </p>
           </div>

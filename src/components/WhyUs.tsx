@@ -51,7 +51,7 @@ export default function WhyUs() {
 
   return (
     <section id="o-nas" className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#0C1018]" />
+      <div className="absolute inset-0 bg-[var(--bg-secondary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
       <div className="absolute inset-0 bg-grid opacity-50" />
 
@@ -74,12 +74,12 @@ export default function WhyUs() {
                 <br />
                 W TURBO
               </h2>
-              <p className="text-[#8A9BB0] text-lg leading-relaxed mb-6">
+              <p className="text-[var(--text-muted)] text-lg leading-relaxed mb-6">
                 Od 2014 roku specjalizujemy się wyłącznie w układach turbosprężarkowych
                 i diesel. Setki naprawionych turbosprężarek miesięcznie, nowoczesny
                 park maszynowy i zespół certyfikowanych techników.
               </p>
-              <p className="text-[#8A9BB0] leading-relaxed mb-8">
+              <p className="text-[var(--text-muted)] leading-relaxed mb-8">
                 Nie kompromitujemy się tanimi zamiennikami — używamy wyłącznie
                 nowych, oryginalnych komponentów. Dlatego nasze turbosprężarki
                 działają jak nowe przez lata.
@@ -88,15 +88,15 @@ export default function WhyUs() {
               <div className="flex flex-wrap gap-4">
                 <div className="glass-orange rounded-xl px-6 py-4 text-center">
                   <div className="font-display text-3xl text-gradient">100%</div>
-                  <div className="text-xs text-[#8A9BB0] mt-1">Oryginalne części</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">Oryginalne części</div>
                 </div>
                 <div className="glass-orange rounded-xl px-6 py-4 text-center">
                   <div className="font-display text-3xl text-gradient">24h</div>
-                  <div className="text-xs text-[#8A9BB0] mt-1">Ekspresowa naprawa</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">Ekspresowa naprawa</div>
                 </div>
                 <div className="glass-orange rounded-xl px-6 py-4 text-center">
                   <div className="font-display text-3xl text-gradient">12M</div>
-                  <div className="text-xs text-[#8A9BB0] mt-1">Gwarancja</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">Gwarancja</div>
                 </div>
               </div>
             </motion.div>
@@ -115,13 +115,13 @@ export default function WhyUs() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
-                className="group bg-[#111827] rounded-xl p-5 border border-white/5 hover:border-[#FF6B1A]/20 transition-all duration-300 hover:-translate-y-1"
+                className="group bg-[var(--bg-card)] rounded-xl p-5 border border-white/5 hover:border-[var(--gold)]/20 transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#FF6B1A]/10 flex items-center justify-center mb-3 group-hover:bg-[#FF6B1A]/20 transition-colors">
-                  <reason.icon className="w-5 h-5 text-[#FF6B1A]" />
+                <div className="w-10 h-10 rounded-lg bg-[var(--gold)]/10 flex items-center justify-center mb-3 group-hover:bg-[var(--gold)]/20 transition-colors">
+                  <reason.icon className="w-5 h-5 text-[var(--gold)]" />
                 </div>
                 <h3 className="font-semibold text-white text-sm mb-2">{reason.title}</h3>
-                <p className="text-xs text-[#8A9BB0] leading-relaxed">{reason.description}</p>
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed">{reason.description}</p>
               </motion.div>
             ))}
           </motion.div>

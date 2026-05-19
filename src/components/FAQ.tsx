@@ -38,7 +38,7 @@ export default function FAQ() {
 
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#0C1018]" />
+      <div className="absolute inset-0 bg-[var(--bg-secondary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
@@ -59,7 +59,7 @@ export default function FAQ() {
               <br />
               <span className="text-gradient">PYTANIA</span>
             </h2>
-            <p className="text-[#8A9BB0] text-lg leading-relaxed mb-8">
+            <p className="text-[var(--text-muted)] text-lg leading-relaxed mb-8">
               Masz inne pytanie? Nasz zespół jest do dyspozycji
               w godzinach pracy i chętnie odpowie na każde zapytanie.
             </p>
@@ -86,19 +86,19 @@ export default function FAQ() {
                 transition={{ delay: 0.3 + i * 0.07 }}
                 className={`rounded-xl border transition-all duration-300 overflow-hidden ${
                   open === i
-                    ? "border-[#FF6B1A]/30 bg-[#111827]"
-                    : "border-white/5 bg-[#111827] hover:border-white/10"
+                    ? "border-[var(--gold)]/30 bg-[var(--bg-card)]"
+                    : "border-white/5 bg-[var(--bg-card)] hover:border-white/10"
                 }`}
               >
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
                 >
-                  <span className={`font-medium text-sm sm:text-base transition-colors ${open === i ? "text-white" : "text-[#8A9BB0]"}`}>
+                  <span className={`font-medium text-sm sm:text-base transition-colors ${open === i ? "text-white" : "text-[var(--text-muted)]"}`}>
                     {faq.q}
                   </span>
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                    open === i ? "bg-[#FF6B1A] text-white" : "bg-white/5 text-[#8A9BB0]"
+                    open === i ? "bg-[var(--gold)] text-white" : "bg-white/5 text-[var(--text-muted)]"
                   }`}>
                     {open === i ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </div>
@@ -112,7 +112,7 @@ export default function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <div className="px-6 pb-5 text-sm text-[#8A9BB0] leading-relaxed border-t border-white/5 pt-4">
+                      <div className="px-6 pb-5 text-sm text-[var(--text-muted)] leading-relaxed border-t border-white/5 pt-4">
                         {faq.a}
                       </div>
                     </motion.div>

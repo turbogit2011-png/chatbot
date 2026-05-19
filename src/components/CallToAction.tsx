@@ -10,7 +10,7 @@ export default function CallToAction() {
 
   return (
     <section className="py-20 sm:py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#0C1018]" />
+      <div className="absolute inset-0 bg-[var(--bg-secondary)]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
@@ -20,7 +20,8 @@ export default function CallToAction() {
           transition={{ duration: 0.7 }}
           className="relative rounded-3xl overflow-hidden"
           style={{
-            background: "linear-gradient(135deg, #FF6B1A 0%, #FF4D00 40%, #CC3000 100%)",
+            background: "linear-gradient(135deg, #1a1628 0%, #0D0B18 40%, #050408 100%)",
+            border: "1px solid rgba(212,168,67,0.2)",
           }}
         >
           {/* Noise layer */}
@@ -57,7 +58,7 @@ export default function CallToAction() {
             <div className="flex flex-col gap-3 min-w-fit">
               <a
                 href="tel:+48000000000"
-                className="flex items-center justify-center gap-2.5 bg-white text-[#CC3000] font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] text-base"
+                className="btn-gold flex items-center justify-center gap-2.5 px-8 py-4 text-base"
               >
                 <Phone className="w-5 h-5" />
                 Zadzwoń teraz
