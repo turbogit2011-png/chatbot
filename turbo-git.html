@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TURBO-GIT — Regeneracja turbosprężarek. Na poziomie.</title>
+<meta name="description" content="Profesjonalna regeneracja turbosprężarek od 2012 roku. Oryginalne części OEM, balansowanie VSR, gwarancja 24 miesiące bez limitu km, wysyłka w 24h w całej Polsce. 8000+ zregenerowanych turbin." />
+<meta name="theme-color" content="#0a0a0b" />
+
+<!-- ===================== OPEN GRAPH / SOCIAL ===================== -->
+<meta property="og:title" content="TURBO-GIT — Regeneracja turbosprężarek na poziomie" />
+<meta property="og:description" content="Twoja turbosprężarka wraca silniejsza niż z fabryki. 24 mies. gwarancji, części OEM, balans VSR, wysyłka 24h." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="pl_PL" />
+
+<!-- ===================== TAILWIND CSS 3.4+ (CDN) ===================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Marka TURBO-GIT
+          ink:    '#0a0a0b', // główne tło (prawie czarne)
+          ink2:   '#111114', // tło sekcji alternatywnych
+          ink3:   '#16161a', // karty
+          steel:  '#9aa3ad', // srebro / szary tekst
+          silver: '#dfe4ea', // jasne srebro
+          power:  '#c8102e', // czerwień mocy (główny akcent)
+          'power-600': '#a50d26',
+          'power-400': '#e23150',
+        },
+        fontFamily: {
+          sans:    ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          display: ['"Archivo Expanded"', 'Archivo', 'Inter', 'system-ui', 'sans-serif'],
+        },
+        boxShadow: {
+          'glow': '0 0 0 1px rgba(200,16,46,.35), 0 20px 60px -20px rgba(200,16,46,.55)',
+          'card': '0 24px 70px -30px rgba(0,0,0,.85)',
+        },
+        keyframes: {
+          spinSlow: { to: { transform: 'rotate(360deg)' } },
+          floaty: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+          shimmer: { '100%': { transform: 'translateX(100%)' } },
+        },
+        animation: {
+          'spin-slow': 'spinSlow 14s linear infinite',
+          'floaty': 'floaty 6s ease-in-out infinite',
+        }
+      }
+    }
+  }
+</script>
+
+<!-- ===================== FONTS ===================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ===================== LUCIDE ICONS ===================== -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  :root { color-scheme: dark; }
+  html, body { background:#0a0a0b; }
+  ::selection { background:#c8102e; color:#fff; }
+
+  /* Pasek przewijania */
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#0a0a0b; }
+  ::-webkit-scrollbar-thumb { background:#26262c; border-radius:20px; border:2px solid #0a0a0b; }
+  ::-webkit-scrollbar-thumb:hover { background:#3a3a44; }
+
+  .font-display { font-family:'Archivo', Inter, sans-serif; font-stretch:expanded; letter-spacing:-.02em; }
+
+  /* Siatka tła w stylu technicznym */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  }
+
+  /* Gradient tekstu czerwień->srebro */
+  .text-gradient {
+    background:linear-gradient(120deg,#fff 0%,#dfe4ea 35%,#e23150 75%,#c8102e 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .text-power-grad {
+    background:linear-gradient(120deg,#e23150,#c8102e);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* Reveal on scroll */
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+
+  /* Hover lift dla kart */
+  .lift { transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, border-color .35s; }
+  .lift:hover { transform:translateY(-6px); }
+
+  /* Animowany ring (turbina) */
+  .turbo-ring { background:conic-gradient(from 0deg, transparent 0 70%, rgba(200,16,46,.0) 70%, #c8102e 85%, transparent 100%); }
+
+  /* Link podkreślenie */
+  .nav-link { position:relative; }
+  .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:#c8102e; transition:width .3s; }
+  .nav-link:hover::after, .nav-link.active::after { width:100%; }
+  .nav-link.active { color:#fff; }
+
+  /* Glass */
+  .glass { background:rgba(17,17,20,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+
+  /* Shimmer skeleton dla placeholderów zdjęć */
+  .ph { position:relative; overflow:hidden; background:#16161a; }
+  .ph::after {
+    content:''; position:absolute; inset:0; transform:translateX(-100%);
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+    animation:shimmer 2.2s infinite;
+  }
+  @keyframes shimmer { 100% { transform:translateX(100%); } }
+
+  details > summary { list-style:none; cursor:pointer; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .faq-icon { transform:rotate(45deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transition:none; opacity:1; transform:none; }
+    .animate-spin-slow, .animate-floaty { animation:none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-ink text-silver font-sans antialiased selection:bg-power">
+
+<!-- ============================================================= -->
+<!-- 1. STICKY NAVBAR                                               -->
+<!-- ============================================================= -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="glass border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-4">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-3 group shrink-0">
+        <span class="relative grid place-items-center w-10 h-10">
+          <span class="absolute inset-0 rounded-full turbo-ring animate-spin-slow opacity-80"></span>
+          <span class="absolute inset-[3px] rounded-full bg-ink border border-white/10"></span>
+          <i data-lucide="fan" class="relative w-5 h-5 text-power group-hover:rotate-90 transition-transform duration-500"></i>
+        </span>
+        <span class="leading-none">
+          <span class="block font-display font-900 text-lg tracking-tight text-white">TURBO<span class="text-power">-</span>GIT</span>
+          <span class="block text-[10px] uppercase tracking-[.22em] text-steel">Regeneracja. Na poziomie.</span>
+        </span>
+      </a>
+
+      <!-- Menu desktop -->
+      <div class="hidden lg:flex items-center gap-7 text-sm font-medium text-steel">
+        <a href="#uslugi"    class="nav-link" data-nav>Usługi</a>
+        <a href="#proces"    class="nav-link" data-nav>Proces</a>
+        <a href="#technologia" class="nav-link" data-nav>Technologia</a>
+        <a href="#realizacje" class="nav-link" data-nav>Realizacje</a>
+        <a href="#opinie"    class="nav-link" data-nav>Opinie</a>
+        <a href="#kontakt"   class="nav-link" data-nav>Kontakt</a>
+      </div>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="tel:+48000000000" class="hidden sm:flex items-center gap-2 text-sm text-silver hover:text-white transition-colors">
+          <i data-lucide="phone" class="w-4 h-4 text-power"></i>
+          <span class="font-semibold tabular-nums">000 000 000</span>
+        </a>
+        <a href="#kontakt" class="relative inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors shadow-[0_8px_30px_-8px_rgba(200,16,46,.7)]">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Zamów regenerację</span>
+          <span class="sm:hidden">Zamów</span>
+        </a>
+        <!-- Hamburger mobile -->
+        <button id="menuBtn" aria-label="Menu" class="lg:hidden grid place-items-center w-10 h-10 rounded-lg border border-white/10 text-silver">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobileMenu" class="lg:hidden hidden glass border-b border-white/5">
+    <div class="px-6 py-4 flex flex-col gap-1 text-base">
+      <a href="#uslugi"     class="py-2 text-steel hover:text-white" data-mlink>Usługi</a>
+      <a href="#proces"     class="py-2 text-steel hover:text-white" data-mlink>Proces</a>
+      <a href="#technologia" class="py-2 text-steel hover:text-white" data-mlink>Technologia</a>
+      <a href="#realizacje" class="py-2 text-steel hover:text-white" data-mlink>Realizacje</a>
+      <a href="#opinie"     class="py-2 text-steel hover:text-white" data-mlink>Opinie</a>
+      <a href="#kalkulator" class="py-2 text-steel hover:text-white" data-mlink>Kalkulator</a>
+      <a href="#kontakt"    class="py-2 text-steel hover:text-white" data-mlink>Kontakt</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================= -->
+<!-- 2. HERO                                                        -->
+<!-- ============================================================= -->
+<section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden pt-[68px]">
+  <!-- Tło: siatka + glow -->
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[700px] rounded-full bg-power/20 blur-[160px] opacity-60"></div>
+  <div class="absolute bottom-0 right-0 w-[600px] h-[400px] rounded-full bg-power/10 blur-[140px]"></div>
+
+  <!--
+    PLACEHOLDER ZDJĘCIE / WIDEO HERO:
+    Tutaj wstaw kinowe ujęcie turbosprężarki w ciemnym studio z czerwonym podświetleniem,
+    makro na wirnik kompresora (idealnie czysty aluminiowy wirnik), płytka głębia ostrości.
+    Format docelowy: <video> z pętlą lub wysokiej jakości WebP ~2400px szer.
+  -->
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-12 gap-10 items-center">
+    <!-- Lewa kolumna: treść -->
+    <div class="lg:col-span-7">
+      <div class="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-steel mb-6">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-power opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-power"></span>
+        </span>
+        Specjaliści od regeneracji turbo od <strong class="text-silver">2012 roku</strong>
+      </div>
+
+      <h1 class="reveal font-display font-900 text-white leading-[0.98] text-[42px] sm:text-6xl lg:text-7xl tracking-tight">
+        Twoja turbosprężarka <br class="hidden sm:block">
+        wraca <span class="text-gradient">silniejsza</span> <br class="hidden sm:block">
+        niż z fabryki.
+      </h1>
+
+      <p class="reveal mt-6 max-w-xl text-lg text-steel leading-relaxed">
+        Profesjonalna regeneracja z <span class="text-silver font-semibold">24-miesięczną gwarancją</span> bez limitu kilometrów.
+        Oryginalne części OEM. Precyzja balansowania VSR. Wysyłka w 24h w całej Polsce.
+      </p>
+
+      <div class="reveal mt-8 flex flex-col sm:flex-row gap-3">
+        <a href="#kontakt" class="group inline-flex items-center justify-center gap-2 rounded-full bg-power px-7 py-4 font-semibold text-white hover:bg-power-600 transition-all shadow-[0_14px_40px_-12px_rgba(200,16,46,.8)]">
+          Rozpocznij regenerację
+          <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+        <a href="#proces" class="group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 font-semibold text-silver hover:bg-white/10 hover:border-white/25 transition-all">
+          <i data-lucide="play-circle" class="w-5 h-5 text-power"></i>
+          Zobacz jak to robimy
+        </a>
+      </div>
+
+      <!-- Mini fakty pod CTA -->
+      <div class="reveal mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-steel">
+        <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> Gwarancja 24 mies.</span>
+        <span class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> Części OEM</span>
+        <span class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Wysyłka 24h</span>
+      </div>
+    </div>
+
+    <!-- Prawa kolumna: wizual turbiny -->
+    <div class="lg:col-span-5 reveal">
+      <div class="relative mx-auto max-w-md aspect-square">
+        <!-- Obracające się pierścienie -->
+        <div class="absolute inset-0 rounded-full border border-white/5"></div>
+        <div class="absolute inset-6 rounded-full border border-white/5"></div>
+        <div class="absolute inset-0 rounded-full turbo-ring animate-spin-slow"></div>
+        <div class="absolute inset-10 rounded-full bg-gradient-to-br from-ink3 to-ink border border-white/10 shadow-card grid place-items-center animate-floaty">
+          <!--
+            PLACEHOLDER: render/zdjęcie turbiny w widoku czołowym (wirnik turbinowy),
+            wycięte z tła PNG, ~900px. Najlepiej delikatne czerwone odbicie na łopatkach.
+          -->
+          <div class="text-center">
+            <i data-lucide="fan" class="w-28 h-28 text-power/90 mx-auto animate-spin-slow"></i>
+            <p class="mt-3 text-xs uppercase tracking-[.25em] text-steel">VSR balanced</p>
+          </div>
+        </div>
+        <!-- Floating badge -->
+        <div class="absolute -left-4 top-8 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
+          <p class="text-2xl font-display font-800 text-white" data-counter data-target="8000" data-suffix="+">0</p>
+          <p class="text-[11px] text-steel">zregenerowanych turbin</p>
+        </div>
+        <div class="absolute -right-2 bottom-10 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
+          <p class="text-2xl font-display font-800 text-power">24<span class="text-base align-top">h</span></p>
+          <p class="text-[11px] text-steel">wysyłka w PL</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <a href="#trust" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-steel/70 hover:text-silver transition-colors animate-floaty">
+    <i data-lucide="chevrons-down" class="w-6 h-6"></i>
+  </a>
+</section>
+
+<!-- ============================================================= -->
+<!-- 3. TRUST BAR                                                   -->
+<!-- ============================================================= -->
+<section id="trust" class="relative border-y border-white/5 bg-ink2">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-6 text-center">
+      <!-- każdy fakt -->
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white"><span data-counter data-target="8000" data-suffix="+">0</span></p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">zregenerowanych turbin</p>
+      </div>
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white"><span data-counter data-target="14">0</span> lat</p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">doświadczenia</p>
+      </div>
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white">24 mies.</p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">gwarancji bez limitu km</p>
+      </div>
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white">OEM</p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">oryginalne części</p>
+      </div>
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white">VSR</p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">balansowanie maszynowe</p>
+      </div>
+      <div class="reveal">
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white">24h</p>
+        <p class="mt-1 text-xs text-steel uppercase tracking-wide">ekspresowa wysyłka</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 4. PROBLEM + ROZWIĄZANIE                                       -->
+<!-- ============================================================= -->
+<section class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute top-1/2 -left-40 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-14 items-center">
+    <div class="reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Problem &amp; Rozwiązanie</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Nowa turbina potrafi zrujnować <span class="text-power-grad">budżet</span>.
+      </h2>
+      <p class="mt-5 text-steel text-lg leading-relaxed">
+        Cena fabrycznie nowej turbosprężarki to często <span class="text-silver font-semibold">3 000 – 9 000 zł</span> i więcej.
+        A prawda jest taka, że w 90% przypadków uszkodzeniu ulega kilka elementów — rdzeń, czyli to co najdroższe,
+        jest w idealnym stanie i można go przywrócić do parametrów fabrycznych.
+      </p>
+      <p class="mt-4 text-steel text-lg leading-relaxed">
+        Profesjonalna regeneracja w TURBO-GIT to ta sama wydajność i ta sama trwałość —
+        za <span class="text-white font-semibold">ułamek ceny</span>.
+      </p>
+
+      <div class="mt-8 flex items-center gap-4">
+        <a href="#kalkulator" class="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm font-semibold text-silver hover:bg-white/10 transition-colors">
+          <i data-lucide="calculator" class="w-4 h-4 text-power"></i> Policz swoją oszczędność
+        </a>
+      </div>
+    </div>
+
+    <!-- Wizual porównania cen -->
+    <div class="reveal">
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-6 sm:p-8 shadow-card">
+        <p class="text-sm text-steel mb-6">Przykład: turbina do popularnego diesla 2.0 TDI</p>
+
+        <!-- Nowa -->
+        <div class="mb-6">
+          <div class="flex justify-between items-end mb-2">
+            <span class="text-silver font-medium">Nowa turbina</span>
+            <span class="font-display font-800 text-xl text-white">~4&nbsp;800 zł</span>
+          </div>
+          <div class="h-3 rounded-full bg-white/5 overflow-hidden">
+            <div class="h-full w-full bg-gradient-to-r from-steel/40 to-steel/70 rounded-full"></div>
+          </div>
+        </div>
+
+        <!-- Regeneracja -->
+        <div>
+          <div class="flex justify-between items-end mb-2">
+            <span class="text-silver font-medium">Regeneracja w TURBO-GIT</span>
+            <span class="font-display font-800 text-xl text-power">~1&nbsp;900 zł</span>
+          </div>
+          <div class="h-3 rounded-full bg-white/5 overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-power-600 to-power rounded-full transition-all duration-1000" data-bar style="width:0%" data-width="40%"></div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex items-center justify-between rounded-xl bg-power/10 border border-power/20 px-5 py-4">
+          <span class="text-sm text-silver">Twoja oszczędność</span>
+          <span class="font-display font-900 text-2xl text-white">45–65%</span>
+        </div>
+        <p class="mt-3 text-xs text-steel">* Wartości poglądowe. Dokładną wycenę otrzymasz po bezpłatnej diagnostyce.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 5. DLACZEGO TURBO-GIT (USŁUGI/BENEFITY)                        -->
+<!-- ============================================================= -->
+<section id="uslugi" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Dlaczego TURBO-GIT</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        To nie naprawa. To <span class="text-power-grad">rewolucja</span> w regeneracji.
+      </h2>
+      <p class="mt-5 text-steel text-lg">Sześć powodów, dla których kierowcy i warsztaty z całej Polski wysyłają turbiny właśnie do nas.</p>
+    </div>
+
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- karta -->
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="search-check" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Precyzyjna diagnostyka</h3>
+        <p class="mt-3 text-steel leading-relaxed">Każdą turbinę rozkładamy do ostatniej śruby i mierzymy luzy z dokładnością do setnych milimetra. Wiemy dokładnie, co zawiodło — i dlaczego.</p>
+      </article>
+
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="badge-check" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Oryginalne części OEM</h3>
+        <p class="mt-3 text-steel leading-relaxed">Zero zamienników z niewiadomego źródła. Zestawy naprawcze i geometrie pochodzą od oryginalnych dostawców — tak jak na linii produkcyjnej.</p>
+      </article>
+
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="gauge" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Balansowanie VSR</h3>
+        <p class="mt-3 text-steel leading-relaxed">Rdzeń balansujemy na maszynie VSR przy realnych obrotach roboczych. Efekt: zero wibracji, cicha praca i żywotność jak w nowej turbinie.</p>
+      </article>
+
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="activity" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Testy pod obciążeniem</h3>
+        <p class="mt-3 text-steel leading-relaxed">Geometrię zmiennych łopatek i ciśnienie doładowania sprawdzamy na stanowisku testowym. Turbina wraca do Ciebie sprawdzona, nie „na czuja”.</p>
+      </article>
+
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="eye" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Pełna transparentność</h3>
+        <p class="mt-3 text-steel leading-relaxed">Dokumentujemy stan turbiny zdjęciami przed i po. Wiesz dokładnie, za co płacisz — bez ukrytych kosztów i bez ściemy.</p>
+      </article>
+
+      <article class="reveal lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform">
+          <i data-lucide="leaf" class="w-6 h-6 text-power"></i>
+        </div>
+        <h3 class="font-display font-800 text-xl text-white">Ekologia + ekonomia</h3>
+        <p class="mt-3 text-steel leading-relaxed">Regeneracja to mniej odpadu i mniej wydobycia surowców niż produkcja nowej części. Dobrze dla portfela i dla planety.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 6. PROCES REGENERACJI - INTERAKTYWNY STEPPER                   -->
+<!-- ============================================================= -->
+<section id="proces" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute -right-40 top-20 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Proces krok po kroku</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        7 etapów, w których nie ma <span class="text-power-grad">drogi na skróty</span>.
+      </h2>
+      <p class="mt-5 text-steel text-lg">Kliknij dowolny krok, żeby zobaczyć co dokładnie się dzieje i dlaczego to ma znaczenie.</p>
+    </div>
+
+    <div class="mt-14 grid lg:grid-cols-12 gap-8">
+      <!-- Lista kroków -->
+      <div class="lg:col-span-5 reveal">
+        <div id="stepList" class="relative flex flex-col gap-2">
+          <!-- linia -->
+          <div class="absolute left-[22px] top-3 bottom-3 w-px bg-white/10"></div>
+          <!-- przyciski generowane są, ale tu statycznie dla SEO -->
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="0">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">01</span>
+            <span class="step-title font-semibold text-steel">Przyjęcie i diagnostyka wstępna</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="1">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">02</span>
+            <span class="step-title font-semibold text-steel">Pełny demontaż rdzenia</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="2">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">03</span>
+            <span class="step-title font-semibold text-steel">Czyszczenie ultradźwiękowe</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="3">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">04</span>
+            <span class="step-title font-semibold text-steel">Pomiary i kwalifikacja części</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="4">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">05</span>
+            <span class="step-title font-semibold text-steel">Wymiana na oryginalne OEM</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="5">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">06</span>
+            <span class="step-title font-semibold text-steel">Balansowanie na maszynie VSR</span>
+          </button>
+          <button class="step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all" data-step="6">
+            <span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-800 text-steel shrink-0">07</span>
+            <span class="step-title font-semibold text-steel">Test końcowy i wysyłka 24h</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Panel szczegółów -->
+      <div class="lg:col-span-7 reveal">
+        <div id="stepPanel" class="h-full rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-9 shadow-card relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-power/10 blur-3xl"></div>
+          <!--
+            PLACEHOLDER ZDJĘCIE KROKU:
+            Dla każdego kroku procesu można podstawić realne zdjęcie z warsztatu (np. mycie ultradźwiękowe,
+            maszyna VSR w akcji, pomiar mikrometrem). Element .step-photo poniżej.
+          -->
+          <div class="step-photo ph aspect-[16/7] rounded-xl border border-white/10 mb-6 grid place-items-center">
+            <span class="text-xs text-steel uppercase tracking-widest">zdjęcie z warsztatu</span>
+          </div>
+          <div class="flex items-center gap-3 mb-3">
+            <span id="stepBadge" class="font-display font-900 text-power text-sm">ETAP 01 / 07</span>
+            <span class="h-px flex-1 bg-white/10"></span>
+          </div>
+          <h3 id="stepHeading" class="font-display font-800 text-2xl sm:text-3xl text-white"></h3>
+          <p id="stepDesc" class="mt-4 text-steel leading-relaxed"></p>
+          <div class="mt-6 rounded-xl bg-power/5 border border-power/15 p-5">
+            <p class="flex items-center gap-2 text-sm font-semibold text-power mb-1"><i data-lucide="key-round" class="w-4 h-4"></i> Dlaczego to kluczowe</p>
+            <p id="stepWhy" class="text-sm text-silver leading-relaxed"></p>
+          </div>
+
+          <div class="mt-7 flex items-center justify-between">
+            <button id="prevStep" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i> Poprzedni</button>
+            <button id="nextStep" class="inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors">Następny <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 7. TECHNOLOGIA                                                 -->
+<!-- ============================================================= -->
+<section id="technologia" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Technologia</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Arsenał, który robi <span class="text-power-grad">różnicę</span>.
+      </h2>
+      <p class="mt-5 text-steel text-lg">Sprzęt, którego nie znajdziesz w przeciętnym warsztacie. To dlatego nasze turbiny po prostu działają.</p>
+    </div>
+
+    <div class="mt-14 grid lg:grid-cols-3 gap-5">
+      <!-- duża karta -->
+      <article class="reveal lift lg:row-span-2 rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
+        <!-- PLACEHOLDER: zdjęcie maszyny balansującej VSR w pracy -->
+        <div class="ph aspect-[4/3] grid place-items-center border-b border-white/10">
+          <span class="text-xs text-steel uppercase tracking-widest">maszyna VSR</span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-display font-800 text-2xl text-white">Maszyna balansująca VSR</h3>
+          <p class="mt-3 text-steel leading-relaxed">Vibration Sorting Rig — balansowanie zmontowanego rdzenia przy obrotach zbliżonych do roboczych (nawet 200&nbsp;000+ obr./min). To eliminuje mikrowibracje, które niszczą łożyskowanie.</p>
+          <ul class="mt-5 space-y-2 text-sm text-silver">
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Balans dynamiczny pełnego rdzenia</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Pomiar drgań w czasie rzeczywistym</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Cicha, kulturalna praca turbiny</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="cpu" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-800 text-xl text-white">Stanowisko testowe geometrii</h3>
+        <p class="mt-2 text-steel leading-relaxed">Kalibracja zmiennej geometrii (VNT) i aktuatorów elektronicznych pod kontrolą sygnału sterującego.</p>
+      </article>
+
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="waves" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-800 text-xl text-white">Myjka ultradźwiękowa</h3>
+        <p class="mt-2 text-steel leading-relaxed">Usuwa nagar i osady z każdego kanału bez ścierania materiału. Czystość na poziomie produkcyjnym.</p>
+      </article>
+
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="ruler" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-800 text-xl text-white">Precyzyjna metrologia</h3>
+        <p class="mt-2 text-steel leading-relaxed">Mikrometry i czujniki zegarowe — pomiar luzów osiowych i promieniowych do 0,01&nbsp;mm.</p>
+      </article>
+
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="flame" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-800 text-xl text-white">Kontrola pod obciążeniem</h3>
+        <p class="mt-2 text-steel leading-relaxed">Symulacja warunków pracy i pomiar ciśnienia doładowania przed wydaniem turbiny.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 8. WIRTUALNY TURBO EXPLORER                                    -->
+<!-- ============================================================= -->
+<section class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 top-0 w-[700px] h-[400px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Wirtualny Turbo Explorer</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Zajrzyj <span class="text-power-grad">do środka</span> turbosprężarki.
+      </h2>
+      <p class="mt-5 text-steel text-lg">Wybierz element, żeby zobaczyć co regenerujemy i dlaczego ma to wpływ na trwałość Twojej turbiny.</p>
+    </div>
+
+    <div class="mt-14 grid lg:grid-cols-12 gap-8 items-stretch">
+      <!-- Schemat turbiny / hotspoty -->
+      <div class="lg:col-span-6 reveal">
+        <div class="relative h-full min-h-[360px] rounded-2xl border border-white/10 bg-gradient-to-br from-ink3 to-ink p-6 shadow-card grid place-items-center overflow-hidden">
+          <div class="absolute inset-0 grid-bg opacity-50"></div>
+          <!--
+            PLACEHOLDER: przekrój turbosprężarki (schemat lub render) z zaznaczonymi elementami.
+            Hotspoty (.hot) ustawione absolutnie odpowiadają częściom. Możesz podmienić na realny przekrój.
+          -->
+          <div class="relative w-full max-w-sm aspect-square">
+            <div class="absolute inset-8 rounded-full border-2 border-dashed border-white/10 animate-spin-slow"></div>
+            <div class="absolute inset-0 grid place-items-center">
+              <i data-lucide="fan" class="w-40 h-40 text-white/10"></i>
+            </div>
+            <!-- Hotspoty -->
+            <button class="hot absolute top-[8%] left-[46%]" data-part="0" aria-label="Wirnik kompresora"></button>
+            <button class="hot absolute top-[42%] left-[10%]" data-part="1" aria-label="Łożyskowanie"></button>
+            <button class="hot absolute top-[44%] right-[8%]" data-part="2" aria-label="Wał i wirnik turbiny"></button>
+            <button class="hot absolute bottom-[10%] left-[42%]" data-part="3" aria-label="Geometria VNT"></button>
+            <button class="hot absolute top-[20%] right-[24%]" data-part="4" aria-label="Uszczelnienia"></button>
+          </div>
+          <p class="absolute bottom-4 left-0 right-0 text-center text-xs text-steel">Kliknij <span class="text-power font-semibold">czerwone punkty</span> lub zakładki obok</p>
+        </div>
+      </div>
+
+      <!-- Tabbed info -->
+      <div class="lg:col-span-6 reveal">
+        <div class="flex flex-wrap gap-2 mb-5" id="partTabs">
+          <button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="0">Wirnik kompresora</button>
+          <button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="1">Łożyskowanie</button>
+          <button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="2">Wał i wirnik turbiny</button>
+          <button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="3">Geometria VNT</button>
+          <button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="4">Uszczelnienia</button>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center">
+              <i id="partIcon" data-lucide="fan" class="w-6 h-6 text-power"></i>
+            </div>
+            <h3 id="partName" class="font-display font-800 text-xl text-white"></h3>
+          </div>
+          <p id="partDesc" class="text-steel leading-relaxed"></p>
+          <div class="mt-5 grid sm:grid-cols-2 gap-3">
+            <div class="rounded-lg bg-white/5 border border-white/10 p-4">
+              <p class="text-xs uppercase tracking-wide text-steel mb-1">Co regenerujemy</p>
+              <p id="partFix" class="text-sm text-silver"></p>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-4">
+              <p class="text-xs uppercase tracking-wide text-steel mb-1">Dlaczego to ważne</p>
+              <p id="partWhy" class="text-sm text-silver"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 9. PORÓWNANIE NOWA vs REGENEROWANA                             -->
+<!-- ============================================================= -->
+<section class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Porównanie</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Nowa turbina <span class="text-steel">vs</span> regeneracja w <span class="text-power-grad">TURBO-GIT</span>
+      </h2>
+    </div>
+
+    <div class="mt-12 reveal overflow-hidden rounded-2xl border border-white/10 bg-ink3 shadow-card">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-white/10 text-sm">
+            <th class="p-5 font-medium text-steel">Kryterium</th>
+            <th class="p-5 font-display font-800 text-silver">Nowa turbina</th>
+            <th class="p-5 font-display font-800 text-power bg-power/5">TURBO-GIT</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm">
+          <tr class="border-b border-white/5">
+            <td class="p-5 text-silver">Cena</td>
+            <td class="p-5 text-steel">Bardzo wysoka (3–9 tys. zł+)</td>
+            <td class="p-5 text-white bg-power/5 font-semibold">Niższa o 45–65%</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="p-5 text-silver">Części</td>
+            <td class="p-5 text-steel">OEM</td>
+            <td class="p-5 text-white bg-power/5 font-semibold">Oryginalne OEM</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="p-5 text-silver">Balansowanie VSR</td>
+            <td class="p-5 text-steel"><i data-lucide="minus" class="w-4 h-4 inline text-steel"></i> zależnie od producenta</td>
+            <td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Zawsze</span></td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="p-5 text-silver">Gwarancja</td>
+            <td class="p-5 text-steel">12–24 mies.</td>
+            <td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">24 mies. bez limitu km</span></td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="p-5 text-silver">Czas realizacji</td>
+            <td class="p-5 text-steel">Często zamówienie z dostawą</td>
+            <td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Ekspres + wysyłka 24h</span></td>
+          </tr>
+          <tr>
+            <td class="p-5 text-silver">Ekologia</td>
+            <td class="p-5 text-steel">Pełna produkcja od zera</td>
+            <td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Niski ślad środowiskowy</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 10. REALIZACJE / BEFORE & AFTER                                -->
+<!-- ============================================================= -->
+<section id="realizacje" class="relative py-24 sm:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Realizacje</span>
+        <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+          Setki turbin. <span class="text-power-grad">Każda jak nowa.</span>
+        </h2>
+      </div>
+      <!-- Filtry kategorii -->
+      <div class="flex flex-wrap gap-2" id="caseFilters">
+        <button class="case-filter active rounded-full border border-power/40 bg-power/10 px-4 py-2 text-sm font-medium text-white" data-cat="all">Wszystkie</button>
+        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="osobowe">Osobowe</button>
+        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="dostawcze">Dostawcze</button>
+        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="ciezarowe">Ciężarowe</button>
+        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="rolnicze">Rolnicze</button>
+      </div>
+    </div>
+
+    <!-- Masonry grid -->
+    <div id="caseGrid" class="mt-12 columns-1 sm:columns-2 lg:columns-3 gap-5 [&>*]:mb-5">
+      <!-- karty generowane przez JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 11. OPINIE                                                     -->
+<!-- ============================================================= -->
+<section id="opinie" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5 overflow-hidden">
+  <div class="absolute -left-40 bottom-0 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Opinie</span>
+        <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+          Mówią za nas <span class="text-power-grad">kierowcy</span>.
+        </h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 text-power">
+          <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+        </div>
+        <p class="text-sm text-steel"><span class="text-white font-semibold">4,9/5</span> średnia ocen</p>
+      </div>
+    </div>
+
+    <!-- Karuzela -->
+    <div class="mt-12 relative reveal">
+      <div id="reviewTrack" class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <!-- karty generowane przez JS -->
+      </div>
+      <!-- Kontrolki -->
+      <div class="mt-6 flex items-center justify-between">
+        <p class="text-sm text-steel">Przeciągnij lub użyj strzałek →</p>
+        <div class="flex gap-2">
+          <button id="revPrev" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+          <button id="revNext" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 12. KALKULATOR OSZCZĘDNOŚCI                                    -->
+<!-- ============================================================= -->
+<section id="kalkulator" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 top-10 w-[800px] h-[500px] rounded-full bg-power/15 blur-[170px] opacity-70"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Kalkulator</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Sprawdź, ile <span class="text-power-grad">zaoszczędzisz</span>.
+      </h2>
+      <p class="mt-5 text-steel text-lg">Orientacyjna kalkulacja w kilka sekund. Finalną wycenę przygotujemy po diagnozie Twojej turbiny.</p>
+    </div>
+
+    <div class="mt-12 grid lg:grid-cols-2 gap-6 reveal">
+      <!-- Panel wyboru -->
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
+        <!-- Kategoria pojazdu -->
+        <label class="block text-sm font-semibold text-silver mb-3">1. Kategoria pojazdu</label>
+        <div id="calcCats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-7">
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="osobowe">
+            <i data-lucide="car" class="w-5 h-5 mx-auto mb-1"></i> Osobowe
+          </button>
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="dostawcze">
+            <i data-lucide="truck" class="w-5 h-5 mx-auto mb-1"></i> Dostawcze
+          </button>
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="ciezarowe">
+            <i data-lucide="container" class="w-5 h-5 mx-auto mb-1"></i> Ciężarowe
+          </button>
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="rolnicze">
+            <i data-lucide="tractor" class="w-5 h-5 mx-auto mb-1"></i> Rolnicze
+          </button>
+        </div>
+
+        <!-- Model turbiny -->
+        <label for="calcModel" class="block text-sm font-semibold text-silver mb-3">2. Popularny model / silnik</label>
+        <select id="calcModel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors mb-7"></select>
+
+        <!-- Moc -->
+        <label class="block text-sm font-semibold text-silver mb-3">3. Moc silnika: <span id="calcPowerVal" class="text-power font-display font-800">150 KM</span></label>
+        <input id="calcPower" type="range" min="75" max="600" step="5" value="150" class="w-full accent-power" />
+        <div class="flex justify-between text-xs text-steel mt-2"><span>75 KM</span><span>600 KM</span></div>
+      </div>
+
+      <!-- Panel wyniku -->
+      <div class="relative rounded-2xl border border-power/25 bg-gradient-to-br from-ink3 to-ink p-7 sm:p-8 shadow-glow overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-power/20 blur-3xl"></div>
+        <p class="text-sm text-steel mb-6">Twoja szacunkowa kalkulacja</p>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-5">
+            <p class="text-xs text-steel mb-1">Nowa turbina</p>
+            <p class="font-display font-800 text-2xl text-silver"><span id="resNew">0</span> zł</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-5">
+            <p class="text-xs text-steel mb-1">Regeneracja</p>
+            <p class="font-display font-800 text-2xl text-white"><span id="resRegen">0</span> zł</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-power/10 border border-power/25 p-6 mb-5">
+          <p class="text-sm text-silver mb-1">Oszczędzasz</p>
+          <div class="flex items-end gap-3 flex-wrap">
+            <p class="font-display font-900 text-4xl sm:text-5xl text-white"><span id="resSave">0</span> zł</p>
+            <p class="font-display font-800 text-2xl text-power mb-1"><span id="resPct">0</span>%</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-sm text-steel mb-6">
+          <i data-lucide="clock" class="w-4 h-4 text-power"></i>
+          Czas realizacji: <span class="text-silver font-semibold" id="resTime">2–4 dni robocze</span>
+        </div>
+
+        <a href="#kontakt" class="group flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all">
+          Zamów dokładną wycenę
+          <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+        <p class="mt-3 text-xs text-steel text-center">Wartości orientacyjne. Nie stanowią oferty handlowej w rozumieniu art. 66 KC.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 13. FAQ                                                        -->
+<!-- ============================================================= -->
+<section id="faq" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">FAQ</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Najczęstsze <span class="text-power-grad">pytania</span>
+      </h2>
+    </div>
+
+    <div id="faqList" class="mt-12 space-y-3 reveal">
+      <!-- generowane przez JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 14. FINALNE CTA + KONTAKT                                      -->
+<!-- ============================================================= -->
+<section id="kontakt" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-[900px] h-[500px] rounded-full bg-power/15 blur-[170px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-2 gap-10 items-stretch">
+      <!-- Lewa: hasło + szybkie akcje -->
+      <div class="reveal">
+        <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+          Gotowy na turbo, które działa <span class="text-power-grad">jak nowe</span>?
+        </h2>
+        <p class="mt-5 text-steel text-lg max-w-md">Wyślij zgłoszenie albo dzwoń. Doradzimy, zdiagnozujemy i przygotujemy wycenę bez zobowiązań. Odbiór kurierem z całej Polski.</p>
+
+        <div class="mt-8 grid sm:grid-cols-2 gap-3">
+          <a href="tel:+48000000000" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+            <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="phone" class="w-5 h-5 text-power"></i></span>
+            <span><span class="block text-xs text-steel">Zadzwoń</span><span class="block font-semibold text-white">000 000 000</span></span>
+          </a>
+          <a href="https://wa.me/48000000000" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+            <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="message-circle" class="w-5 h-5 text-power"></i></span>
+            <span><span class="block text-xs text-steel">Napisz</span><span class="block font-semibold text-white">WhatsApp</span></span>
+          </a>
+          <a href="#kontakt" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+            <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="package" class="w-5 h-5 text-power"></i></span>
+            <span><span class="block text-xs text-steel">Logistyka</span><span class="block font-semibold text-white">Umów odbiór kurierem</span></span>
+          </a>
+          <a href="#" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+            <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="map-pin" class="w-5 h-5 text-power"></i></span>
+            <span><span class="block text-xs text-steel">Siedziba</span><span class="block font-semibold text-white">Januszkowice</span></span>
+          </a>
+        </div>
+
+        <!-- PLACEHOLDER: tutaj można osadzić mapę Google z lokalizacją warsztatu (iframe) -->
+        <div class="mt-6 ph aspect-[16/6] rounded-xl border border-white/10 grid place-items-center">
+          <span class="text-xs text-steel uppercase tracking-widest">mapa dojazdu — Januszkowice</span>
+        </div>
+      </div>
+
+      <!-- Prawa: formularz -->
+      <div class="reveal">
+        <form id="contactForm" class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card" novalidate>
+          <h3 class="font-display font-800 text-2xl text-white mb-6">Zamów regenerację</h3>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-steel mb-1.5" for="fName">Imię i nazwisko *</label>
+              <input id="fName" name="name" required class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="Jan Kowalski" />
+            </div>
+            <div>
+              <label class="block text-sm text-steel mb-1.5" for="fPhone">Telefon *</label>
+              <input id="fPhone" name="phone" required inputmode="tel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="600 000 000" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm text-steel mb-1.5" for="fCar">Pojazd / silnik</label>
+              <input id="fCar" name="car" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="np. VW Passat B7 2.0 TDI 140 KM" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm text-steel mb-1.5" for="fMsg">Opis problemu</label>
+              <textarea id="fMsg" name="message" rows="3" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors resize-none" placeholder="np. dymi, brak mocy, gwizd przy przyspieszaniu..."></textarea>
+            </div>
+          </div>
+
+          <label class="mt-4 flex items-start gap-3 text-xs text-steel">
+            <input type="checkbox" required class="mt-0.5 accent-power w-4 h-4" />
+            <span>Akceptuję przetwarzanie danych w celu kontaktu zgodnie z polityką prywatności. *</span>
+          </label>
+
+          <button type="submit" class="group mt-6 flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all shadow-[0_14px_40px_-12px_rgba(200,16,46,.8)]">
+            Wyślij zgłoszenie
+            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+          </button>
+          <p class="mt-3 text-center text-xs text-steel">Odpowiadamy zwykle w ciągu kilku godzin w dni robocze.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================= -->
+<!-- 15. FOOTER                                                     -->
+<!-- ============================================================= -->
+<footer class="border-t border-white/10 bg-ink2">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="relative grid place-items-center w-9 h-9">
+            <span class="absolute inset-0 rounded-full turbo-ring opacity-70"></span>
+            <span class="absolute inset-[3px] rounded-full bg-ink2 border border-white/10"></span>
+            <i data-lucide="fan" class="relative w-4 h-4 text-power"></i>
+          </span>
+          <span class="font-display font-900 text-lg text-white">TURBO<span class="text-power">-</span>GIT</span>
+        </div>
+        <p class="text-sm text-steel leading-relaxed">Regeneracja turbosprężarek na poziomie premium. Od 2012 roku. Januszkowice, Polska.</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Nawigacja</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li><a href="#uslugi" class="hover:text-white transition-colors">Usługi</a></li>
+          <li><a href="#proces" class="hover:text-white transition-colors">Proces</a></li>
+          <li><a href="#technologia" class="hover:text-white transition-colors">Technologia</a></li>
+          <li><a href="#realizacje" class="hover:text-white transition-colors">Realizacje</a></li>
+          <li><a href="#kalkulator" class="hover:text-white transition-colors">Kalkulator</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Kontakt</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-power"></i> 000 000 000</li>
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-power"></i> kontakt@turbo-git.com</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-power"></i> Januszkowice</li>
+          <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-power"></i> Pon–Pt 8:00–17:00</li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Gwarancja jakości</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> 24 mies. bez limitu km</li>
+          <li class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> Oryginalne części OEM</li>
+          <li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Wysyłka 24h w całej PL</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-steel">
+      <p>© <span id="year"></span> TURBO-GIT. Wszelkie prawa zastrzeżone.</p>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Polityka prywatności</a>
+        <a href="#" class="hover:text-white transition-colors">Regulamin</a>
+        <a href="#hero" class="hover:text-white transition-colors flex items-center gap-1">Do góry <i data-lucide="arrow-up" class="w-3 h-3"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================= -->
+<!-- MODAL POTWIERDZENIA (DEMO)                                     -->
+<!-- ============================================================= -->
+<div id="modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-close></div>
+  <div class="relative w-full max-w-md rounded-2xl border border-white/10 bg-ink3 p-8 text-center shadow-card animate-[floaty_4s_ease-in-out_infinite]">
+    <div class="mx-auto w-16 h-16 rounded-full bg-power/15 border border-power/30 grid place-items-center mb-5">
+      <i data-lucide="check-check" class="w-8 h-8 text-power"></i>
+    </div>
+    <h3 class="font-display font-800 text-2xl text-white">Zgłoszenie wysłane!</h3>
+    <p class="mt-3 text-steel">Dziękujemy. Skontaktujemy się z Tobą najszybciej jak to możliwe, żeby ustalić szczegóły regeneracji.</p>
+    <button data-close class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Świetnie <i data-lucide="thumbs-up" class="w-4 h-4"></i></button>
+    <p class="mt-4 text-[11px] text-steel">To wersja demo — formularz nie wysyła jeszcze realnych danych. Instrukcja podpięcia na końcu pliku HTML.</p>
+  </div>
+</div>
+
+<!-- Hotspot styl -->
+<style>
+  .hot { width:22px; height:22px; border-radius:9999px; background:#c8102e; box-shadow:0 0 0 0 rgba(200,16,46,.6); transition:transform .25s; }
+  .hot::after { content:''; position:absolute; inset:-8px; border-radius:9999px; border:1px solid rgba(200,16,46,.5); animation:hotPing 2s ease-out infinite; }
+  .hot:hover, .hot.active { transform:scale(1.25); }
+  .hot.active { background:#fff; box-shadow:0 0 0 4px rgba(200,16,46,.5); }
+  @keyframes hotPing { 0%{transform:scale(.6);opacity:1} 100%{transform:scale(1.4);opacity:0} }
+  .part-tab.active { background:#c8102e; border-color:#c8102e; color:#fff; }
+  .calc-cat.active { background:rgba(200,16,46,.15); border-color:#c8102e; color:#fff; }
+  .step-btn.active { border-color:rgba(200,16,46,.4); background:rgba(200,16,46,.06); }
+  .step-btn.active .step-dot { background:#c8102e; color:#fff; border-color:#c8102e; }
+  .step-btn.active .step-title { color:#fff; }
+</style>
+
+<!-- ============================================================= -->
+<!-- JAVASCRIPT (Vanilla ES6+)                                      -->
+<!-- ============================================================= -->
+<script>
+(() => {
+  'use strict';
+
+  /* ----- Lucide icons init ----- */
+  const renderIcons = () => window.lucide && window.lucide.createIcons();
+  renderIcons();
+
+  /* ----- Rok w stopce ----- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ============================================================
+     NAVBAR: tło po scrollu + mobile menu + active link
+  ============================================================ */
+  const navbar = document.getElementById('navbar');
+  const onScrollNav = () => {
+    if (window.scrollY > 20) navbar.classList.add('shadow-[0_10px_40px_-20px_rgba(0,0,0,.9)]');
+    else navbar.classList.remove('shadow-[0_10px_40px_-20px_rgba(0,0,0,.9)]');
+  };
+  window.addEventListener('scroll', onScrollNav, { passive:true });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  document.querySelectorAll('[data-mlink]').forEach(a =>
+    a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  /* Active section highlight */
+  const navLinks = [...document.querySelectorAll('[data-nav]')];
+  const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = '#' + e.target.id;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin:'-45% 0px -50% 0px' });
+  sections.forEach(s => navObserver.observe(s));
+
+  /* ============================================================
+     REVEAL ON SCROLL
+  ============================================================ */
+  const revObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObserver.unobserve(e.target); } });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revObserver.observe(el));
+
+  /* ============================================================
+     ANIMOWANE LICZNIKI
+  ============================================================ */
+  const animateCounter = (el) => {
+    const target = +el.dataset.target;
+    const suffix = el.dataset.suffix || '';
+    const dur = 1600; const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString('pl-PL') + (p === 1 ? suffix : '');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); counterObserver.unobserve(e.target); } });
+  }, { threshold:0.6 });
+  document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+
+  /* Animowany pasek (sekcja problem) */
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.width = e.target.dataset.width; barObserver.unobserve(e.target); } });
+  }, { threshold:0.5 });
+  document.querySelectorAll('[data-bar]').forEach(el => barObserver.observe(el));
+
+  /* ============================================================
+     PROCES — STEPPER
+  ============================================================ */
+  const steps = [
+    { h:'Przyjęcie i diagnostyka wstępna',
+      d:'Turbinę przyjmujemy osobiście lub kurierem, oględziny i wywiad o objawach (dymienie, brak mocy, gwizd, wycieki oleju). Robimy dokumentację zdjęciową stanu „as is”.',
+      w:'Trafna diagnoza już na starcie pozwala odróżnić usterkę samej turbiny od problemu w silniku — żebyś nie płacił za naprawę, która nie rozwiąże przyczyny.' },
+    { h:'Pełny demontaż rdzenia',
+      d:'Rozkładamy turbinę do pojedynczych komponentów: korpus środkowy (CHRA), wirniki, wał, łożyska, geometria. Każda część trafia do osobnej kontroli.',
+      w:'Tylko pełny demontaż ujawnia ukryte uszkodzenia — pęknięcia, wyrobienia, ślady kontaktu łopatek. Bez tego regeneracja to loteria.' },
+    { h:'Czyszczenie ultradźwiękowe',
+      d:'Elementy myjemy w kąpieli ultradźwiękowej, która usuwa nagar i osady olejowe z najmniejszych kanałów bez ścierania materiału bazowego.',
+      w:'Czysta powierzchnia to warunek precyzyjnego pomiaru i prawidłowego balansu. Resztki nagaru fałszują wyniki i skracają żywotność.' },
+    { h:'Pomiary i kwalifikacja części',
+      d:'Mikrometrem i czujnikami zegarowymi mierzymy luzy osiowe i promieniowe, bicie wału, stan gniazd. Kwalifikujemy, co nadaje się do ponownego użycia, a co do wymiany.',
+      w:'Decyzje oparte na liczbach, nie na „oku”. Dzięki temu wiesz, że turbina spełnia tolerancje fabryczne, a nie tylko „jakoś chodzi”.' },
+    { h:'Wymiana na oryginalne OEM',
+      d:'Montujemy oryginalne zestawy naprawcze OEM — łożyskowanie, pierścienie, tuleje, w razie potrzeby nowy rdzeń lub geometria zmiennych łopatek.',
+      w:'Zamienniki bywają poza tolerancją i przyspieszają zużycie. Części OEM gwarantują parametry i trwałość jak na linii produkcyjnej.' },
+    { h:'Balansowanie na maszynie VSR',
+      d:'Zmontowany rdzeń balansujemy dynamicznie na maszynie VSR przy obrotach zbliżonych do roboczych, korygując niewyważenie do minimum.',
+      w:'Przy 150–250 tys. obr./min nawet mikrogram niewyważenia niszczy łożyska. VSR to różnica między turbiną cichą i trwałą a taką, która padnie po sezonie.' },
+    { h:'Test końcowy i wysyłka 24h',
+      d:'Sprawdzamy geometrię, szczelność i pracę aktuatora na stanowisku, pakujemy bezpiecznie i wysyłamy — ekspresowo, z 24-miesięczną gwarancją bez limitu km.',
+      w:'Turbina opuszcza warsztat sprawdzona, nie „na nadzieję”. Dostajesz gotowy do montażu produkt i pełne wsparcie gwarancyjne.' },
+  ];
+  const stepBtns = [...document.querySelectorAll('.step-btn')];
+  const stepHeading = document.getElementById('stepHeading');
+  const stepDesc = document.getElementById('stepDesc');
+  const stepWhy = document.getElementById('stepWhy');
+  const stepBadge = document.getElementById('stepBadge');
+  let curStep = 0;
+  const setStep = (i) => {
+    curStep = (i + steps.length) % steps.length;
+    const s = steps[curStep];
+    stepBtns.forEach((b, idx) => b.classList.toggle('active', idx === curStep));
+    stepHeading.textContent = s.h;
+    stepDesc.textContent = s.d;
+    stepWhy.textContent = s.w;
+    stepBadge.textContent = `ETAP ${String(curStep+1).padStart(2,'0')} / 07`;
+  };
+  stepBtns.forEach((b, i) => b.addEventListener('click', () => setStep(i)));
+  document.getElementById('prevStep').addEventListener('click', () => setStep(curStep - 1));
+  document.getElementById('nextStep').addEventListener('click', () => setStep(curStep + 1));
+  setStep(0);
+
+  /* ============================================================
+     TURBO EXPLORER
+  ============================================================ */
+  const parts = [
+    { name:'Wirnik kompresora', icon:'fan',
+      desc:'Aluminiowy wirnik po stronie zimnej, który spręża powietrze trafiające do silnika. Wrażliwy na uderzenia ciał obcych i zużycie krawędzi łopatek.',
+      fix:'Kontrola łopatek, wymiana przy uszkodzeniu, czyszczenie i balans.',
+      why:'Uszkodzone łopatki = spadek doładowania i utrata mocy.' },
+    { name:'Łożyskowanie', icon:'circle-dot',
+      desc:'Łożyska ślizgowe lub kulkowe, na których wiruje wał. Pracują w ekstremalnej temperaturze i prędkości, smarowane olejem silnikowym.',
+      fix:'Wymiana na oryginalne łożyska OEM + nowe panewki i pierścienie.',
+      why:'Zużyte łożyska to luzy, hałas i kasacja całej turbiny.' },
+    { name:'Wał i wirnik turbiny', icon:'git-commit-horizontal',
+      desc:'Stalowy wał z wirnikiem turbinowym po stronie gorącej, napędzany spalinami. Pracuje w temperaturach przekraczających 800°C.',
+      fix:'Kontrola bicia wału, stanu wirnika, prostowanie/wymiana w razie potrzeby.',
+      why:'Bicie wału rujnuje balans i niszczy uszczelnienia oraz łożyska.' },
+    { name:'Geometria VNT', icon:'settings-2',
+      desc:'Zmienna geometria (układ ruchomych łopatek kierujących) reguluje ciśnienie doładowania w zależności od obrotów silnika.',
+      fix:'Czyszczenie z nagaru, regeneracja mechanizmu, kalibracja na stanowisku.',
+      why:'Zatarta geometria = tryb awaryjny, dymienie i brak mocy w dole.' },
+    { name:'Uszczelnienia', icon:'shield',
+      desc:'Pierścienie uszczelniające po stronie gorącej i zimnej, które nie dopuszczają oleju do układu dolotowego i wydechowego.',
+      fix:'Wymiana wszystkich pierścieni na nowe OEM podczas każdej regeneracji.',
+      why:'Nieszczelność to wyrzucanie oleju, niebieski dym i ryzyko rozbiegu.' },
+  ];
+  const partTabs = [...document.querySelectorAll('.part-tab')];
+  const hots = [...document.querySelectorAll('.hot')];
+  const partName = document.getElementById('partName');
+  const partDesc = document.getElementById('partDesc');
+  const partFix = document.getElementById('partFix');
+  const partWhy = document.getElementById('partWhy');
+  const partIcon = document.getElementById('partIcon');
+  const setPart = (i) => {
+    const p = parts[i];
+    partTabs.forEach((t, idx) => t.classList.toggle('active', idx === i));
+    hots.forEach((h, idx) => h.classList.toggle('active', idx === i));
+    partName.textContent = p.name;
+    partDesc.textContent = p.desc;
+    partFix.textContent = p.fix;
+    partWhy.textContent = p.why;
+    partIcon.setAttribute('data-lucide', p.icon);
+    renderIcons();
+  };
+  partTabs.forEach((t, i) => t.addEventListener('click', () => setPart(i)));
+  hots.forEach((h, i) => h.addEventListener('click', () => setPart(i)));
+  setPart(0);
+
+  /* ============================================================
+     REALIZACJE — dane + render + filtr
+  ============================================================ */
+  const cases = [
+    { cat:'osobowe',  title:'VW Passat B7 2.0 TDI', meta:'140 KM • geometria VNT', save:'2 600 zł', note:'Wymiana geometrii i łożyskowania, balans VSR.' },
+    { cat:'osobowe',  title:'BMW 320d E90', meta:'177 KM • dymienie', save:'2 900 zł', note:'Uszczelnienia + nowy rdzeń OEM.' },
+    { cat:'osobowe',  title:'Audi A4 B8 2.0 TDI', meta:'143 KM • brak mocy', save:'2 400 zł', note:'Regeneracja aktuatora i geometrii.' },
+    { cat:'dostawcze',title:'Ford Transit 2.2 TDCi', meta:'125 KM • gwizd', save:'3 100 zł', note:'Wymiana wału i łożysk, kalibracja.' },
+    { cat:'dostawcze',title:'Mercedes Sprinter 2.1 CDI', meta:'150 KM • wyciek oleju', save:'3 400 zł', note:'Komplet uszczelnień + balans VSR.' },
+    { cat:'ciezarowe',title:'Scania R450', meta:'450 KM • spadek doładowania', save:'5 800 zł', note:'Regeneracja rdzenia dużej mocy.' },
+    { cat:'ciezarowe',title:'MAN TGX D26', meta:'480 KM • serwis floty', save:'6 200 zł', note:'Pełna regeneracja z testem obciążeniowym.' },
+    { cat:'rolnicze', title:'John Deere 6R', meta:'ciągnik • przegrzanie', save:'4 100 zł', note:'Czyszczenie geometrii, nowe łożyska OEM.' },
+    { cat:'rolnicze', title:'New Holland T7', meta:'ciągnik • brak mocy', save:'3 900 zł', note:'Balans VSR, wymiana wirnika.' },
+  ];
+  const caseGrid = document.getElementById('caseGrid');
+  const renderCases = (cat='all') => {
+    caseGrid.innerHTML = cases
+      .filter(c => cat === 'all' || c.cat === cat)
+      .map(c => `
+      <article class="reveal in lift break-inside-avoid rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40 group">
+        <!-- PLACEHOLDER BEFORE/AFTER: podmień ten blok na realne zdjęcia (np. <img> w trybie hover-swap).
+             Lewa połowa = "przed" (brudna/uszkodzona turbina), prawa = "po" (zregenerowana, czysta). -->
+        <div class="relative ph aspect-[4/3] grid grid-cols-2">
+          <div class="grid place-items-center border-r border-white/10"><span class="text-[10px] uppercase tracking-widest text-steel">przed</span></div>
+          <div class="grid place-items-center"><span class="text-[10px] uppercase tracking-widest text-power">po</span></div>
+          <span class="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-silver">${c.cat}</span>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-800 text-lg text-white">${c.title}</h3>
+          <p class="mt-1 text-sm text-steel">${c.meta}</p>
+          <p class="mt-3 text-sm text-silver leading-relaxed">${c.note}</p>
+          <div class="mt-4 flex items-center justify-between">
+            <span class="text-xs text-steel">Oszczędność klienta</span>
+            <span class="font-display font-800 text-power">${c.save}</span>
+          </div>
+        </div>
+      </article>`).join('');
+    renderIcons();
+  };
+  renderCases();
+  document.querySelectorAll('.case-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.case-filter').forEach(b => {
+        b.classList.remove('active','border-power/40','bg-power/10','text-white');
+        b.classList.add('border-white/15','text-steel');
+      });
+      btn.classList.add('active','border-power/40','bg-power/10','text-white');
+      btn.classList.remove('border-white/15','text-steel');
+      renderCases(btn.dataset.cat);
+    });
+  });
+
+  /* ============================================================
+     OPINIE — render + karuzela
+  ============================================================ */
+  const reviews = [
+    { name:'Marek W.', car:'VW Passat 2.0 TDI', text:'Turbina jak nowa, zero gwizdu, auto ciągnie od dołu. Wysłali ekspresowo, dostałem następnego dnia. Polecam w 100%.', video:true },
+    { name:'Anna K.', car:'BMW 320d', text:'Bałam się regeneracji, a okazało się taniej i lepiej niż nowa. Dostałam zdjęcia przed i po — pełen profesjonalizm.', video:false },
+    { name:'Tomasz R.', car:'Ford Transit (firma)', text:'Mam flotę dostawczaków, regenerują mi turbiny od lat. Zawsze terminowo i bez reklamacji. Konkret, nie ściema.', video:true },
+    { name:'Grzegorz P.', car:'Scania R450', text:'Ciężarówka wróciła na trasę w dwa dni. Moc wróciła, spalanie wróciło do normy. Robota na poziomie.', video:false },
+    { name:'Daniel S.', car:'Audi A4 B8', text:'Geometria zatarta, inni chcieli sprzedać nową za 5 tys. Tu zrobili za połowę i działa idealnie. Dzięki!', video:false },
+    { name:'Krzysztof M.', car:'John Deere 6R', text:'Ciągnik to narzędzie pracy, nie mogłem czekać tydzień. Zrobili ekspres, gwarancja 2 lata. Super kontakt.', video:true },
+  ];
+  const stars = '★★★★★';
+  const reviewTrack = document.getElementById('reviewTrack');
+  reviewTrack.innerHTML = reviews.map(r => `
+    <article class="snap-start shrink-0 w-[300px] sm:w-[360px] rounded-2xl border border-white/10 bg-ink3 p-7 flex flex-col">
+      ${r.video ? `
+      <!-- PLACEHOLDER WIDEO: podmień na realny <video>/embed z opinią klienta -->
+      <div class="ph aspect-video rounded-xl border border-white/10 mb-5 grid place-items-center group cursor-pointer">
+        <span class="grid place-items-center w-12 h-12 rounded-full bg-power/90 text-white"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>` : ``}
+      <div class="text-power text-lg mb-3">${stars}</div>
+      <p class="text-silver leading-relaxed flex-1">„${r.text}”</p>
+      <div class="mt-5 flex items-center gap-3 pt-5 border-t border-white/10">
+        <span class="grid place-items-center w-10 h-10 rounded-full bg-power/15 text-power font-display font-800">${r.name.charAt(0)}</span>
+        <span><span class="block text-sm font-semibold text-white">${r.name}</span><span class="block text-xs text-steel">${r.car}</span></span>
+      </div>
+    </article>`).join('');
+  const scrollBy = 380;
+  document.getElementById('revNext').addEventListener('click', () => reviewTrack.scrollBy({ left:scrollBy, behavior:'smooth' }));
+  document.getElementById('revPrev').addEventListener('click', () => reviewTrack.scrollBy({ left:-scrollBy, behavior:'smooth' }));
+
+  /* ============================================================
+     KALKULATOR OSZCZĘDNOŚCI
+  ============================================================ */
+  // Modele wg kategorii: bazowa cena nowej turbiny (zł) + bazowa cena regeneracji (zł)
+  const calcData = {
+    osobowe: {
+      time:'2–4 dni robocze',
+      models:[
+        { label:'1.6 / 2.0 TDI (VW, Audi, Skoda)', newP:4800, regen:1900 },
+        { label:'2.0d (BMW)', newP:5200, regen:2100 },
+        { label:'1.5 / 1.6 dCi (Renault, Nissan)', newP:3600, regen:1500 },
+        { label:'1.3 / 1.6 CDTI (Opel, Fiat)', newP:3400, regen:1450 },
+        { label:'2.2 / 2.0 CDI (Mercedes)', newP:5400, regen:2200 },
+      ]
+    },
+    dostawcze: {
+      time:'2–5 dni roboczych',
+      models:[
+        { label:'2.2 TDCi (Ford Transit)', newP:5600, regen:2300 },
+        { label:'2.1 / 2.2 CDI (Mercedes Sprinter)', newP:6200, regen:2500 },
+        { label:'2.3 / 2.8 JTD (Iveco Daily)', newP:6400, regen:2600 },
+        { label:'2.5 / 3.0 dCi (Renault Master)', newP:5900, regen:2400 },
+      ]
+    },
+    ciezarowe: {
+      time:'3–6 dni roboczych',
+      models:[
+        { label:'Scania DC13 / R-series', newP:12500, regen:5400 },
+        { label:'MAN D26 / TGX', newP:13200, regen:5700 },
+        { label:'Volvo D13 / FH', newP:12800, regen:5500 },
+        { label:'Mercedes OM471 / Actros', newP:13500, regen:5800 },
+      ]
+    },
+    rolnicze: {
+      time:'3–6 dni roboczych',
+      models:[
+        { label:'John Deere PowerTech', newP:8800, regen:3600 },
+        { label:'New Holland / CASE FPT', newP:8400, regen:3400 },
+        { label:'Massey Ferguson / AGCO', newP:8200, regen:3300 },
+        { label:'Deutz-Fahr TCD', newP:7900, regen:3200 },
+      ]
+    },
+  };
+
+  let calcState = { cat:'osobowe', modelIdx:0, power:150 };
+  const calcCats = [...document.querySelectorAll('.calc-cat')];
+  const calcModel = document.getElementById('calcModel');
+  const calcPower = document.getElementById('calcPower');
+  const calcPowerVal = document.getElementById('calcPowerVal');
+
+  const fmt = (n) => Math.round(n).toLocaleString('pl-PL');
+  // płynna animacja liczby
+  const animNumber = (el, to, suffix='') => {
+    const from = parseInt((el.textContent || '0').replace(/\D/g,'')) || 0;
+    const dur = 600; const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now-start)/dur, 1);
+      const eased = 1 - Math.pow(1-p,3);
+      el.textContent = fmt(from + (to-from)*eased) + suffix;
+      if (p<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const populateModels = () => {
+    const models = calcData[calcState.cat].models;
+    calcModel.innerHTML = models.map((m,i)=>`<option value="${i}">${m.label}</option>`).join('');
+    calcState.modelIdx = 0;
+  };
+
+  const recalc = () => {
+    const d = calcData[calcState.cat];
+    const m = d.models[calcState.modelIdx];
+    // współczynnik mocy: skaluje cenę względem 150 KM (osobowe) jako baza
+    const baseRef = calcState.cat === 'osobowe' ? 150 : calcState.cat === 'dostawcze' ? 150 : calcState.cat === 'ciezarowe' ? 450 : 180;
+    const factor = 0.7 + 0.3 * (calcState.power / baseRef); // łagodne skalowanie
+    const newP = m.newP * factor;
+    const regen = m.regen * factor;
+    const save = newP - regen;
+    const pct = Math.round((save / newP) * 100);
+    animNumber(document.getElementById('resNew'), newP);
+    animNumber(document.getElementById('resRegen'), regen);
+    animNumber(document.getElementById('resSave'), save);
+    animNumber(document.getElementById('resPct'), pct);
+    document.getElementById('resTime').textContent = d.time;
+  };
+
+  calcCats.forEach(btn => btn.addEventListener('click', () => {
+    calcCats.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calcState.cat = btn.dataset.cat;
+    populateModels();
+    recalc();
+  }));
+  calcModel.addEventListener('change', () => { calcState.modelIdx = +calcModel.value; recalc(); });
+  calcPower.addEventListener('input', () => {
+    calcState.power = +calcPower.value;
+    calcPowerVal.textContent = calcState.power + ' KM';
+    recalc();
+  });
+  // init
+  calcCats[0].classList.add('active');
+  populateModels();
+  recalc();
+
+  /* ============================================================
+     FAQ — render accordion
+  ============================================================ */
+  const faqs = [
+    { q:'Ile trwa regeneracja turbosprężarki?', a:'Standardowo 2–4 dni robocze dla aut osobowych i dostawczych. Realizujemy też tryb ekspresowy, a gotową turbinę wysyłamy w 24h kurierem w całej Polsce.' },
+    { q:'Jaką gwarancję dostaję?', a:'Na każdą regenerację udzielamy 24 miesięcy gwarancji bez limitu kilometrów. Gwarancja obejmuje wykonaną pracę i zastosowane części.' },
+    { q:'Czy używacie oryginalnych części?', a:'Tak. Stosujemy wyłącznie oryginalne zestawy naprawcze i komponenty OEM od sprawdzonych dostawców — bez tanich zamienników z niewiadomego źródła.' },
+    { q:'Czym jest balansowanie VSR i czy zawsze je robicie?', a:'VSR to balansowanie zmontowanego rdzenia przy obrotach zbliżonych do roboczych. Wykonujemy je przy każdej regeneracji — to gwarancja cichej pracy i trwałości.' },
+    { q:'Jak wysłać do Was turbinę?', a:'Możesz przywieźć ją osobiście do Januszkowic albo zamówić odbiór kurierem. Wystarczy zgłoszenie przez formularz lub telefon — resztę logistyki ogarniamy my.' },
+    { q:'Czy regeneracja jest tak samo trwała jak nowa turbina?', a:'Przy zastosowaniu oryginalnych części OEM i balansie VSR turbina pracuje w tolerancjach fabrycznych. W praktyce trwałość jest porównywalna z nową — za ułamek ceny.' },
+    { q:'Ile mogę zaoszczędzić?', a:'Zwykle 45–65% względem ceny nowej turbiny. Dokładną kwotę zobaczysz w naszym kalkulatorze, a wiążącą wycenę otrzymasz po bezpłatnej diagnostyce.' },
+    { q:'Co jeśli mojej turbiny nie da się zregenerować?', a:'Zdarza się rzadko, ale jeśli rdzeń jest skrajnie uszkodzony, poinformujemy Cię przed rozpoczęciem prac i zaproponujemy najlepsze rozwiązanie. Bez ukrytych kosztów.' },
+    { q:'Regenerujecie turbiny do maszyn rolniczych i ciężarówek?', a:'Tak — obsługujemy auta osobowe, dostawcze, ciężarowe oraz maszyny rolnicze i budowlane. Mamy sprzęt i części do dużych jednostek.' },
+    { q:'Czy wystawiacie fakturę VAT?', a:'Oczywiście. Wystawiamy faktury VAT, obsługujemy klientów indywidualnych, warsztaty i floty.' },
+  ];
+  document.getElementById('faqList').innerHTML = faqs.map(f => `
+    <details class="group rounded-2xl border border-white/10 bg-ink3 overflow-hidden">
+      <summary class="flex items-center justify-between gap-4 p-5 sm:p-6">
+        <span class="font-semibold text-silver group-hover:text-white transition-colors">${f.q}</span>
+        <span class="faq-icon shrink-0 grid place-items-center w-8 h-8 rounded-full border border-white/15 text-power transition-transform"><i data-lucide="plus" class="w-4 h-4"></i></span>
+      </summary>
+      <div class="px-5 sm:px-6 pb-6 -mt-1 text-steel leading-relaxed">${f.a}</div>
+    </details>`).join('');
+  renderIcons();
+
+  /* ============================================================
+     FORMULARZ + MODAL
+  ============================================================ */
+  const form = document.getElementById('contactForm');
+  const modal = document.getElementById('modal');
+  const openModal = () => { modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow='hidden'; };
+  const closeModal = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow=''; };
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    // DEMO: tu w realnej wersji wysyłka do backendu (patrz instrukcja na końcu pliku)
+    openModal();
+    form.reset();
+  });
+  modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+})();
+</script>
+
+<!-- =================================================================
+     INSTRUKCJE DLA DEWELOPERA / WŁAŚCICIELA STRONY
+     =================================================================
+
+  Ten plik to kompletny, samowystarczalny landing page TURBO-GIT.
+  Otwórz go w przeglądarce — działa od razu (Tailwind, Lucide i fonty ładowane z CDN).
+
+  ----------------------------------------------------------------
+  1) JAK PODŁĄCZYĆ PRAWDZIWY FORMULARZ
+  ----------------------------------------------------------------
+  Obecnie formularz (#contactForm) pokazuje tylko modal-demo i czyści pola.
+  Aby wysyłać realne zgłoszenia, masz kilka opcji:
+
+  A. Usługa "no-code" (najszybciej):
+     - Formspree (https://formspree.io), Getform, Web3Forms, Basin.
+     - Zarejestruj się, dostaniesz endpoint, np. https://formspree.io/f/XXXX
+     - W <form id="contactForm"> dodaj: action="https://formspree.io/f/XXXX" method="POST"
+     - W JS w handlerze submit zamień sekcję DEMO na faktyczny fetch:
+
+         const data = new FormData(form);
+         const res = await fetch(form.action, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+         if (res.ok) { openModal(); form.reset(); } else { alert('Błąd wysyłki, spróbuj ponownie.'); }
+
+     (pamiętaj o dodaniu 'async' przy funkcji obsługującej submit)
+
+  B. Własny backend / e-mail:
+     - Wystaw prosty endpoint (Node/Express, PHP mail(), serverless na Vercel/Netlify Functions).
+     - Wyślij na niego FormData lub JSON i obsłuż wysyłkę maila (np. Nodemailer, Resend, SendGrid).
+
+  C. WhatsApp / telefon: przyciski w sekcji #kontakt już działają —
+     podmień numer 48000000000 i 000 000 000 na prawdziwy numer firmy
+     (wystąpienia: nav, hero mini-fakty nie, sekcja kontakt, footer, linki tel:/wa.me).
+
+  ----------------------------------------------------------------
+  2) JAK DODAĆ PRAWDZIWE ZDJĘCIA I FILMY
+  ----------------------------------------------------------------
+  W kodzie wszystkie miejsca na grafikę są oznaczone:
+     - komentarzami "PLACEHOLDER: ..." (z opisem, co ma się znaleźć na zdjęciu)
+     - klasą .ph (animowany szary placeholder "shimmer")
+
+  Aby wstawić zdjęcie, zamień blok z klasą .ph na <img>, np.:
+     <img src="img/hero-turbina.webp" alt="Zregenerowana turbosprężarka TURBO-GIT"
+          class="w-full h-full object-cover" loading="lazy" />
+
+  Kluczowe miejsca:
+     - HERO: render/zdjęcie turbiny (sekcja #hero, prawa kolumna).
+     - PROCES: zdjęcie do każdego z 7 kroków (element .step-photo). Można rozbudować
+       tablicę "steps" o pole img i ustawiać tło/obraz przy zmianie kroku.
+     - TECHNOLOGIA: zdjęcia maszyn (VSR, myjka ultradźwiękowa, stanowisko testowe).
+     - TURBO EXPLORER: realny przekrój turbiny zamiast schematu ikonowego;
+       hotspoty (.hot) pozycjonowane są procentowo — dopasuj top/left do zdjęcia.
+     - REALIZACJE: before/after — w tablicy "cases" dodaj pola np. imgBefore/imgAfter
+       i podmień placeholder w renderCases() na dwa <img> (hover-swap lub slider).
+     - OPINIE: wideo (pola video:true) — podmień placeholder na <video> lub embed YT/Vimeo.
+     - KONTAKT: <iframe> Google Maps z lokalizacją w Januszkowicach.
+
+  Format obrazów: zalecane WebP/AVIF, lazy-loading (loading="lazy"),
+  rozsądne wymiary (hero ~2000px, miniatury ~800px). Dodawaj sensowne alt-y (SEO + dostępność).
+
+  ----------------------------------------------------------------
+  3) KONFIGURACJA / DANE FIRMY DO PODMIANY
+  ----------------------------------------------------------------
+     - Numer telefonu: 000 000 000  -> realny numer (linki tel: i wa.me)
+     - E-mail: kontakt@turbo-git.com -> realny adres
+     - Ceny w kalkulatorze: obiekt calcData w <script> — zaktualizuj newP/regen wg cennika.
+     - Realizacje, opinie, FAQ: tablice cases / reviews / faqs — edytuj treści w jednym miejscu.
+     - Kolory marki: w tailwind.config (power = #c8102e). Zmiana w jednym miejscu = cała strona.
+
+  ----------------------------------------------------------------
+  4) SUGESTIE DALSZEGO ROZWOJU
+  ----------------------------------------------------------------
+     - PRODUKCJA: zamień Tailwind z CDN na build lokalny (PostCSS) — szybsze ładowanie,
+       brak ostrzeżenia "cdn.tailwindcss.com should not be used in production".
+     - HOSTING WIZYTÓWKI: wystarczy statyczny hosting (Netlify, Vercel, Cloudflare Pages, GitHub Pages).
+     - CMS / TREŚCI: migracja do Next.js + Sanity (lub Strapi/Payload) — realizacje, opinie i FAQ
+       edytowalne przez panel bez ruszania kodu. Repo jest już projektem Next.js (patrz /src).
+     - SKLEP / ZAMÓWIENIA ONLINE: integracja z Shopify lub własny koszyk (Stripe / Przelewy24 / PayU)
+       — sprzedaż "regeneracji wysyłkowej" z systemem zwrotu kaucji za rdzeń (core charge).
+     - REZERWACJE / ODBIÓR KURIEREM: integracja z API firm kurierskich (InPost, DPD) — automatyczne
+       generowanie etykiet i zamawianie odbioru turbiny od klienta.
+     - ANALITYKA & KONWERSJA: Google Analytics 4 / Plausible, piksel Meta, zdarzenia na CTA,
+       A/B testy nagłówka hero i kalkulatora.
+     - SEO: dodaj dane strukturalne JSON-LD (LocalBusiness/AutoRepair), sitemap.xml, robots.txt,
+       Open Graph image, oraz osobne podstrony pod frazy "regeneracja turbiny [marka/model]".
+     - WYDAJNOŚĆ/DOSTĘPNOŚĆ: self-host fontów, preload kluczowych zasobów, audyt Lighthouse,
+       kontrast i nawigacja klawiaturą (większość już zadbana w tym pliku).
+
+  ================================================================= -->
+
+</body>
+</html>
