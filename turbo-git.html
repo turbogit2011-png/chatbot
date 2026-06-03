@@ -165,9 +165,9 @@
 
       <!-- CTA -->
       <div class="flex items-center gap-3 shrink-0">
-        <a href="tel:+48000000000" class="hidden sm:flex items-center gap-2 text-sm text-silver hover:text-white transition-colors">
+        <a href="tel:+48694706140" class="hidden sm:flex items-center gap-2 text-sm text-silver hover:text-white transition-colors">
           <i data-lucide="phone" class="w-4 h-4 text-power"></i>
-          <span class="font-semibold tabular-nums">000 000 000</span>
+          <span class="font-semibold tabular-nums">694 706 140</span>
         </a>
         <a href="#kontakt" class="relative inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors shadow-[0_8px_30px_-8px_rgba(200,16,46,.7)]">
           <i data-lucide="zap" class="w-4 h-4"></i>
@@ -202,17 +202,12 @@
 <!-- 2. HERO                                                        -->
 <!-- ============================================================= -->
 <section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden pt-[68px]">
-  <!-- Tło: siatka + glow -->
+  <!-- Tło: kinowe zdjęcie magazynu turbin + siatka + glow -->
+  <img src="assets/img/shelf-red.jpg" alt="Magazyn turbosprężarek TURBO-GIT" class="absolute inset-0 w-full h-full object-cover opacity-25" loading="eager" />
+  <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/70 to-ink"></div>
   <div class="absolute inset-0 grid-bg"></div>
   <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[700px] rounded-full bg-power/20 blur-[160px] opacity-60"></div>
   <div class="absolute bottom-0 right-0 w-[600px] h-[400px] rounded-full bg-power/10 blur-[140px]"></div>
-
-  <!--
-    PLACEHOLDER ZDJĘCIE / WIDEO HERO:
-    Tutaj wstaw kinowe ujęcie turbosprężarki w ciemnym studio z czerwonym podświetleniem,
-    makro na wirnik kompresora (idealnie czysty aluminiowy wirnik), płytka głębia ostrości.
-    Format docelowy: <video> z pętlą lub wysokiej jakości WebP ~2400px szer.
-  -->
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-12 gap-10 items-center">
     <!-- Lewa kolumna: treść -->
@@ -262,15 +257,12 @@
         <div class="absolute inset-0 rounded-full border border-white/5"></div>
         <div class="absolute inset-6 rounded-full border border-white/5"></div>
         <div class="absolute inset-0 rounded-full turbo-ring animate-spin-slow"></div>
-        <div class="absolute inset-10 rounded-full bg-gradient-to-br from-ink3 to-ink border border-white/10 shadow-card grid place-items-center animate-floaty">
-          <!--
-            PLACEHOLDER: render/zdjęcie turbiny w widoku czołowym (wirnik turbinowy),
-            wycięte z tła PNG, ~900px. Najlepiej delikatne czerwone odbicie na łopatkach.
-          -->
-          <div class="text-center">
-            <i data-lucide="fan" class="w-28 h-28 text-power/90 mx-auto animate-spin-slow"></i>
-            <p class="mt-3 text-xs uppercase tracking-[.25em] text-steel">VSR balanced</p>
-          </div>
+        <div class="absolute inset-10 rounded-full overflow-hidden border border-white/10 shadow-card animate-floaty">
+          <!-- Zdjęcie: czołowy widok wirnika turbiny (realne, z warsztatu TURBO-GIT) -->
+          <img src="assets/img/turbine-wheel.jpg" alt="Czołowy widok zregenerowanego wirnika turbiny TURBO-GIT" class="absolute inset-0 w-full h-full object-cover scale-110" loading="eager" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 rounded-full ring-1 ring-inset ring-power/25"></div>
+          <p class="absolute bottom-5 inset-x-0 text-center text-xs uppercase tracking-[.25em] text-silver">VSR&nbsp;301 balanced</p>
         </div>
         <!-- Floating badge -->
         <div class="absolute -left-4 top-8 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
@@ -315,7 +307,7 @@
         <p class="mt-1 text-xs text-steel uppercase tracking-wide">oryginalne części</p>
       </div>
       <div class="reveal">
-        <p class="font-display font-800 text-2xl lg:text-3xl text-white">VSR</p>
+        <p class="font-display font-800 text-2xl lg:text-3xl text-white">VSR&nbsp;301</p>
         <p class="mt-1 text-xs text-steel uppercase tracking-wide">balansowanie maszynowe</p>
       </div>
       <div class="reveal">
@@ -356,7 +348,17 @@
 
     <!-- Wizual porównania cen -->
     <div class="reveal">
-      <div class="rounded-2xl border border-white/10 bg-ink3 p-6 sm:p-8 shadow-card">
+      <div class="rounded-2xl border border-white/10 bg-ink3 overflow-hidden shadow-card">
+        <!-- Zdjęcie: regałów z turbinami w warsztacie (dowód skali: 8000+ turbin) -->
+        <div class="relative aspect-[16/8]">
+          <img src="assets/img/shelf-blue.jpg" alt="Regały z turbosprężarkami w warsztacie TURBO-GIT" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink3 via-ink3/30 to-transparent"></div>
+          <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+            <span class="text-[11px] uppercase tracking-widest text-silver/90">Nasz magazyn rdzeni i turbin</span>
+            <span class="rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">8000+ na stanie</span>
+          </div>
+        </div>
+        <div class="p-6 sm:p-8">
         <p class="text-sm text-steel mb-6">Przykład: turbina do popularnego diesla 2.0 TDI</p>
 
         <!-- Nowa -->
@@ -386,6 +388,7 @@
           <span class="font-display font-900 text-2xl text-white">45–65%</span>
         </div>
         <p class="mt-3 text-xs text-steel">* Wartości poglądowe. Dokładną wycenę otrzymasz po bezpłatnej diagnostyce.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -513,13 +516,10 @@
       <div class="lg:col-span-7 reveal">
         <div id="stepPanel" class="h-full rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-9 shadow-card relative overflow-hidden">
           <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-power/10 blur-3xl"></div>
-          <!--
-            PLACEHOLDER ZDJĘCIE KROKU:
-            Dla każdego kroku procesu można podstawić realne zdjęcie z warsztatu (np. mycie ultradźwiękowe,
-            maszyna VSR w akcji, pomiar mikrometrem). Element .step-photo poniżej.
-          -->
-          <div class="step-photo ph aspect-[16/7] rounded-xl border border-white/10 mb-6 grid place-items-center">
-            <span class="text-xs text-steel uppercase tracking-widest">zdjęcie z warsztatu</span>
+          <!-- Zdjęcie kroku — podmieniane dynamicznie w JS (tablica steps[].img) -->
+          <div class="relative aspect-[16/7] rounded-xl border border-white/10 mb-6 overflow-hidden">
+            <img id="stepPhoto" src="assets/img/workbench.jpg" alt="Etap regeneracji turbosprężarki" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink3/70 to-transparent"></div>
           </div>
           <div class="flex items-center gap-3 mb-3">
             <span id="stepBadge" class="font-display font-900 text-power text-sm">ETAP 01 / 07</span>
@@ -558,12 +558,14 @@
     <div class="mt-14 grid lg:grid-cols-3 gap-5">
       <!-- duża karta -->
       <article class="reveal lift lg:row-span-2 rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <!-- PLACEHOLDER: zdjęcie maszyny balansującej VSR w pracy -->
-        <div class="ph aspect-[4/3] grid place-items-center border-b border-white/10">
-          <span class="text-xs text-steel uppercase tracking-widest">maszyna VSR</span>
+        <!-- Zdjęcie: makro zregenerowanego rdzenia / wirnika kompresora -->
+        <div class="relative aspect-[4/3] border-b border-white/10 overflow-hidden">
+          <img src="assets/img/compressor-macro.jpg" alt="Makro wirnika kompresora po balansowaniu VSR 301" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink3 to-transparent"></div>
+          <span class="absolute top-3 left-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">VSR 301</span>
         </div>
         <div class="p-7">
-          <h3 class="font-display font-800 text-2xl text-white">Maszyna balansująca VSR</h3>
+          <h3 class="font-display font-800 text-2xl text-white">Maszyna balansująca VSR 301</h3>
           <p class="mt-3 text-steel leading-relaxed">Vibration Sorting Rig — balansowanie zmontowanego rdzenia przy obrotach zbliżonych do roboczych (nawet 200&nbsp;000+ obr./min). To eliminuje mikrowibracje, które niszczą łożyskowanie.</p>
           <ul class="mt-5 space-y-2 text-sm text-silver">
             <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Balans dynamiczny pełnego rdzenia</li>
@@ -573,10 +575,17 @@
         </div>
       </article>
 
-      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
-        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="cpu" class="w-6 h-6 text-power"></i></div>
-        <h3 class="font-display font-800 text-xl text-white">Stanowisko testowe geometrii</h3>
-        <p class="mt-2 text-steel leading-relaxed">Kalibracja zmiennej geometrii (VNT) i aktuatorów elektronicznych pod kontrolą sygnału sterującego.</p>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
+        <!-- Zdjęcie: stanowisko serwisowe z turbiną i komputerem diagnostycznym -->
+        <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
+          <img src="assets/img/workbench.jpg" alt="Stanowisko testowe geometrii i kalibracji REA-Master" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink3/80 to-transparent"></div>
+        </div>
+        <div class="p-7">
+          <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="cpu" class="w-6 h-6 text-power"></i></div>
+          <h3 class="font-display font-800 text-xl text-white">Stanowisko REA-Master</h3>
+          <p class="mt-2 text-steel leading-relaxed">Kalibracja zmiennej geometrii (VNT) i aktuatorów elektronicznych pod kontrolą sygnału sterującego.</p>
+        </div>
       </article>
 
       <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
@@ -619,15 +628,13 @@
       <div class="lg:col-span-6 reveal">
         <div class="relative h-full min-h-[360px] rounded-2xl border border-white/10 bg-gradient-to-br from-ink3 to-ink p-6 shadow-card grid place-items-center overflow-hidden">
           <div class="absolute inset-0 grid-bg opacity-50"></div>
-          <!--
-            PLACEHOLDER: przekrój turbosprężarki (schemat lub render) z zaznaczonymi elementami.
-            Hotspoty (.hot) ustawione absolutnie odpowiadają częściom. Możesz podmienić na realny przekrój.
-          -->
+          <!-- Realny widok czołowy turbiny jako interaktywny schemat. Hotspoty (.hot) pozycjonowane procentowo. -->
           <div class="relative w-full max-w-sm aspect-square">
-            <div class="absolute inset-8 rounded-full border-2 border-dashed border-white/10 animate-spin-slow"></div>
-            <div class="absolute inset-0 grid place-items-center">
-              <i data-lucide="fan" class="w-40 h-40 text-white/10"></i>
+            <div class="absolute inset-2 rounded-full overflow-hidden border border-white/10 shadow-card">
+              <img src="assets/img/turbine-wheel.jpg" alt="Przekrój turbosprężarki — widok wirnika" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              <div class="absolute inset-0 bg-ink/30"></div>
             </div>
+            <div class="absolute inset-8 rounded-full border-2 border-dashed border-white/20 animate-spin-slow pointer-events-none"></div>
             <!-- Hotspoty -->
             <button class="hot absolute top-[8%] left-[46%]" data-part="0" aria-label="Wirnik kompresora"></button>
             <button class="hot absolute top-[42%] left-[10%]" data-part="1" aria-label="Łożyskowanie"></button>
@@ -668,6 +675,71 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 8B. MAGAZYN — DOWÓD SKALI (full-bleed)                         -->
+<!-- ============================================================= -->
+<section class="relative overflow-hidden">
+  <!-- Zdjęcie regałów z turbinami (efekt fixed/parallax) -->
+  <div class="absolute inset-0 bg-fixed bg-center bg-cover" style="background-image:url('assets/img/shelf-redblue-1.jpg')"></div>
+  <div class="absolute inset-0 bg-ink/80"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/60 to-transparent"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Nasz magazyn</span>
+      <h2 class="mt-4 font-display font-900 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
+        Półki, które mówią <span class="text-power-grad">więcej niż słowa</span>.
+      </h2>
+      <p class="mt-5 text-silver text-lg leading-relaxed">
+        Setki rdzeni, geometrii i kompletnych turbin na stanie — dlatego potrafimy działać ekspresowo i dobrać właściwą część do niemal każdego silnika. To nie magazynowe zdjęcia z internetu. To nasz realny warsztat.
+      </p>
+      <div class="mt-10 grid grid-cols-3 gap-6 max-w-lg">
+        <div>
+          <p class="font-display font-900 text-3xl sm:text-4xl text-white"><span data-counter data-target="8000" data-suffix="+">0</span></p>
+          <p class="mt-1 text-xs text-steel uppercase tracking-wide">turbin</p>
+        </div>
+        <div>
+          <p class="font-display font-900 text-3xl sm:text-4xl text-white"><span data-counter data-target="14">0</span></p>
+          <p class="mt-1 text-xs text-steel uppercase tracking-wide">lat</p>
+        </div>
+        <div>
+          <p class="font-display font-900 text-3xl sm:text-4xl text-power">4,9</p>
+          <p class="mt-1 text-xs text-steel uppercase tracking-wide">ocena Google</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 8C. MARKI OEM + B2B                                            -->
+<!-- ============================================================= -->
+<section class="relative py-16 border-y border-white/5 bg-ink">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <p class="text-center text-xs uppercase tracking-[.25em] text-steel reveal">Pracujemy na oryginalnych częściach i geometriach OEM</p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 reveal">
+      <span class="font-display font-800 text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Garrett</span>
+      <span class="font-display font-800 text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">BorgWarner</span>
+      <span class="font-display font-800 text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">IHI</span>
+      <span class="font-display font-800 text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Holset</span>
+      <span class="font-display font-800 text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Melett</span>
+    </div>
+
+    <!-- B2B callout -->
+    <div class="mt-12 reveal rounded-2xl border border-white/10 bg-ink3 p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 justify-between">
+      <div class="flex items-center gap-4">
+        <span class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center shrink-0"><i data-lucide="handshake" class="w-6 h-6 text-power"></i></span>
+        <div>
+          <h3 class="font-display font-800 text-xl text-white">Program B2B dla warsztatów</h3>
+          <p class="mt-1 text-steel text-sm max-w-xl">Stała współpraca dla certyfikowanych warsztatów: rabat 10%, termin płatności 30 dni i priorytetowa realizacja.</p>
+        </div>
+      </div>
+      <a href="#kontakt" class="shrink-0 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-silver hover:bg-white/10 transition-colors">
+        Dołącz do programu <i data-lucide="arrow-right" class="w-4 h-4 text-power"></i>
+      </a>
     </div>
   </div>
 </section>
@@ -917,11 +989,11 @@
         <p class="mt-5 text-steel text-lg max-w-md">Wyślij zgłoszenie albo dzwoń. Doradzimy, zdiagnozujemy i przygotujemy wycenę bez zobowiązań. Odbiór kurierem z całej Polski.</p>
 
         <div class="mt-8 grid sm:grid-cols-2 gap-3">
-          <a href="tel:+48000000000" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+          <a href="tel:+48694706140" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
             <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="phone" class="w-5 h-5 text-power"></i></span>
-            <span><span class="block text-xs text-steel">Zadzwoń</span><span class="block font-semibold text-white">000 000 000</span></span>
+            <span><span class="block text-xs text-steel">Zadzwoń</span><span class="block font-semibold text-white">694 706 140</span></span>
           </a>
-          <a href="https://wa.me/48000000000" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+          <a href="https://wa.me/48694706140" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
             <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="message-circle" class="w-5 h-5 text-power"></i></span>
             <span><span class="block text-xs text-steel">Napisz</span><span class="block font-semibold text-white">WhatsApp</span></span>
           </a>
@@ -929,15 +1001,18 @@
             <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="package" class="w-5 h-5 text-power"></i></span>
             <span><span class="block text-xs text-steel">Logistyka</span><span class="block font-semibold text-white">Umów odbiór kurierem</span></span>
           </a>
-          <a href="#" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
+          <a href="https://maps.google.com/?q=TURBO-GIT+Wrocławska+7+Januszkowice" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40">
             <span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="map-pin" class="w-5 h-5 text-power"></i></span>
-            <span><span class="block text-xs text-steel">Siedziba</span><span class="block font-semibold text-white">Januszkowice</span></span>
+            <span><span class="block text-xs text-steel">Siedziba</span><span class="block font-semibold text-white">ul. Wrocławska 7, Januszkowice</span></span>
           </a>
         </div>
 
-        <!-- PLACEHOLDER: tutaj można osadzić mapę Google z lokalizacją warsztatu (iframe) -->
-        <div class="mt-6 ph aspect-[16/6] rounded-xl border border-white/10 grid place-items-center">
-          <span class="text-xs text-steel uppercase tracking-widest">mapa dojazdu — Januszkowice</span>
+        <!-- Mapa dojazdu — TURBO-GIT, ul. Wrocławska 7, 55-095 Januszkowice -->
+        <div class="mt-6 rounded-xl border border-white/10 overflow-hidden">
+          <iframe
+            title="Mapa dojazdu TURBO-GIT Januszkowice"
+            src="https://www.google.com/maps?q=Wroc%C5%82awska%207%2C%2055-095%20Januszkowice&output=embed"
+            class="w-full aspect-[16/6] grayscale contrast-125 opacity-90" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
 
@@ -998,7 +1073,12 @@
           </span>
           <span class="font-display font-900 text-lg text-white">TURBO<span class="text-power">-</span>GIT</span>
         </div>
-        <p class="text-sm text-steel leading-relaxed">Regeneracja turbosprężarek na poziomie premium. Od 2012 roku. Januszkowice, Polska.</p>
+        <p class="text-sm text-steel leading-relaxed">Regeneracja turbosprężarek na poziomie premium. Od 2012 roku.</p>
+        <p class="mt-4 text-xs text-steel leading-relaxed">
+          TURBO-GIT Paulina Hołda<br>
+          ul. Wrocławska 7, 55-095 Januszkowice<br>
+          NIP: 8961447143
+        </p>
       </div>
       <div>
         <p class="font-semibold text-white mb-4">Nawigacja</p>
@@ -1013,10 +1093,10 @@
       <div>
         <p class="font-semibold text-white mb-4">Kontakt</p>
         <ul class="space-y-2 text-sm text-steel">
-          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-power"></i> 000 000 000</li>
-          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-power"></i> kontakt@turbo-git.com</li>
-          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-power"></i> Januszkowice</li>
-          <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-power"></i> Pon–Pt 8:00–17:00</li>
+          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-power"></i> +48 694 706 140</li>
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-power"></i> biuro@turbo-git.com</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-power"></i> ul. Wrocławska 7, Januszkowice</li>
+          <li class="flex items-start gap-2"><i data-lucide="clock" class="w-4 h-4 text-power mt-0.5"></i> <span>Pon–Pt 7:00–16:00<br>Sob 8:00–13:00</span></li>
         </ul>
       </div>
       <div>
@@ -1029,7 +1109,7 @@
       </div>
     </div>
     <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-steel">
-      <p>© <span id="year"></span> TURBO-GIT. Wszelkie prawa zastrzeżone.</p>
+      <p>© <span id="year"></span> TURBO-GIT Paulina Hołda. Wszelkie prawa zastrzeżone.</p>
       <div class="flex gap-5">
         <a href="#" class="hover:text-white transition-colors">Polityka prywatności</a>
         <a href="#" class="hover:text-white transition-colors">Regulamin</a>
@@ -1150,25 +1230,25 @@
      PROCES — STEPPER
   ============================================================ */
   const steps = [
-    { h:'Przyjęcie i diagnostyka wstępna',
+    { h:'Przyjęcie i diagnostyka wstępna', img:'assets/img/workbench.jpg',
       d:'Turbinę przyjmujemy osobiście lub kurierem, oględziny i wywiad o objawach (dymienie, brak mocy, gwizd, wycieki oleju). Robimy dokumentację zdjęciową stanu „as is”.',
       w:'Trafna diagnoza już na starcie pozwala odróżnić usterkę samej turbiny od problemu w silniku — żebyś nie płacił za naprawę, która nie rozwiąże przyczyny.' },
-    { h:'Pełny demontaż rdzenia',
+    { h:'Pełny demontaż rdzenia', img:'assets/img/turbine-wheel.jpg',
       d:'Rozkładamy turbinę do pojedynczych komponentów: korpus środkowy (CHRA), wirniki, wał, łożyska, geometria. Każda część trafia do osobnej kontroli.',
       w:'Tylko pełny demontaż ujawnia ukryte uszkodzenia — pęknięcia, wyrobienia, ślady kontaktu łopatek. Bez tego regeneracja to loteria.' },
-    { h:'Czyszczenie ultradźwiękowe',
+    { h:'Czyszczenie ultradźwiękowe', img:'assets/img/compressor-macro.jpg',
       d:'Elementy myjemy w kąpieli ultradźwiękowej, która usuwa nagar i osady olejowe z najmniejszych kanałów bez ścierania materiału bazowego.',
       w:'Czysta powierzchnia to warunek precyzyjnego pomiaru i prawidłowego balansu. Resztki nagaru fałszują wyniki i skracają żywotność.' },
-    { h:'Pomiary i kwalifikacja części',
+    { h:'Pomiary i kwalifikacja części', img:'assets/img/compressor-macro.jpg',
       d:'Mikrometrem i czujnikami zegarowymi mierzymy luzy osiowe i promieniowe, bicie wału, stan gniazd. Kwalifikujemy, co nadaje się do ponownego użycia, a co do wymiany.',
       w:'Decyzje oparte na liczbach, nie na „oku”. Dzięki temu wiesz, że turbina spełnia tolerancje fabryczne, a nie tylko „jakoś chodzi”.' },
-    { h:'Wymiana na oryginalne OEM',
-      d:'Montujemy oryginalne zestawy naprawcze OEM — łożyskowanie, pierścienie, tuleje, w razie potrzeby nowy rdzeń lub geometria zmiennych łopatek.',
+    { h:'Wymiana na oryginalne OEM', img:'assets/img/shelf-redblue-1.jpg',
+      d:'Montujemy oryginalne zestawy naprawcze OEM (Garrett, BorgWarner, IHI, Holset) — łożyskowanie, pierścienie, tuleje, w razie potrzeby nowy rdzeń lub geometria zmiennych łopatek.',
       w:'Zamienniki bywają poza tolerancją i przyspieszają zużycie. Części OEM gwarantują parametry i trwałość jak na linii produkcyjnej.' },
-    { h:'Balansowanie na maszynie VSR',
-      d:'Zmontowany rdzeń balansujemy dynamicznie na maszynie VSR przy obrotach zbliżonych do roboczych, korygując niewyważenie do minimum.',
+    { h:'Balansowanie na maszynie VSR 301', img:'assets/img/turbine-wheel.jpg',
+      d:'Zmontowany rdzeń balansujemy dynamicznie na maszynie VSR 301 przy obrotach zbliżonych do roboczych, korygując niewyważenie do minimum. Geometrię kalibrujemy na stanowisku REA-Master.',
       w:'Przy 150–250 tys. obr./min nawet mikrogram niewyważenia niszczy łożyska. VSR to różnica między turbiną cichą i trwałą a taką, która padnie po sezonie.' },
-    { h:'Test końcowy i wysyłka 24h',
+    { h:'Test końcowy i wysyłka 24h', img:'assets/img/workbench.jpg',
       d:'Sprawdzamy geometrię, szczelność i pracę aktuatora na stanowisku, pakujemy bezpiecznie i wysyłamy — ekspresowo, z 24-miesięczną gwarancją bez limitu km.',
       w:'Turbina opuszcza warsztat sprawdzona, nie „na nadzieję”. Dostajesz gotowy do montażu produkt i pełne wsparcie gwarancyjne.' },
   ];
@@ -1177,6 +1257,7 @@
   const stepDesc = document.getElementById('stepDesc');
   const stepWhy = document.getElementById('stepWhy');
   const stepBadge = document.getElementById('stepBadge');
+  const stepPhoto = document.getElementById('stepPhoto');
   let curStep = 0;
   const setStep = (i) => {
     curStep = (i + steps.length) % steps.length;
@@ -1186,6 +1267,7 @@
     stepDesc.textContent = s.d;
     stepWhy.textContent = s.w;
     stepBadge.textContent = `ETAP ${String(curStep+1).padStart(2,'0')} / 07`;
+    if (stepPhoto && s.img) { stepPhoto.style.opacity = '0'; setTimeout(() => { stepPhoto.src = s.img; stepPhoto.alt = s.h; stepPhoto.style.opacity = '1'; }, 200); }
   };
   stepBtns.forEach((b, i) => b.addEventListener('click', () => setStep(i)));
   document.getElementById('prevStep').addEventListener('click', () => setStep(curStep - 1));
@@ -1243,15 +1325,15 @@
      REALIZACJE — dane + render + filtr
   ============================================================ */
   const cases = [
-    { cat:'osobowe',  title:'VW Passat B7 2.0 TDI', meta:'140 KM • geometria VNT', save:'2 600 zł', note:'Wymiana geometrii i łożyskowania, balans VSR.' },
-    { cat:'osobowe',  title:'BMW 320d E90', meta:'177 KM • dymienie', save:'2 900 zł', note:'Uszczelnienia + nowy rdzeń OEM.' },
-    { cat:'osobowe',  title:'Audi A4 B8 2.0 TDI', meta:'143 KM • brak mocy', save:'2 400 zł', note:'Regeneracja aktuatora i geometrii.' },
-    { cat:'dostawcze',title:'Ford Transit 2.2 TDCi', meta:'125 KM • gwizd', save:'3 100 zł', note:'Wymiana wału i łożysk, kalibracja.' },
-    { cat:'dostawcze',title:'Mercedes Sprinter 2.1 CDI', meta:'150 KM • wyciek oleju', save:'3 400 zł', note:'Komplet uszczelnień + balans VSR.' },
-    { cat:'ciezarowe',title:'Scania R450', meta:'450 KM • spadek doładowania', save:'5 800 zł', note:'Regeneracja rdzenia dużej mocy.' },
-    { cat:'ciezarowe',title:'MAN TGX D26', meta:'480 KM • serwis floty', save:'6 200 zł', note:'Pełna regeneracja z testem obciążeniowym.' },
-    { cat:'rolnicze', title:'John Deere 6R', meta:'ciągnik • przegrzanie', save:'4 100 zł', note:'Czyszczenie geometrii, nowe łożyska OEM.' },
-    { cat:'rolnicze', title:'New Holland T7', meta:'ciągnik • brak mocy', save:'3 900 zł', note:'Balans VSR, wymiana wirnika.' },
+    { cat:'osobowe',  img:'assets/img/compressor-macro.jpg', title:'VW Passat B7 2.0 TDI', meta:'140 KM • geometria VNT', save:'2 600 zł', note:'Wymiana geometrii i łożyskowania, balans VSR.' },
+    { cat:'osobowe',  img:'assets/img/turbine-wheel.jpg', title:'BMW 320d E90', meta:'177 KM • dymienie', save:'2 900 zł', note:'Uszczelnienia + nowy rdzeń OEM.' },
+    { cat:'osobowe',  img:'assets/img/workbench.jpg', title:'Audi A4 B8 2.0 TDI', meta:'143 KM • brak mocy', save:'2 400 zł', note:'Regeneracja aktuatora i geometrii.' },
+    { cat:'dostawcze',img:'assets/img/shelf-blue.jpg', title:'Ford Transit 2.2 TDCi', meta:'125 KM • gwizd', save:'3 100 zł', note:'Wymiana wału i łożysk, kalibracja.' },
+    { cat:'dostawcze',img:'assets/img/shelf-redblue-1.jpg', title:'Mercedes Sprinter 2.1 CDI', meta:'150 KM • wyciek oleju', save:'3 400 zł', note:'Komplet uszczelnień + balans VSR.' },
+    { cat:'ciezarowe',img:'assets/img/shelf-red.jpg', title:'Scania R450', meta:'450 KM • spadek doładowania', save:'5 800 zł', note:'Regeneracja rdzenia dużej mocy.' },
+    { cat:'ciezarowe',img:'assets/img/shelf-redblue-2.jpg', title:'MAN TGX D26', meta:'480 KM • serwis floty', save:'6 200 zł', note:'Pełna regeneracja z testem obciążeniowym.' },
+    { cat:'rolnicze', img:'assets/img/workbench.jpg', title:'John Deere 6R', meta:'ciągnik • przegrzanie', save:'4 100 zł', note:'Czyszczenie geometrii, nowe łożyska OEM.' },
+    { cat:'rolnicze', img:'assets/img/compressor-macro.jpg', title:'New Holland T7', meta:'ciągnik • brak mocy', save:'3 900 zł', note:'Balans VSR, wymiana wirnika.' },
   ];
   const caseGrid = document.getElementById('caseGrid');
   const renderCases = (cat='all') => {
@@ -1259,12 +1341,12 @@
       .filter(c => cat === 'all' || c.cat === cat)
       .map(c => `
       <article class="reveal in lift break-inside-avoid rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40 group">
-        <!-- PLACEHOLDER BEFORE/AFTER: podmień ten blok na realne zdjęcia (np. <img> w trybie hover-swap).
-             Lewa połowa = "przed" (brudna/uszkodzona turbina), prawa = "po" (zregenerowana, czysta). -->
-        <div class="relative ph aspect-[4/3] grid grid-cols-2">
-          <div class="grid place-items-center border-r border-white/10"><span class="text-[10px] uppercase tracking-widest text-steel">przed</span></div>
-          <div class="grid place-items-center"><span class="text-[10px] uppercase tracking-widest text-power">po</span></div>
+        <!-- Realne zdjęcie z warsztatu. Aby pokazać efekt przed/po, podmień na dwa <img> w trybie hover-swap. -->
+        <div class="relative aspect-[4/3] overflow-hidden">
+          <img src="${c.img}" alt="Regeneracja turbiny — ${c.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink3 via-ink3/10 to-transparent"></div>
           <span class="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-silver">${c.cat}</span>
+          <span class="absolute top-3 right-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">zregenerowana</span>
         </div>
         <div class="p-6">
           <h3 class="font-display font-800 text-lg text-white">${c.title}</h3>
@@ -1307,9 +1389,11 @@
   reviewTrack.innerHTML = reviews.map(r => `
     <article class="snap-start shrink-0 w-[300px] sm:w-[360px] rounded-2xl border border-white/10 bg-ink3 p-7 flex flex-col">
       ${r.video ? `
-      <!-- PLACEHOLDER WIDEO: podmień na realny <video>/embed z opinią klienta -->
-      <div class="ph aspect-video rounded-xl border border-white/10 mb-5 grid place-items-center group cursor-pointer">
-        <span class="grid place-items-center w-12 h-12 rounded-full bg-power/90 text-white"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <!-- Miniatura wideo-opinii. Podmień tło/odnośnik na realny <video> lub embed YT/Vimeo. -->
+      <div class="relative aspect-video rounded-xl border border-white/10 mb-5 overflow-hidden grid place-items-center group cursor-pointer">
+        <img src="assets/img/shelf-redblue-2.jpg" alt="Wideo-opinia klienta TURBO-GIT" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" loading="lazy" />
+        <div class="absolute inset-0 bg-ink/40"></div>
+        <span class="relative grid place-items-center w-12 h-12 rounded-full bg-power/90 text-white shadow-lg group-hover:scale-110 transition-transform"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
       </div>` : ``}
       <div class="text-power text-lg mb-3">${stars}</div>
       <p class="text-silver leading-relaxed flex-1">„${r.text}”</p>
@@ -1502,19 +1586,30 @@
      - Wyślij na niego FormData lub JSON i obsłuż wysyłkę maila (np. Nodemailer, Resend, SendGrid).
 
   C. WhatsApp / telefon: przyciski w sekcji #kontakt już działają —
-     podmień numer 48000000000 i 000 000 000 na prawdziwy numer firmy
-     (wystąpienia: nav, hero mini-fakty nie, sekcja kontakt, footer, linki tel:/wa.me).
+     wpisany jest prawdziwy numer firmy +48 694 706 140 (linki tel: i wa.me).
+
+  >>> WAŻNE — DANE FIRMY:
+     Wstawiono prawdziwe dane z turbo-git.com:
+       Firma:   TURBO-GIT Paulina Hołda
+       Tel:     +48 694 706 140
+       Adres:   ul. Wrocławska 7, 55-095 Januszkowice
+       NIP:     8961447143
+       Godziny: Pon–Pt 7:00–16:00, Sob 8:00–13:00
+     E-MAIL "biuro@turbo-git.com" jest PRZYJĘTY (na stronie był maskowany) —
+     POTWIERDŹ go i w razie potrzeby zamień (np. kontakt@turbo-git.com).
 
   ----------------------------------------------------------------
   2) JAK DODAĆ PRAWDZIWE ZDJĘCIA I FILMY
   ----------------------------------------------------------------
-  W kodzie wszystkie miejsca na grafikę są oznaczone:
-     - komentarzami "PLACEHOLDER: ..." (z opisem, co ma się znaleźć na zdjęciu)
-     - klasą .ph (animowany szary placeholder "shimmer")
+  Prawdziwe zdjęcia z warsztatu są już osadzone i leżą w folderze assets/img/:
+     turbine-wheel.jpg, compressor-macro.jpg, workbench.jpg,
+     shelf-blue.jpg, shelf-red.jpg, shelf-redblue-1.jpg, shelf-redblue-2.jpg
+  WAŻNE: folder assets/ musi być wgrany razem z plikiem HTML (ścieżki względne).
 
-  Aby wstawić zdjęcie, zamień blok z klasą .ph na <img>, np.:
-     <img src="img/hero-turbina.webp" alt="Zregenerowana turbosprężarka TURBO-GIT"
-          class="w-full h-full object-cover" loading="lazy" />
+  Aby podmienić/dodać zdjęcie, wystarczy podmienić plik w assets/img/ lub atrybut src w <img>.
+  Zostały jeszcze 2 miejsca opcjonalne do uzupełnienia realnym materiałem:
+     - wideo-opinie (sekcja #opinie) — obecnie miniatura ze zdjęciem + przycisk play,
+     - realizacje (sekcja #realizacje) — można dodać prawdziwe pary "przed/po".
 
   Kluczowe miejsca:
      - HERO: render/zdjęcie turbiny (sekcja #hero, prawa kolumna).
@@ -1534,8 +1629,8 @@
   ----------------------------------------------------------------
   3) KONFIGURACJA / DANE FIRMY DO PODMIANY
   ----------------------------------------------------------------
-     - Numer telefonu: 000 000 000  -> realny numer (linki tel: i wa.me)
-     - E-mail: kontakt@turbo-git.com -> realny adres
+     - Numer telefonu: 694 706 140  -> realny numer (linki tel: i wa.me)
+     - E-mail: biuro@turbo-git.com -> realny adres
      - Ceny w kalkulatorze: obiekt calcData w <script> — zaktualizuj newP/regen wg cennika.
      - Realizacje, opinie, FAQ: tablice cases / reviews / faqs — edytuj treści w jednym miejscu.
      - Kolory marki: w tailwind.config (power = #c8102e). Zmiana w jednym miejscu = cała strona.
