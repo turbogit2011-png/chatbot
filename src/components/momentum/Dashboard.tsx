@@ -197,13 +197,22 @@ export default function Dashboard() {
                 Zróbmy dziś coś wielkiego.
               </span>
             </h1>
-            <Link
-              href="/wealth"
-              className="chip mt-3 hover:!border-[var(--violet)] transition-colors"
-              style={{ color: "var(--violet)" }}
-            >
-              <Coins size={13} /> Droga do Miliarda — planer bogactwa
-            </Link>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <Link
+                href="/ai"
+                className="chip hover:!border-[var(--violet)] transition-colors"
+                style={{ color: "var(--violet)" }}
+              >
+                <Sparkles size={13} /> Aura — prywatna AI w przeglądarce
+              </Link>
+              <Link
+                href="/wealth"
+                className="chip hover:!border-[var(--violet)] transition-colors"
+                style={{ color: "var(--violet)" }}
+              >
+                <Coins size={13} /> Droga do Miliarda
+              </Link>
+            </div>
           </div>
           <Clock />
         </motion.header>
