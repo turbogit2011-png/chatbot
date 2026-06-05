@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Download, Sparkles, Trash2, Upload, Zap } from "lucide-react";
+import { Coins, Download, Sparkles, Trash2, Upload, Zap } from "lucide-react";
 import {
   FocusByDay,
   Habit,
@@ -196,6 +197,13 @@ export default function Dashboard() {
                 Zróbmy dziś coś wielkiego.
               </span>
             </h1>
+            <Link
+              href="/wealth"
+              className="chip mt-3 hover:!border-[var(--violet)] transition-colors"
+              style={{ color: "var(--violet)" }}
+            >
+              <Coins size={13} /> Droga do Miliarda — planer bogactwa
+            </Link>
           </div>
           <Clock />
         </motion.header>

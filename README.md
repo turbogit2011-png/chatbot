@@ -16,6 +16,9 @@ na Next.js 16 (App Router, statyczny eksport). Wszystkie dane są przechowywane
 - **📊 Statystyki dnia** — minuty skupienia, ukończone zadania, najlepsza passa
   oraz wykres skupienia z ostatnich 7 dni.
 - **💾 Eksport / import / reset** — pełna kontrola nad własnymi danymi (plik JSON).
+- **💰 Droga do Miliarda** (`/wealth`) — kalkulator procentu składanego: ile to
+  potrwa, ile odkładać i jakiego zwrotu potrzeba, by trafić w cel finansowy —
+  z wykresem wzrostu (skala log), kamieniami milowymi i szczerym „reality check".
 
 ## Uruchomienie
 
