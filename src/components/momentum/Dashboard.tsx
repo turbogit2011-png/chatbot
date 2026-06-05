@@ -12,11 +12,15 @@ import {
   useMounted,
   usePersistentState,
 } from "@/lib/store";
+import { fireConfetti } from "@/lib/confetti";
 import FocusTimer from "./FocusTimer";
 import Tasks from "./Tasks";
 import Habits from "./Habits";
 import Notes from "./Notes";
 import Insights from "./Insights";
+import { InstallButton } from "./Pwa";
+
+const DEFAULT_GOAL = 120;
 
 function greeting(hour: number): string {
   if (hour < 5) return "Spokojnej nocy";
@@ -70,10 +74,12 @@ export default function Dashboard() {
   const [habits, setHabits] = usePersistentState<Habit[]>(KEYS.habits, []);
   const [focusByDay, setFocusByDay] = usePersistentState<FocusByDay>(KEYS.focus, {});
   const [notes, setNotes] = usePersistentState<string>(KEYS.notes, "");
+  const [goal, setGoal] = usePersistentState<number>(KEYS.goal, DEFAULT_GOAL);
   const mounted = useMounted();
   const fileRef = useRef<HTMLInputElement>(null);
 
   const hour = mounted ? new Date().getHours() : 9;
+  const focusToday = focusByDay[dayKey()] ?? 0;
 
   const logMinutes = useCallback(
     (minutes: number) => {
@@ -82,6 +88,30 @@ export default function Dashboard() {
     },
     [setFocusByDay]
   );
+
+  // Celebrate reaching the daily focus goal (skips the initial load).
+  const goalMetRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    const met = goal > 0 && focusToday >= goal;
+    if (goalMetRef.current === null) {
+      goalMetRef.current = met;
+      return;
+    }
+    if (met && !goalMetRef.current) fireConfetti(0.5, 0.35, 170);
+    goalMetRef.current = met;
+  }, [focusToday, goal]);
+
+  // Celebrate clearing every task for the day.
+  const allDoneRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    const allDone = tasks.length > 0 && tasks.every((t) => t.done);
+    if (allDoneRef.current === null) {
+      allDoneRef.current = allDone;
+      return;
+    }
+    if (allDone && !allDoneRef.current) fireConfetti(0.5, 0.4, 140);
+    allDoneRef.current = allDone;
+  }, [tasks]);
 
   function exportData() {
     const data = { tasks, habits, focusByDay, notes, exportedAt: Date.now() };
@@ -120,8 +150,6 @@ export default function Dashboard() {
     setFocusByDay({});
     setNotes("");
   }
-
-  const focusToday = focusByDay[dayKey()] ?? 0;
 
   return (
     <div className="relative min-h-screen">
@@ -183,7 +211,12 @@ export default function Dashboard() {
           transition={{ duration: 0.4, delay: 0.05 }}
           className="mb-5"
         >
-          <Insights tasks={tasks} habits={habits} focusByDay={focusByDay} />
+          <Insights
+            tasks={tasks}
+            habits={habits}
+            focusByDay={focusByDay}
+            goal={goal}
+          />
         </motion.div>
 
         {/* Main grid */}
@@ -194,7 +227,12 @@ export default function Dashboard() {
           className="grid gap-5 lg:grid-cols-3 items-start"
         >
           <div className="lg:row-span-2">
-            <FocusTimer focusToday={focusToday} onLogMinutes={logMinutes} />
+            <FocusTimer
+              focusToday={focusToday}
+              goal={goal}
+              onGoalChange={setGoal}
+              onLogMinutes={logMinutes}
+            />
           </div>
           <div className="lg:col-span-2">
             <Tasks tasks={tasks} setTasks={setTasks} />
@@ -212,7 +250,8 @@ export default function Dashboard() {
               kont, żadnego śledzenia.
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            <InstallButton />
             <button onClick={exportData} className="btn btn-ghost !py-2 !px-3 text-xs">
               <Download size={14} /> Eksport
             </button>

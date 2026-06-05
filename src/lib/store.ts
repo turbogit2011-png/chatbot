@@ -123,4 +123,5 @@ export const KEYS = {
   focus: "momentum.focus",
   notes: "momentum.notes",
   timer: "momentum.timer",
+  goal: "momentum.goal",
 } as const;

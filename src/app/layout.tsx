@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import { ServiceWorkerRegister } from "@/components/momentum/Pwa";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -30,6 +31,16 @@ export const metadata: Metadata = {
     "offline",
   ],
   authors: [{ name: "Momentum" }],
+  applicationName: "Momentum",
+  appleWebApp: {
+    capable: true,
+    title: "Momentum",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
   openGraph: {
     title: "Momentum – Twoje centrum produktywności",
     description:
@@ -50,7 +61,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <ServiceWorkerRegister />
+      </body>
     </html>
   );
 }

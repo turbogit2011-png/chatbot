@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Brain, Coffee, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
+import {
+  Brain,
+  Coffee,
+  Pause,
+  Play,
+  RotateCcw,
+  SkipForward,
+  Target,
+} from "lucide-react";
 import { usePersistentState, KEYS } from "@/lib/store";
+import { fireConfetti } from "@/lib/confetti";
 import { cn } from "@/lib/utils";
 
 type Mode = "focus" | "short" | "long";
@@ -56,9 +65,13 @@ function playChime() {
 
 export default function FocusTimer({
   focusToday,
+  goal,
+  onGoalChange,
   onLogMinutes,
 }: {
   focusToday: number;
+  goal: number;
+  onGoalChange: (minutes: number) => void;
   onLogMinutes: (minutes: number) => void;
 }) {
   const [config, setConfig] = usePersistentState<TimerConfig>(
@@ -90,6 +103,7 @@ export default function FocusTimer({
         const cur = stateRef.current;
         if (cur.mode === "focus") {
           onLogMinutes(config.focus);
+          fireConfetti(0.5, 0.45, 90);
           const next = cur.sessions + 1;
           setSessions(next);
           const nextMode: Mode = next % 4 === 0 ? "long" : "short";
@@ -252,6 +266,53 @@ export default function FocusTimer({
             />
           </label>
         ))}
+      </div>
+
+      {/* Daily goal */}
+      <div className="w-full mt-6 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+            <Target size={14} className="text-[var(--violet)]" /> Cel dzienny
+          </span>
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="tabular-nums text-[var(--text)]">
+              {Math.min(focusToday, goal)}
+            </span>
+            <span className="text-[var(--text-subtle)]">/</span>
+            <input
+              type="number"
+              min={1}
+              max={600}
+              value={goal}
+              onChange={(e) =>
+                onGoalChange(
+                  Math.max(1, Math.min(600, Math.round(Number(e.target.value)) || 1))
+                )
+              }
+              className="input-field !w-16 text-center !py-1 !px-2 text-xs"
+              aria-label="Cel dzienny w minutach"
+            />
+            <span className="text-[var(--text-subtle)]">min</span>
+          </div>
+        </div>
+        <div
+          className="h-2.5 w-full rounded-full overflow-hidden"
+          style={{ background: "rgba(255,255,255,0.06)" }}
+        >
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{
+              width: `${Math.min(100, goal > 0 ? (focusToday / goal) * 100 : 0)}%`,
+              background:
+                focusToday >= goal ? "var(--emerald)" : "var(--grad-brand)",
+            }}
+          />
+        </div>
+        {focusToday >= goal && goal > 0 && (
+          <div className="text-[11px] text-[var(--emerald)] mt-2 text-center">
+            🎉 Cel osiągnięty! Świetna robota.
+          </div>
+        )}
       </div>
     </div>
   );

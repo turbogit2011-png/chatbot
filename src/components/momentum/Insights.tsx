@@ -18,12 +18,14 @@ function StatCard({
   value,
   sub,
   color,
+  progress,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   sub: string;
   color: string;
+  progress?: number;
 }) {
   return (
     <div className="card p-4 flex flex-col gap-1">
@@ -35,6 +37,17 @@ function StatCard({
         {value}
       </div>
       <div className="text-[11px] text-[var(--text-subtle)]">{sub}</div>
+      {progress !== undefined && (
+        <div
+          className="h-1.5 w-full rounded-full overflow-hidden mt-2"
+          style={{ background: "rgba(255,255,255,0.07)" }}
+        >
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${Math.min(100, progress * 100)}%`, background: color }}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -43,10 +56,12 @@ export default function Insights({
   tasks,
   habits,
   focusByDay,
+  goal,
 }: {
   tasks: Task[];
   habits: Habit[];
   focusByDay: FocusByDay;
+  goal: number;
 }) {
   const week = useMemo(() => lastNDays(7), []);
   const today = dayKey();
@@ -72,8 +87,9 @@ export default function Insights({
           icon={<Clock3 size={15} />}
           label="Skupienie dziś"
           value={`${focusToday}`}
-          sub="minut deep work"
+          sub={`z ${goal} min celu`}
           color="var(--violet)"
+          progress={goal > 0 ? focusToday / goal : 0}
         />
         <StatCard
           icon={<Award size={15} />}

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Self-contained sub-project with its own lint/build/deploy config.
+    "turbo-git-shop/**",
   ]),
 ]);
 
