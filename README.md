@@ -19,8 +19,11 @@ na Next.js 16 (App Router, statyczny eksport). Wszystkie dane są przechowywane
 - **💰 Droga do Miliarda** (`/wealth`) — kalkulator procentu składanego: ile to
   potrwa, ile odkładać i jakiego zwrotu potrzeba, by trafić w cel finansowy —
   z wykresem wzrostu (skala log), kamieniami milowymi i szczerym „reality check".
-- **✨ Aura — prywatna AI** (`/ai`) — asystent AI działający w 100% w przeglądarce
-  przez WebGPU (otwarte modele Qwen / Llama uruchamiane lokalnie). Bez serwerów,
+- **✨ Aura — prywatna AI** (`/ai`) — pełnoprawny asystent AI działający w 100% w
+  przeglądarce przez WebGPU (otwarte modele Qwen / Llama uruchamiane lokalnie):
+  wiele rozmów z auto-tytułami, streaming odpowiedzi, **Markdown + podświetlanie
+  składni** z kopiowaniem kodu, **Stop/Regeneruj**, licznik tok/s, eksport rozmowy
+  do `.md`, ustawienia (model, temperatura, własny prompt systemowy). Bez serwerów,
   bez API, bez opłat — rozmowy nigdy nie opuszczają urządzenia. Wymaga przeglądarki
   z WebGPU (Chrome/Edge) i jednorazowego pobrania modelu (~0,5–2,3 GB).
 
