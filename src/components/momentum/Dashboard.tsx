@@ -199,7 +199,7 @@ export default function Dashboard() {
             </h1>
             <div className="flex flex-wrap gap-2 mt-3">
               <Link
-                href="/ai"
+                href="/aura"
                 className="chip hover:!border-[var(--violet)] transition-colors"
                 style={{ color: "var(--violet)" }}
               >

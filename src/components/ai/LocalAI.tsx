@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Cpu,
+  Crown,
   Download,
   Eraser,
   Gauge,
@@ -25,8 +26,14 @@ import {
 } from "lucide-react";
 import { usePersistentState, useMounted, uid } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import {
+  FREE_CONVERSATION_LIMIT,
+  FREE_MODEL_ID,
+  usePro,
+} from "@/lib/pro";
 import { useEngine } from "./useEngine";
 import { Markdown } from "./Markdown";
+import ProModal from "./ProModal";
 import {
   AuraMessage,
   AuraSettings,
@@ -48,15 +55,19 @@ export default function LocalAI() {
     "aura.settings",
     DEFAULT_SETTINGS
   );
+  const [pro, setPro] = usePro();
   const [input, setInput] = useState("");
   const [generating, setGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showPro, setShowPro] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const engine = useEngine();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const hasWebGPU = mounted && typeof navigator !== "undefined" && "gpu" in navigator;
   const active = conversations.find((c) => c.id === activeId) ?? null;
+  const isPro = pro.licensed;
+  const effectiveModel = isPro ? settings.model : FREE_MODEL_ID;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -134,6 +145,10 @@ export default function LocalAI() {
 
     const existing =
       activeId && conversations.some((c) => c.id === activeId) ? activeId : null;
+    if (!existing && !isPro && conversations.length >= FREE_CONVERSATION_LIMIT) {
+      setShowPro(true);
+      return;
+    }
     const convId = existing ?? uid();
     const userMsg: AuraMessage = { role: "user", content: text };
     const prior = conversations.find((c) => c.id === convId)?.messages ?? [];
@@ -195,6 +210,10 @@ export default function LocalAI() {
 
   function exportConversation() {
     if (!active) return;
+    if (!isPro) {
+      setShowPro(true);
+      return;
+    }
     const md = active.messages
       .map((m) => `## ${m.role === "user" ? "Ty" : "Aura"}\n\n${m.content}`)
       .join("\n\n---\n\n");
@@ -223,9 +242,11 @@ export default function LocalAI() {
           <WebGpuWarning />
         ) : engine.status !== "ready" ? (
           <Loader
-            settings={settings}
             setSettings={setSettings}
             engine={engine}
+            isPro={isPro}
+            effectiveModel={effectiveModel}
+            onUpgrade={() => setShowPro(true)}
             onOpenSettings={() => setShowSettings(true)}
           />
         ) : (
@@ -296,7 +317,27 @@ export default function LocalAI() {
                   </div>
                 ))}
               </div>
-              <div className="p-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="p-3 space-y-2" style={{ borderTop: "1px solid var(--border)" }}>
+                {!isPro ? (
+                  <button
+                    onClick={() => setShowPro(true)}
+                    className="btn w-full text-sm"
+                    style={{
+                      background: "rgba(251,191,36,0.12)",
+                      border: "1px solid rgba(251,191,36,0.35)",
+                      color: "var(--amber)",
+                    }}
+                  >
+                    <Crown size={15} /> Ulepsz do Pro
+                  </button>
+                ) : (
+                  <div
+                    className="text-xs text-center py-1.5 rounded-lg flex items-center justify-center gap-1.5"
+                    style={{ color: "var(--amber)", background: "rgba(251,191,36,0.08)" }}
+                  >
+                    <Crown size={13} /> Aura Pro aktywna
+                  </div>
+                )}
                 <button
                   onClick={() => setShowSettings(true)}
                   className="btn btn-ghost w-full text-sm"
@@ -322,8 +363,13 @@ export default function LocalAI() {
                 <span className="text-xs text-[var(--text-muted)] flex items-center gap-2 min-w-0">
                   <span className="w-2 h-2 rounded-full bg-[var(--emerald)] animate-pulse-ring shrink-0" />
                   <span className="truncate">
-                    {MODELS.find((m) => m.id === settings.model)?.label} · lokalnie
+                    {MODELS.find((m) => m.id === effectiveModel)?.label} · lokalnie
                   </span>
+                  {isPro && (
+                    <span className="chip !py-0.5 !px-2" style={{ color: "var(--amber)" }}>
+                      <Crown size={11} /> Pro
+                    </span>
+                  )}
                 </span>
                 <div className="flex items-center gap-1">
                   <button
@@ -392,7 +438,22 @@ export default function LocalAI() {
           settings={settings}
           setSettings={setSettings}
           engine={engine}
+          isPro={isPro}
+          onUpgrade={() => {
+            setShowSettings(false);
+            setShowPro(true);
+          }}
           onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {showPro && (
+        <ProModal
+          onActivate={(key) => {
+            setPro({ licensed: true, key });
+            setShowPro(false);
+          }}
+          onClose={() => setShowPro(false)}
         />
       )}
     </div>
@@ -453,14 +514,18 @@ function WebGpuWarning() {
 }
 
 function Loader({
-  settings,
   setSettings,
   engine,
+  isPro,
+  effectiveModel,
+  onUpgrade,
   onOpenSettings,
 }: {
-  settings: AuraSettings;
   setSettings: React.Dispatch<React.SetStateAction<AuraSettings>>;
   engine: ReturnType<typeof useEngine>;
+  isPro: boolean;
+  effectiveModel: string;
+  onUpgrade: () => void;
   onOpenSettings: () => void;
 }) {
   return (
@@ -473,22 +538,31 @@ function Loader({
         działa nawet offline.
       </p>
       <div className="grid sm:grid-cols-3 gap-3 mb-5">
-        {MODELS.map((m) => (
-          <button
-            key={m.id}
-            disabled={engine.status === "loading"}
-            onClick={() => setSettings((s) => ({ ...s, model: m.id }))}
-            className="card p-3 text-left disabled:opacity-50"
-            style={
-              settings.model === m.id
-                ? { borderColor: "var(--violet)", background: "rgba(139,92,246,0.08)" }
-                : undefined
-            }
-          >
-            <div className="font-semibold text-sm">{m.label}</div>
-            <div className="text-[11px] text-[var(--text-subtle)] mt-1">{m.note}</div>
-          </button>
-        ))}
+        {MODELS.map((m) => {
+          const locked = !isPro && m.id !== FREE_MODEL_ID;
+          const selected = effectiveModel === m.id;
+          return (
+            <button
+              key={m.id}
+              disabled={engine.status === "loading"}
+              onClick={() => (locked ? onUpgrade() : setSettings((s) => ({ ...s, model: m.id })))}
+              className="card p-3 text-left disabled:opacity-50 relative"
+              style={
+                selected
+                  ? { borderColor: "var(--violet)", background: "rgba(139,92,246,0.08)" }
+                  : undefined
+              }
+            >
+              <div className="font-semibold text-sm flex items-center gap-1.5">
+                {m.label}
+                {locked && <Crown size={12} className="text-[var(--amber)]" />}
+              </div>
+              <div className="text-[11px] text-[var(--text-subtle)] mt-1">
+                {locked ? "Dostępny w Aura Pro" : m.note}
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {engine.status === "loading" ? (
@@ -509,7 +583,7 @@ function Loader({
         </div>
       ) : (
         <div className="flex items-center gap-2">
-          <button onClick={() => engine.load(settings.model)} className="btn btn-primary">
+          <button onClick={() => engine.load(effectiveModel)} className="btn btn-primary">
             <Cpu size={16} /> Uruchom Aurę
           </button>
           <button onClick={onOpenSettings} className="btn btn-ghost">
@@ -660,11 +734,15 @@ function SettingsModal({
   settings,
   setSettings,
   engine,
+  isPro,
+  onUpgrade,
   onClose,
 }: {
   settings: AuraSettings;
   setSettings: React.Dispatch<React.SetStateAction<AuraSettings>>;
   engine: ReturnType<typeof useEngine>;
+  isPro: boolean;
+  onUpgrade: () => void;
   onClose: () => void;
 }) {
   return (
@@ -681,7 +759,7 @@ function SettingsModal({
         <label className="block mb-4">
           <span className="text-xs text-[var(--text-muted)] mb-1.5 block">Model</span>
           <select
-            value={settings.model}
+            value={isPro ? settings.model : FREE_MODEL_ID}
             onChange={(e) => {
               const model = e.target.value;
               setSettings((s) => ({ ...s, model }));
@@ -690,11 +768,20 @@ function SettingsModal({
             className="input-field"
           >
             {MODELS.map((m) => (
-              <option key={m.id} value={m.id}>
+              <option key={m.id} value={m.id} disabled={!isPro && m.id !== FREE_MODEL_ID}>
                 {m.label} — {m.note}
+                {!isPro && m.id !== FREE_MODEL_ID ? " (Pro)" : ""}
               </option>
             ))}
           </select>
+          {!isPro && (
+            <button
+              onClick={onUpgrade}
+              className="text-[11px] text-[var(--amber)] mt-1.5 inline-flex items-center gap-1"
+            >
+              <Crown size={11} /> Odblokuj wszystkie modele w Pro
+            </button>
+          )}
         </label>
 
         <label className="block mb-4">
@@ -715,17 +802,33 @@ function SettingsModal({
           />
         </label>
 
-        <label className="block mb-5">
-          <span className="text-xs text-[var(--text-muted)] mb-1.5 block">
+        <div className="block mb-5">
+          <span className="text-xs text-[var(--text-muted)] mb-1.5 flex items-center gap-1.5">
             Prompt systemowy (persona)
+            {!isPro && <Crown size={11} className="text-[var(--amber)]" />}
           </span>
-          <textarea
-            value={settings.systemPrompt}
-            onChange={(e) => setSettings((s) => ({ ...s, systemPrompt: e.target.value }))}
-            rows={5}
-            className="input-field resize-none text-xs leading-relaxed"
-          />
-        </label>
+          <div className="relative">
+            <textarea
+              value={settings.systemPrompt}
+              onChange={(e) => setSettings((s) => ({ ...s, systemPrompt: e.target.value }))}
+              rows={5}
+              disabled={!isPro}
+              className="input-field resize-none text-xs leading-relaxed disabled:opacity-60"
+            />
+            {!isPro && (
+              <button
+                onClick={onUpgrade}
+                className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 rounded-xl text-sm"
+                style={{ background: "rgba(7,7,13,0.55)", backdropFilter: "blur(2px)" }}
+              >
+                <Lock size={18} className="text-[var(--amber)]" />
+                <span className="text-[var(--amber)] text-xs font-semibold">
+                  Własne persony w Aura Pro
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
 
         <div className="flex items-center justify-between">
           <button
