@@ -1,277 +1,202 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Shield, Award, Clock } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Star, ShieldCheck, Sparkles } from "lucide-react";
+import { BUSINESS } from "@/lib/data";
 
-function ParticleCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const METRICS = [
+  { value: "15", suffix: "lat", label: "doświadczenia od 2012" },
+  { value: "8000", suffix: "+", label: "zregenerowanych turbo" },
+  { value: "24", suffix: "mc", label: "gwarancji bez limitu km" },
+];
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    interface Particle {
-      x: number; y: number; vx: number; vy: number;
-      size: number; opacity: number; decay: number; color: string;
-    }
-
-    const particles: Particle[] = [];
-    const colors = ["#FF6B1A", "#FF8C3A", "#FF3D00", "#FFB347", "#FF6B1A"];
-
-    const spawn = () => {
-      const side = Math.floor(Math.random() * 4);
-      let x = 0, y = 0;
-      const w = canvas.width, h = canvas.height;
-      if (side === 0) { x = Math.random() * w; y = h; }
-      else if (side === 1) { x = 0; y = Math.random() * h; }
-      else if (side === 2) { x = Math.random() * w; y = 0; }
-      else { x = w; y = Math.random() * h; }
-
-      const angle = Math.atan2(h / 2 - y, w / 2 - x) + (Math.random() - 0.5) * 1.2;
-      const speed = 0.3 + Math.random() * 0.8;
-      particles.push({
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: 0.5 + Math.random() * 1.5,
-        opacity: 0.3 + Math.random() * 0.4,
-        decay: 0.003 + Math.random() * 0.004,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    };
-
-    let animId: number;
-    let frame = 0;
-    const animate = () => {
-      animId = requestAnimationFrame(animate);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      frame++;
-      if (frame % 3 === 0 && particles.length < 120) spawn();
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.opacity -= p.decay;
-
-        if (p.opacity <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.floor(p.opacity * 255).toString(16).padStart(2, "0");
-        ctx.fill();
-      }
-
-      // Draw connection lines for nearby particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 80) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255,107,26,${0.04 * (1 - dist / 80)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
-    animate();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
+export function Hero() {
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-60"
-      style={{ zIndex: 1 }}
-    />
+    <section id="top" className="relative overflow-hidden pt-36 sm:pt-44">
+      <div className="pointer-events-none absolute inset-0 bg-grid opacity-60" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-halo" />
+
+      <div className="container-pro relative grid items-center gap-12 pb-20 lg:grid-cols-[1.1fr_0.9fr] lg:pb-28">
+        {/* Copy */}
+        <div>
+          <motion.span
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="chip"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Elitarne laboratorium regeneracji · {BUSINESS.region}
+          </motion.span>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="mt-6 text-[2.7rem] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl"
+          >
+            <span className="text-gold-grad text-glow-gold">Inżynieria</span>
+            <br />
+            <span className="text-ink">Doładowania</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12 }}
+            className="mt-6 max-w-xl text-base leading-relaxed text-titanium sm:text-lg"
+          >
+            Precyzyjna regeneracja turbosprężarek i DPF na poziomie laboratoryjnym.
+            Wyważanie Turbo Technics VSR 301 z dokładnością do{" "}
+            <span className="font-tel text-gold-bright">0,001 g/cm²</span>, kalibracja
+            REA-Master oraz wyłącznie oryginalne komponenty OEM.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+            className="mt-8 flex flex-wrap items-center gap-4"
+          >
+            <a href="#diagnostyka" className="btn-gold">
+              Diagnoza AI <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="#finder" className="btn-ghost">
+              Dobierz turbo
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.28 }}
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-titanium"
+          >
+            <span className="flex items-center gap-2">
+              <span className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-gold text-gold" />
+                ))}
+              </span>
+              <span className="font-tel font-semibold text-ink">{BUSINESS.rating}</span>
+              <span>/ 5 Google · {BUSINESS.positivePct}% pozytywnych</span>
+            </span>
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-gold" />
+              Kurier ekspres {BUSINESS.pickupHours}
+            </span>
+          </motion.div>
+        </div>
+
+        {/* Visual */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="relative mx-auto w-full max-w-md"
+        >
+          <TurboArt />
+        </motion.div>
+      </div>
+
+      {/* Metric strip */}
+      <div className="container-pro relative -mt-4 pb-16 lg:pb-24">
+        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--line)] sm:grid-cols-3">
+          {METRICS.map((m, i) => (
+            <motion.div
+              key={m.label}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="bg-[var(--panel)] px-6 py-7"
+            >
+              <div className="flex items-baseline gap-1">
+                <span className="font-tel text-4xl font-bold text-gold-grad">{m.value}</span>
+                <span className="font-tel text-lg font-semibold text-copper">{m.suffix}</span>
+              </div>
+              <p className="mt-1 text-sm text-titanium">{m.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-const badges = [
-  { icon: Shield, label: "Gwarancja 12 miesięcy" },
-  { icon: Award, label: "10+ lat doświadczenia" },
-  { icon: Clock, label: "Czas realizacji 24-48h" },
-];
-
-export default function Hero() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-
-  const handleContact = () => {
-    document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleServices = () => {
-    document.querySelector("#uslugi")?.scrollIntoView({ behavior: "smooth" });
-  };
-
+function TurboArt() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-[#07090E]" />
-      <div className="absolute inset-0 bg-grid opacity-100" />
+    <div className="relative aspect-square">
+      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(197,155,103,0.18),transparent_62%)]" />
+      <svg viewBox="0 0 400 400" className="relative h-full w-full">
+        <defs>
+          <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#e3c08b" />
+            <stop offset="55%" stopColor="#c59b67" />
+            <stop offset="100%" stopColor="#a66e4e" />
+          </linearGradient>
+          <radialGradient id="hub" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#161620" />
+            <stop offset="100%" stopColor="#06060a" />
+          </radialGradient>
+        </defs>
 
-      {/* Gradient orbs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#FF6B1A]/8 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#FF3D00]/6 blur-[100px] pointer-events-none" />
-      <div className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-[#FF6B1A]/5 blur-[80px] pointer-events-none" />
+        {/* outer housing rings */}
+        <circle cx="200" cy="200" r="178" fill="none" stroke="rgba(197,155,103,0.16)" strokeWidth="1" />
+        <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(197,155,103,0.28)" strokeWidth="1.5" />
 
-      {/* Particles */}
-      <ParticleCanvas />
+        {/* compressor blades */}
+        <g className="spin-slow" style={{ transformOrigin: "200px 200px" }}>
+          {Array.from({ length: 14 }).map((_, i) => {
+            const a = (i * 360) / 14;
+            return (
+              <path
+                key={i}
+                d="M200 200 C 214 150, 240 120, 250 70 C 226 110, 206 150, 200 200 Z"
+                fill="url(#gold)"
+                opacity={0.85}
+                transform={`rotate(${a} 200 200)`}
+              />
+            );
+          })}
+        </g>
 
-      {/* Radial spotlight */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,107,26,0.06) 0%, transparent 70%)",
-          zIndex: 1,
-        }}
-      />
+        {/* hub */}
+        <circle cx="200" cy="200" r="46" fill="url(#hub)" stroke="url(#gold)" strokeWidth="2" />
+        <circle cx="200" cy="200" r="14" fill="url(#gold)" />
 
-      <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-20 w-full"
-      >
-        <div className="max-w-4xl">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="badge mb-8 w-fit"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#FF6B1A] animate-pulse" />
-            Profesjonalny serwis turbosprężarek od 2014 roku
-          </motion.div>
+        {/* ticks */}
+        <g>
+          {Array.from({ length: 60 }).map((_, i) => {
+            const a = (i * Math.PI * 2) / 60;
+            const r1 = 168;
+            const r2 = i % 5 === 0 ? 156 : 162;
+            const x1 = 200 + r1 * Math.cos(a);
+            const y1 = 200 + r1 * Math.sin(a);
+            const x2 = 200 + r2 * Math.cos(a);
+            const y2 = 200 + r2 * Math.sin(a);
+            return (
+              <line
+                key={i}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="rgba(197,155,103,0.4)"
+                strokeWidth={i % 5 === 0 ? 1.6 : 0.8}
+              />
+            );
+          })}
+        </g>
+      </svg>
 
-          {/* Main headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="font-display text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] tracking-wide text-white mb-6"
-          >
-            REGENERACJA
-            <br />
-            <span className="text-gradient glow-text">TURBO</span>
-            <br />
-            SPRĘŻAREK
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="text-[#8A9BB0] text-lg sm:text-xl max-w-xl mb-10 leading-relaxed"
-          >
-            Przywracamy pełną moc Twojego silnika. Precyzyjna diagnostyka,
-            regeneracja CNC i testy na specjalistycznych stanowiskach.
-            Wszystkie marki i modele.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="flex flex-wrap gap-4 mb-16"
-          >
-            <button onClick={handleContact} className="btn-primary flex items-center gap-2 text-base">
-              Bezpłatna wycena
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button onClick={handleServices} className="btn-secondary flex items-center gap-2 text-base">
-              Nasze usługi
-            </button>
-          </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
-            className="flex flex-wrap gap-6"
-          >
-            {badges.map((badge, i) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg glass-orange flex items-center justify-center flex-shrink-0">
-                  <badge.icon className="w-4 h-4 text-[#FF6B1A]" />
-                </div>
-                <span className="text-sm font-medium text-[#8A9BB0]">{badge.label}</span>
-              </div>
-            ))}
-          </motion.div>
+      {/* floating spec badge */}
+      <div className="floaty absolute -bottom-3 left-1/2 -translate-x-1/2">
+        <div className="panel-glass flex items-center gap-3 rounded-xl px-4 py-2.5 glow-ring">
+          <span className="font-tel text-xs uppercase tracking-widest text-titanium">RPM</span>
+          <span className="font-tel text-lg font-bold text-gold-bright">248 000</span>
         </div>
-
-        {/* Floating stat cards */}
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-4"
-        >
-          {[
-            { value: "5 000+", label: "Zregenerowanych turbo" },
-            { value: "98%", label: "Zadowolonych klientów" },
-            { value: "24h", label: "Czas realizacji" },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 + i * 0.1, duration: 0.5 }}
-              className="glass border-gradient rounded-xl px-6 py-4 min-w-[180px] animate-float"
-              style={{ animationDelay: `${i * 2}s` }}
-            >
-              <div className="font-display text-3xl text-gradient mb-0.5">{stat.value}</div>
-              <div className="text-xs text-[#8A9BB0] font-medium">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#07090E] to-transparent pointer-events-none z-10" />
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-      >
-        <span className="text-xs text-[#4A5568] font-medium tracking-widest uppercase">Przewiń</span>
-        <div className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-            className="w-1.5 h-1.5 rounded-full bg-[#FF6B1A]"
-          />
-        </div>
-      </motion.div>
-    </section>
+      </div>
+    </div>
   );
 }
