@@ -1,9 +1,10 @@
-name: Deploy TURBO-GIT Shop to GitHub Pages
+name: Deploy TURBO-GIT to GitHub Pages
 
 on:
   push:
     branches:
       - main
+      - claude/turbo-git-dashboard-app-8fPOX
   workflow_dispatch:
 
 permissions:
@@ -27,22 +28,20 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: turbo-git-shop/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: turbo-git-shop
 
       - name: Build
         run: npm run build
-        working-directory: turbo-git-shop
         env:
           NODE_ENV: production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./turbo-git-shop/out
+          path: ./out
 
   deploy:
     environment:
