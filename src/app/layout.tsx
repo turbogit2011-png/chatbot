@@ -16,31 +16,31 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "TurboDiesel – Regeneracja Turbosprężarek | Profesjonalny Serwis",
+  title: "Turbo-Git – Regenerowane Turbosprężarki | 8000+ modeli | Gwarancja 24M",
   description:
-    "Profesjonalna regeneracja turbosprężarek, wtryskiwaczy i filtrów DPF. Ponad 10 lat doświadczenia. Gwarancja 12 miesięcy. Diagnostyka CNC. Sprawdź ofertę!",
+    "Sklep z regenerowanymi turbosprężarkami. 8000+ modeli w magazynie, gwarancja 24 miesiące, wysyłka 24h. Technologia VSR 301. Obsługujemy wszystkie marki. Ceny od 699 zł.",
   keywords: [
-    "regeneracja turbosprężarek",
-    "serwis turbo",
-    "naprawa turbosprężarki",
-    "turbodiesel",
-    "wtryskiwacze",
-    "DPF",
-    "diesel",
-    "turbosprężarka",
+    "regenerowane turbosprężarki",
+    "turbosprężarka sklep",
+    "kupno turbosprężarki",
+    "turbo z gwarancją",
+    "turbosprężarka używana",
+    "wymiana turbo",
+    "VSR 301",
+    "turbo-git",
   ],
-  authors: [{ name: "TurboDiesel" }],
+  authors: [{ name: "Turbo-Git" }],
   openGraph: {
-    title: "TurboDiesel – Regeneracja Turbosprężarek",
+    title: "Turbo-Git – Regenerowane Turbosprężarki",
     description:
-      "Profesjonalna regeneracja turbosprężarek z gwarancją 12 miesięcy",
+      "8000+ modeli w magazynie. Gwarancja 24 miesiące. Wysyłka 24h. Ceny od 699 zł.",
     type: "website",
     locale: "pl_PL",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF6B1A",
+  themeColor: "#F97316",
 };
 
 export default function RootLayout({

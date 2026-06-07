@@ -6,28 +6,28 @@ import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
-    q: "Ile kosztuje regeneracja turbosprężarki?",
-    a: "Koszt regeneracji zależy od modelu i stopnia uszkodzenia turbosprężarki. Dla samochodów osobowych cena wynosi zwykle od 600 do 1200 zł. Dla aut dostawczych i ciężarowych wyceniamy indywidualnie. Bezpłatna wycena po diagnostyce.",
+    q: "Ile kosztuje regenerowana turbosprężarka?",
+    a: "Ceny zaczynają się od 699 zł dla samochodów osobowych. Pojazdy dostawcze i ciężarowe wyceniamy indywidualnie. Cena obejmuje regenerację, balansowanie VSR 301, kalibrację oraz gwarancję 24 miesięcy.",
   },
   {
-    q: "Jak długo trwa regeneracja?",
-    a: "Standardowa regeneracja turbosprężarki trwa 24–48 godzin od momentu przyjęcia. W przypadku pilnych zleceń jesteśmy w stanie zrealizować naprawę nawet tego samego dnia (usługa Express). Klient jest na bieżąco informowany o postępach.",
+    q: "Jak długo trwa dostawa?",
+    a: "Zamówienia złożone do godziny 14:00 wysyłamy tego samego dnia. Standardowy czas dostawy to 24 godziny na terenie całej Polski. Dla zamówień ekspresowych oferujemy dostawę kurierską overnight.",
   },
   {
-    q: "Czy wysyłacie i odbieracie kurierem z całej Polski?",
-    a: "Tak, obsługujemy klientów z całej Polski i zagranicy. Po zamówieniu odbioru kurierskiego wysyłamy paczkomat lub kurier do Twojego domu lub warsztatu. Zapewniamy bezpieczne opakowanie i ubezpieczenie przesyłki.",
+    q: "Czy mogę odesłać stare turbo w zamian?",
+    a: "Tak, przyjmujemy uszkodzone turbosprężarki w ramach wymiany. Po uzgodnieniu szczegółów telefonicznie możesz odesłać stare turbo kurierem — zorganizujemy odbiór na nasz koszt.",
   },
   {
-    q: "Jaka gwarancja jest udzielana na zregenerowaną turbosprężarkę?",
-    a: "Udzielamy 12 miesięcy gwarancji bez limitu kilometrów na każdą zregenerowaną turbosprężarkę. W przypadku reklamacji odbieramy turbo na własny koszt i naprawiamy w trybie priorytetowym.",
+    q: "Jaka jest gwarancja na turbosprężarkę?",
+    a: "Udzielamy pełnej gwarancji 24 miesiące bez limitu kilometrów na każdą turbosprężarkę. W przypadku reklamacji odbieramy turbo na własny koszt i naprawiamy lub wymieniamy priorytetowo.",
   },
   {
-    q: "Czy używacie oryginalnych części zamiennych?",
-    a: "Tak, stosujemy wyłącznie nowe, oryginalne komponenty od renomowanych producentów: Garrett, BorgWarner, IHI, Holset, KKK. Nie używamy tanich zamienników. Każda naprawa jest udokumentowana protokołem z listą wymienionych części.",
+    q: "Czy używacie oryginalnych części?",
+    a: "Tak — stosujemy wyłącznie nowe, oryginalne komponenty od Garrett, BorgWarner, IHI, Holset i KKK. Nie używamy tanich zamienników. Każde turbo jest dostarczone z protokołem wymienionych części.",
   },
   {
-    q: "Skąd mam wiedzieć, że moja turbosprężarka jest uszkodzona?",
-    a: "Typowe objawy to: utrata mocy silnika, niebiesko-czarny dym, świszczący dźwięk podczas przyspieszania, zwiększone zużycie oleju, palące się kontrolki. Jeśli zauważasz któryś z tych symptomów – zadzwoń do nas po bezpłatną konsultację.",
+    q: "Czy obsługujecie pojazdy ciężarowe i TIR?",
+    a: "Tak, obsługujemy pojazdy ciężarowe, TIR, maszyny rolnicze i budowlane. Ceny dla ciężarówek wyceniamy indywidualnie — zadzwoń na +48 694 706 140.",
   },
 ];
 
@@ -38,12 +38,11 @@ export default function FAQ() {
 
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#0C1018]" />
+      <div className="absolute inset-0 bg-[#07090E]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -60,18 +59,14 @@ export default function FAQ() {
               <span className="text-gradient">PYTANIA</span>
             </h2>
             <p className="text-[#8A9BB0] text-lg leading-relaxed mb-8">
-              Masz inne pytanie? Nasz zespół jest do dyspozycji
-              w godzinach pracy i chętnie odpowie na każde zapytanie.
+              Masz pytanie o konkretny model? Nasz zespół odpowie
+              błyskawicznie — zadzwoń lub napisz.
             </p>
-            <a
-              href="tel:+48000000000"
-              className="btn-primary inline-flex items-center gap-2 text-sm"
-            >
-              Zadzwoń teraz
+            <a href="tel:+48694706140" className="btn-primary inline-flex items-center gap-2 text-sm">
+              +48 694 706 140
             </a>
           </motion.div>
 
-          {/* Right: accordion */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -103,7 +98,6 @@ export default function FAQ() {
                     {open === i ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </div>
                 </button>
-
                 <AnimatePresence initial={false}>
                   {open === i && (
                     <motion.div

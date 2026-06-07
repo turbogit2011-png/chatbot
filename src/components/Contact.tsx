@@ -5,13 +5,13 @@ import { motion, useInView } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 
 const contactInfo = [
-  { icon: Phone, label: "Telefon", value: "+48 000 000 000", href: "tel:+48000000000" },
-  { icon: Mail, label: "Email", value: "kontakt@turbodiesel.cc", href: "mailto:kontakt@turbodiesel.cc" },
-  { icon: MapPin, label: "Adres", value: "ul. Przykładowa 1, 00-000 Miasto", href: "#" },
-  { icon: Clock, label: "Godziny pracy", value: "Pn–Pt: 8:00–18:00 / Sob: 9:00–13:00", href: null },
+  { icon: Phone,  label: "Telefon",       value: "+48 694 706 140",               href: "tel:+48694706140" },
+  { icon: Mail,   label: "Email",          value: "info@turbo-git.com",            href: "mailto:info@turbo-git.com" },
+  { icon: MapPin, label: "Adres",          value: "ul. Wrocławska 7, 55-095 Januszkowice", href: "https://maps.google.com/?q=Wrocławska+7+Januszkowice" },
+  { icon: Clock,  label: "Godziny pracy",  value: "Pn–Pt: 8:00–17:00 / Sob: 9:00–13:00", href: null },
 ];
 
-type FormState = "idle" | "loading" | "success" | "error";
+type FormState = "idle" | "loading" | "success";
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,15 +32,13 @@ export default function Contact() {
 
   return (
     <section id="kontakt" className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#07090E]" />
+      <div className="absolute inset-0 bg-[#0C1018]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
-      <div
-        className="absolute inset-0 pointer-events-none"
+      <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,107,26,0.06), transparent 70%)" }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -48,21 +46,20 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <div className="section-label mx-auto justify-center mb-4">
-            <span>Skontaktuj się</span>
+            <span>Kontakt</span>
           </div>
           <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] text-white leading-none mb-4 tracking-wide">
-            BEZPŁATNA
+            ZAPYTAJ O
             <br />
-            <span className="text-gradient">WYCENA</span>
+            <span className="text-gradient">SWOJE TURBO</span>
           </h2>
           <p className="text-[#8A9BB0] text-lg max-w-xl mx-auto">
-            Opisz problem i model pojazdu — oddzwonimy lub odpiszemy w ciągu 30 minut
-            w godzinach pracy z bezpłatną wyceną.
+            Podaj markę i model pojazdu — oddzwonimy w ciągu 30 minut
+            z dostępnością i ceną.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-10 items-start">
-          {/* Contact info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -76,9 +73,8 @@ export default function Contact() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.1 }}
               >
-                {info.href && info.href !== "#" ? (
-                  <a
-                    href={info.href}
+                {info.href ? (
+                  <a href={info.href} target={info.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
                     className="flex items-start gap-4 bg-[#111827] rounded-xl p-5 border border-white/5 hover:border-[#FF6B1A]/20 transition-all group"
                   >
                     <div className="w-10 h-10 rounded-lg bg-[#FF6B1A]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#FF6B1A]/20 transition-colors">
@@ -103,9 +99,8 @@ export default function Contact() {
               </motion.div>
             ))}
 
-            {/* Quick note */}
             <div className="glass-orange rounded-xl p-5 mt-2">
-              <p className="text-sm text-[#FF8C3A] font-medium mb-1">Szybka obsługa gwarantowana</p>
+              <p className="text-sm text-[#FF8C3A] font-medium mb-1">Szybka odpowiedź gwarantowana</p>
               <p className="text-xs text-[#8A9BB0] leading-relaxed">
                 Odpowiadamy na wszystkie zapytania w ciągu 30 minut w godzinach pracy.
                 Wycena bezpłatna i niezobowiązująca.
@@ -113,7 +108,6 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -121,7 +115,6 @@ export default function Contact() {
             className="lg:col-span-3"
           >
             <div className="bg-[#111827] rounded-2xl border border-white/5 p-7 sm:p-10 relative overflow-hidden">
-              {/* Corner accent */}
               <div className="absolute top-0 right-0 w-32 h-32 opacity-20 pointer-events-none"
                 style={{ background: "radial-gradient(circle at 100% 0%, rgba(255,107,26,0.4), transparent 70%)" }}
               />
@@ -144,82 +137,37 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
-                        Imię i nazwisko *
-                      </label>
-                      <input
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="Jan Kowalski"
-                        className="input-field"
-                      />
+                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">Imię i nazwisko *</label>
+                      <input name="name" value={form.name} onChange={handleChange} required placeholder="Jan Kowalski" className="input-field" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
-                        Telefon *
-                      </label>
-                      <input
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        required
-                        type="tel"
-                        placeholder="+48 000 000 000"
-                        className="input-field"
-                      />
+                      <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">Telefon *</label>
+                      <input name="phone" value={form.phone} onChange={handleChange} required type="tel" placeholder="+48 694 706 140" className="input-field" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
-                      Email
-                    </label>
-                    <input
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      type="email"
-                      placeholder="jan@kowalski.pl"
-                      className="input-field"
-                    />
+                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">Email</label>
+                    <input name="email" value={form.email} onChange={handleChange} type="email" placeholder="jan@kowalski.pl" className="input-field" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">
-                      Opis problemu i marka pojazdu *
-                    </label>
+                    <label className="block text-xs font-medium text-[#8A9BB0] mb-2 uppercase tracking-wider">Marka, model pojazdu, numer OEM turbo *</label>
                     <textarea
-                      name="message"
-                      value={form.message}
-                      onChange={handleChange}
-                      required
-                      rows={5}
-                      placeholder="Opisz swój problem – model pojazdu, rok produkcji, objawy usterki..."
+                      name="message" value={form.message} onChange={handleChange} required rows={5}
+                      placeholder="Np.: Audi A4 2.0 TDI 140KM rok 2008, numer OEM: 03G253019H..."
                       className="input-field resize-none"
                     />
                   </div>
-
-                  <button
-                    type="submit"
-                    disabled={formState === "loading"}
+                  <button type="submit" disabled={formState === "loading"}
                     className="btn-primary flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {formState === "loading" ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Wysyłanie...
-                      </>
+                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Wysyłanie...</>
                     ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        Wyślij zapytanie
-                      </>
+                      <><Send className="w-4 h-4" />Wyślij zapytanie</>
                     )}
                   </button>
-
                   <p className="text-xs text-[#4A5568] text-center">
                     Wysyłając formularz wyrażasz zgodę na kontakt w sprawie wyceny.
-                    Twoje dane są bezpieczne.
                   </p>
                 </form>
               )}

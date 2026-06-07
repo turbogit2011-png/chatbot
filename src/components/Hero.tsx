@@ -1,11 +1,10 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Shield, Award, Clock, Phone } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, Clock } from "lucide-react";
 
 function TurboViz() {
   const cx = 240, cy = 240;
-
   return (
     <div className="relative flex items-center justify-center select-none" aria-hidden="true">
       <div
@@ -32,11 +31,9 @@ function TurboViz() {
           </filter>
         </defs>
 
-        {/* Static ambient rings */}
         <circle cx={cx} cy={cy} r="232" fill="none" stroke="rgba(255,107,26,0.05)" strokeWidth="1" />
         <circle cx={cx} cy={cy} r="222" fill="none" stroke="rgba(255,107,26,0.03)" strokeWidth="0.5" />
 
-        {/* Slow outer rotating ring with tick marks */}
         <g style={{ transformOrigin: `${cx}px ${cy}px`, animation: "spin-slow 32s linear infinite" }}>
           <circle cx={cx} cy={cy} r="208" fill="none" stroke="rgba(255,107,26,0.11)" strokeWidth="1" strokeDasharray="5 14" />
           {Array.from({ length: 36 }).map((_, i) => {
@@ -53,10 +50,8 @@ function TurboViz() {
           })}
         </g>
 
-        {/* Middle static ring */}
         <circle cx={cx} cy={cy} r="176" fill="none" stroke="rgba(255,107,26,0.07)" strokeWidth="1" />
 
-        {/* TURBINE BLADES – counter-clockwise fast spin */}
         <g style={{ transformOrigin: `${cx}px ${cy}px`, animation: "spin-reverse 2.6s linear infinite" }}>
           {Array.from({ length: 9 }).map((_, i) => {
             const base = (i * 40) * (Math.PI / 180);
@@ -76,7 +71,6 @@ function TurboViz() {
           })}
         </g>
 
-        {/* Inner clockwise ring */}
         <g style={{ transformOrigin: `${cx}px ${cy}px`, animation: "spin-slow 7s linear infinite" }}>
           <circle cx={cx} cy={cy} r="63" fill="none" stroke="rgba(255,107,26,0.35)" strokeWidth="1.5" />
           {Array.from({ length: 12 }).map((_, i) => {
@@ -92,18 +86,16 @@ function TurboViz() {
           })}
         </g>
 
-        {/* Center hub */}
         <circle cx={cx} cy={cy} r="48" fill="rgba(255,107,26,0.05)" />
         <circle cx={cx} cy={cy} r="34" fill="rgba(255,107,26,0.11)" />
         <circle cx={cx} cy={cy} r="22" fill="rgba(255,107,26,0.20)" stroke="rgba(255,107,26,0.55)" strokeWidth="1.5" />
         <circle cx={cx} cy={cy} r="9"  fill="#FF6B1A" filter="url(#vCGlow)" />
         <circle cx={cx} cy={cy} r="4"  fill="#FFB86C" />
 
-        {/* Callout dots on the outer ring */}
         {[
-          { angle: -50, label: "5000+" },
-          { angle:  40, label: "CNC" },
-          { angle: 135, label: "12M" },
+          { angle: -50, label: "8000+" },
+          { angle:  40, label: "VSR301" },
+          { angle: 135, label: "24M" },
           { angle: 225, label: "24H" },
         ].map(({ angle, label }, i) => {
           const a = angle * (Math.PI / 180);
@@ -131,7 +123,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function Hero() {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, 100]);
+  const y       = useTransform(scrollY, [0, 600], [0, 100]);
   const opacity = useTransform(scrollY, [0, 380], [1, 0]);
 
   const scrollTo = (id: string) =>
@@ -139,7 +131,6 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 bg-[#07090E]" />
       <div className="absolute inset-0 bg-grid" />
       <div
@@ -157,7 +148,7 @@ export default function Hero() {
       >
         <div className="grid lg:grid-cols-[1fr_500px] xl:grid-cols-[1fr_540px] gap-10 xl:gap-16 items-center">
 
-          {/* ── Left: copy ── */}
+          {/* ── Left copy ── */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
@@ -166,43 +157,31 @@ export default function Hero() {
               className="badge mb-8 w-fit"
             >
               <span className="w-2 h-2 rounded-full bg-[#FF6B1A] animate-pulse flex-shrink-0" />
-              Profesjonalny serwis turbosprężarek od 2014 roku
+              Regenerowane turbosprężarki z gwarancją — od 2012 roku
             </motion.div>
 
-            {/* Headline – line-clip reveal */}
+            {/* Headline */}
             <h1 className="font-display leading-[0.88] tracking-wide mb-8"
               style={{ fontSize: "clamp(3.6rem, 7.5vw, 8rem)" }}
             >
-              {/* Line 1 */}
               <span className="block overflow-hidden">
-                <motion.span
-                  className="block text-white"
-                  initial={{ y: "106%" }}
-                  animate={{ y: 0 }}
+                <motion.span className="block text-white"
+                  initial={{ y: "106%" }} animate={{ y: 0 }}
                   transition={{ duration: 0.75, delay: 0.12, ease }}
-                >REGENERACJA</motion.span>
+                >8 000+</motion.span>
               </span>
-              {/* Line 2 */}
               <span className="block overflow-hidden">
-                <motion.span
-                  className="block text-gradient glow-text"
-                  initial={{ y: "106%" }}
-                  animate={{ y: 0 }}
+                <motion.span className="block text-gradient glow-text"
+                  initial={{ y: "106%" }} animate={{ y: 0 }}
                   transition={{ duration: 0.75, delay: 0.24, ease }}
                 >TURBO</motion.span>
               </span>
-              {/* Line 3 – outline/stroke text */}
               <span className="block overflow-hidden">
-                <motion.span
-                  className="block"
-                  initial={{ y: "106%" }}
-                  animate={{ y: 0 }}
+                <motion.span className="block"
+                  initial={{ y: "106%" }} animate={{ y: 0 }}
                   transition={{ duration: 0.75, delay: 0.36, ease }}
-                  style={{
-                    WebkitTextStroke: "2px rgba(255,255,255,0.35)",
-                    color: "transparent",
-                  }}
-                >SPRĘŻAREK</motion.span>
+                  style={{ WebkitTextStroke: "2px rgba(255,255,255,0.35)", color: "transparent" }}
+                >W MAGAZYNIE</motion.span>
               </span>
             </h1>
 
@@ -212,8 +191,8 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-[#8A9BB0] text-lg sm:text-xl max-w-lg mb-10 leading-relaxed"
             >
-              Precyzyjna diagnostyka, regeneracja CNC i testy na specjalistycznych stanowiskach.
-              Wszystkie marki i modele. Gwarancja 12 miesięcy.
+              Regenerowane turbosprężarki wszystkich marek z gwarancją 24 miesięcy.
+              Balansowanie VSR&nbsp;301, tylko oryginalne części OEM. Ceny od&nbsp;699&nbsp;zł.
             </motion.p>
 
             <motion.div
@@ -223,18 +202,16 @@ export default function Hero() {
               className="flex flex-wrap gap-4 mb-14"
             >
               <button
-                onClick={() => scrollTo("#kontakt")}
+                onClick={() => scrollTo("#kategorie")}
                 className="btn-primary flex items-center gap-2 text-base group"
               >
-                Bezpłatna wycena
+                Znajdź swoje turbo
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              <a
-                href="tel:+48000000000"
+              <a href="tel:+48694706140"
                 className="btn-secondary flex items-center gap-2 text-base"
               >
-                <Phone className="w-4 h-4 text-[#FF6B1A]" />
-                Zadzwoń teraz
+                +48 694 706 140
               </a>
             </motion.div>
 
@@ -245,9 +222,9 @@ export default function Hero() {
               className="flex flex-wrap gap-6"
             >
               {[
-                { icon: Shield, label: "Gwarancja 12 miesięcy" },
-                { icon: Award,  label: "10+ lat doświadczenia" },
-                { icon: Clock,  label: "Realizacja 24–48h" },
+                { icon: ShieldCheck, label: "Gwarancja 24 miesiące" },
+                { icon: Truck,       label: "Wysyłka w 24h" },
+                { icon: Clock,       label: "14 lat doświadczenia" },
               ].map(({ icon: Icon, label }, i) => (
                 <div key={i} className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg glass-orange flex items-center justify-center flex-shrink-0">
@@ -271,7 +248,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
