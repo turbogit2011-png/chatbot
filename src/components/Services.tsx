@@ -57,26 +57,12 @@ const services = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0 },
-};
-
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section id="uslugi" className="py-24 sm:py-32 relative overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 bg-[#07090E]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div className="absolute inset-0 dot-pattern opacity-30" />
@@ -103,69 +89,92 @@ export default function Services() {
           </p>
         </motion.div>
 
-        {/* Services grid */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate={inView ? "show" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
+        {/* Services grid – featured card spans 2 cols on lg */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((service, i) => (
             <motion.div
               key={i}
-              variants={item}
-              className={`relative rounded-2xl p-7 card-hover cursor-pointer group ${
+              initial={{ opacity: 0, y: 28 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
+              className={[
+                "group relative rounded-2xl p-7 cursor-pointer overflow-hidden transition-all duration-500",
                 service.highlight
-                  ? "border-gradient bg-[#111827]"
-                  : "bg-[#111827] border border-white/5 hover:border-[#FF6B1A]/20"
-              }`}
+                  ? "sm:col-span-2 lg:col-span-2 border border-[#FF6B1A]/30 hover:border-[#FF6B1A]/55"
+                  : "border border-white/5 hover:border-[#FF6B1A]/20 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(255,107,26,0.1)]",
+              ].join(" ")}
+              style={service.highlight ? { background: "#111827" } : { background: "#111827" }}
             >
+              {/* Featured card – large gradient background */}
               {service.highlight && (
-                <div className="absolute -top-3 left-6">
-                  <span className="badge text-xs">Bestseller</span>
+                <>
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(255,107,26,0.12) 0%, rgba(255,61,0,0.06) 50%, transparent 100%)",
+                    }}
+                  />
+                  <div
+                    className="absolute top-0 right-0 w-64 h-64 pointer-events-none opacity-30"
+                    style={{ background: "radial-gradient(circle at 80% 20%, rgba(255,107,26,0.3), transparent 60%)" }}
+                  />
+                </>
+              )}
+
+              {service.highlight && (
+                <div className="absolute -top-3 left-6 z-10">
+                  <span className="badge text-xs">⭐ Bestseller</span>
                 </div>
               )}
 
-              {/* Icon */}
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 ${
-                service.highlight
-                  ? "bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] shadow-[0_0_20px_rgba(255,107,26,0.4)]"
-                  : "bg-white/5 group-hover:bg-[#FF6B1A]/10"
-              }`}>
-                <service.icon className={`w-6 h-6 ${service.highlight ? "text-white" : "text-[#FF6B1A]"}`} />
+              <div className="relative z-10 flex flex-col h-full">
+                {/* Icon */}
+                <div className={[
+                  "rounded-xl flex items-center justify-center mb-5 flex-shrink-0 transition-all duration-300",
+                  service.highlight
+                    ? "w-14 h-14 bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] shadow-[0_0_28px_rgba(255,107,26,0.5)] group-hover:shadow-[0_0_40px_rgba(255,107,26,0.7)]"
+                    : "w-12 h-12 bg-white/5 group-hover:bg-[#FF6B1A]/12",
+                ].join(" ")}>
+                  <service.icon className={`${service.highlight ? "w-7 h-7 text-white" : "w-6 h-6 text-[#FF6B1A]"}`} />
+                </div>
+
+                <div className={service.highlight ? "lg:grid lg:grid-cols-2 lg:gap-8" : ""}>
+                  <div>
+                    <h3 className={`font-semibold text-white group-hover:text-[#FF8C3A] transition-colors mb-2 ${service.highlight ? "text-xl" : "text-lg"}`}>
+                      {service.title}
+                    </h3>
+                    <p className="text-sm text-[#8A9BB0] leading-relaxed mb-5">
+                      {service.description}
+                    </p>
+                  </div>
+
+                  <div>
+                    <ul className="flex flex-col gap-2 mb-5">
+                      {service.features.map((feat, j) => (
+                        <li key={j} className="flex items-center gap-2 text-xs text-[#8A9BB0]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B1A] flex-shrink-0" />
+                          {feat}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-[#FF6B1A] group-hover:gap-3 transition-all">
+                      <span>Dowiedz się więcej</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Content */}
-              <h3 className="font-semibold text-lg text-white mb-2 group-hover:text-[#FF8C3A] transition-colors">
-                {service.title}
-              </h3>
-              <p className="text-sm text-[#8A9BB0] leading-relaxed mb-5">
-                {service.description}
-              </p>
-
-              {/* Features */}
-              <ul className="flex flex-col gap-2 mb-5">
-                {service.features.map((feat, j) => (
-                  <li key={j} className="flex items-center gap-2 text-xs text-[#8A9BB0]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B1A] flex-shrink-0" />
-                    {feat}
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <div className="flex items-center gap-1.5 text-sm font-medium text-[#FF6B1A] group-hover:gap-3 transition-all">
-                <span>Dowiedz się więcej</span>
-                <ArrowRight className="w-4 h-4" />
-              </div>
-
-              {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(255,107,26,0.06), transparent 60%)" }}
-              />
+              {/* Hover glow (non-featured) */}
+              {!service.highlight && (
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(255,107,26,0.06), transparent 60%)" }}
+                />
+              )}
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

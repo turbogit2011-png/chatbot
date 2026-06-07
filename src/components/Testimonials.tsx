@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
@@ -33,7 +33,7 @@ const testimonials = [
     name: "Piotr Zając",
     role: "Fleet Manager",
     content:
-      "Zarządzam flotą 20 aut firmowych. TurboDiesel to nasz stały partner serwisowy. Szybkość realizacji i profesjonalizm na najwyższym poziomie – zdecydowanie godne polecenia.",
+      "Zarządzam flotą 20 aut firmowych. TurboDiesel to nasz stały partner serwisowy. Szybkość realizacji i profesjonalizm na najwyższym poziomie.",
     rating: 5,
     vehicle: "Flota firmowa 20 aut",
   },
@@ -47,24 +47,22 @@ const testimonials = [
   },
 ];
 
+const brands = ["Garrett", "BorgWarner", "IHI", "Holset", "KKK", "MHI", "Continental"];
+
 export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [current, setCurrent] = useState(0);
-
-  const prev = () => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
-  const next = () => setCurrent((c) => (c + 1) % testimonials.length);
 
   return (
     <section id="opinie" className="py-24 sm:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-[#07090E]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
-      <div
-        className="absolute inset-0 pointer-events-none"
+      <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,107,26,0.05), transparent 60%)" }}
       />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -88,97 +86,67 @@ export default function Testimonials() {
           </div>
         </motion.div>
 
-        {/* Carousel */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative max-w-3xl mx-auto"
-        >
-          <AnimatePresence mode="wait">
+        {/* Testimonials grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-20">
+          {testimonials.map((t, i) => (
             <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="glass-orange rounded-2xl p-8 sm:p-10 relative overflow-hidden"
+              key={i}
+              initial={{ opacity: 0, y: 28 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.09 }}
+              className={[
+                "group relative rounded-2xl p-7 border transition-all duration-400 overflow-hidden",
+                i === 0
+                  ? "md:col-span-2 lg:col-span-1 glass-orange border-[#FF6B1A]/20 hover:border-[#FF6B1A]/40"
+                  : "bg-[#111827] border-white/5 hover:border-[#FF6B1A]/20 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(255,107,26,0.08)]",
+              ].join(" ")}
             >
-              {/* Quote icon */}
-              <Quote className="absolute top-6 right-8 w-16 h-16 text-[#FF6B1A]/10" />
+              {/* Quote watermark */}
+              <Quote className="absolute top-5 right-6 w-12 h-12 text-[#FF6B1A]/10 group-hover:text-[#FF6B1A]/18 transition-colors" />
 
               {/* Stars */}
-              <div className="flex items-center gap-1 mb-6">
-                {[...Array(testimonials[current].rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-[#FF6B1A] text-[#FF6B1A]" />
+              <div className="flex items-center gap-0.5 mb-5">
+                {[...Array(t.rating)].map((_, j) => (
+                  <Star key={j} className="w-3.5 h-3.5 fill-[#FF6B1A] text-[#FF6B1A]" />
                 ))}
               </div>
 
-              {/* Content */}
-              <p className="text-white text-lg sm:text-xl leading-relaxed mb-8 relative z-10">
-                &ldquo;{testimonials[current].content}&rdquo;
+              {/* Review text */}
+              <p className="text-[#D0D8E4] text-sm leading-relaxed mb-6 relative z-10">
+                &ldquo;{t.content}&rdquo;
               </p>
 
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                  {testimonials[current].name.charAt(0)}
+              {/* Author row */}
+              <div className="flex items-center gap-3 mt-auto">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                  {t.name.charAt(0)}
                 </div>
-                <div>
-                  <div className="font-semibold text-white">{testimonials[current].name}</div>
-                  <div className="text-sm text-[#8A9BB0]">{testimonials[current].role}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-white text-sm truncate">{t.name}</div>
+                  <div className="text-xs text-[#8A9BB0]">{t.role}</div>
                 </div>
-                <div className="ml-auto">
-                  <span className="badge text-xs">{testimonials[current].vehicle}</span>
-                </div>
+                <span className="badge text-xs whitespace-nowrap">{t.vehicle}</span>
               </div>
             </motion.div>
-          </AnimatePresence>
+          ))}
+        </div>
 
-          {/* Controls */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <button
-              onClick={prev}
-              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 transition-all"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            {/* Dots */}
-            <div className="flex items-center gap-2">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`rounded-full transition-all duration-300 ${
-                    i === current ? "w-6 h-2 bg-[#FF6B1A]" : "w-2 h-2 bg-white/20 hover:bg-white/40"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={next}
-              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 transition-all"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Logos strip */}
+        {/* Brands strip */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-20 text-center"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-center"
         >
           <p className="text-xs text-[#4A5568] uppercase tracking-widest mb-8 font-medium">
             Marki, z którymi pracujemy
           </p>
           <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-4">
-            {["Garrett", "BorgWarner", "IHI", "Holset", "KKK", "MHI", "Continental"].map((brand) => (
-              <span key={brand} className="font-display text-xl text-white/20 hover:text-white/50 transition-colors tracking-wider cursor-default">
+            {brands.map((brand) => (
+              <span
+                key={brand}
+                className="font-display text-xl text-white/20 hover:text-white/55 transition-colors tracking-wider cursor-default"
+              >
                 {brand}
               </span>
             ))}
