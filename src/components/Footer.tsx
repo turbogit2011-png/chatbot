@@ -1,137 +1,67 @@
-"use client";
+import { Gauge, Star, ShieldCheck, MapPin } from "lucide-react";
+import { BUSINESS, OEM_BRANDS } from "@/lib/data";
 
-import { Zap, Phone, Mail, MapPin, ArrowUp } from "lucide-react";
-
-const links = {
-  uslugi: [
-    "Regeneracja turbosprężarek",
-    "Regeneracja wtryskiwaczy",
-    "Regeneracja DPF/FAP",
-    "Serwis pomp wtryskowych",
-    "Chip tuning",
-    "Diagnostyka komputerowa",
-  ],
-  firma: ["O nas", "Jak działamy", "Cennik", "Gwarancja", "Realizacje", "Blog"],
-  info: ["FAQ", "Wysyłka kurierska", "Regulamin", "Polityka prywatności"],
-};
-
-export default function Footer() {
-  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
+export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/5">
-      <div className="absolute inset-0 bg-[#07090E]" />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,107,26,0.04), transparent 60%)" }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Top strip */}
-        <div className="py-12 border-b border-white/5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* Brand */}
-            <div className="lg:col-span-1">
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#FF6B1A] to-[#FF3D00] flex items-center justify-center shadow-[0_0_20px_rgba(255,107,26,0.3)]">
-                  <Zap className="w-5 h-5 text-white fill-white" />
-                </div>
-                <div>
-                  <span className="font-display text-xl tracking-wider text-white leading-none">TURBO</span>
-                  <span className="font-display text-xl tracking-wider text-[#FF6B1A] leading-none">DIESEL</span>
-                </div>
-              </div>
-              <p className="text-sm text-[#4A5568] leading-relaxed mb-5">
-                Profesjonalna regeneracja turbosprężarek i serwis diesel od 2014 roku.
-                Gwarancja 12 miesięcy na każdą naprawę.
-              </p>
-              <div className="flex flex-col gap-2.5">
-                <a href="tel:+48000000000" className="flex items-center gap-2 text-sm text-[#8A9BB0] hover:text-[#FF6B1A] transition-colors">
-                  <Phone className="w-4 h-4 text-[#FF6B1A] flex-shrink-0" />
-                  +48 000 000 000
-                </a>
-                <a href="mailto:kontakt@turbodiesel.cc" className="flex items-center gap-2 text-sm text-[#8A9BB0] hover:text-[#FF6B1A] transition-colors">
-                  <Mail className="w-4 h-4 text-[#FF6B1A] flex-shrink-0" />
-                  kontakt@turbodiesel.cc
-                </a>
-                <div className="flex items-start gap-2 text-sm text-[#8A9BB0]">
-                  <MapPin className="w-4 h-4 text-[#FF6B1A] flex-shrink-0 mt-0.5" />
-                  ul. Przykładowa 1, 00-000 Miasto
-                </div>
-              </div>
+    <footer className="relative border-t border-[var(--line)] bg-[var(--obsidian-2)]">
+      <div className="container-pro py-14">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-9 w-9 place-items-center rounded-lg bezel">
+                <Gauge className="h-5 w-5 text-gold" />
+              </span>
+              <span className="font-tel text-lg font-bold tracking-[0.14em] text-ink">
+                TURBO<span className="text-gold">-GIT</span>
+              </span>
             </div>
-
-            {/* Services */}
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Usługi</h4>
-              <ul className="flex flex-col gap-2.5">
-                {links.uslugi.map((l) => (
-                  <li key={l}>
-                    <a href="#uslugi" onClick={(e) => { e.preventDefault(); document.querySelector("#uslugi")?.scrollIntoView({ behavior: "smooth" }); }}
-                      className="text-sm text-[#4A5568] hover:text-[#FF6B1A] transition-colors">
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-titanium">
+              Elitarne laboratorium regeneracji turbosprężarek i DPF. Wyważanie VSR 301,
+              kalibracja REA-Master i wyłącznie oryginalne komponenty OEM. Gwarancja{" "}
+              {BUSINESS.warrantyMonths} miesięcy bez limitu kilometrów.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {OEM_BRANDS.map((b) => (
+                <span key={b} className="chip">
+                  {b}
+                </span>
+              ))}
             </div>
+          </div>
 
-            {/* Company */}
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Firma</h4>
-              <ul className="flex flex-col gap-2.5">
-                {links.firma.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="text-sm text-[#4A5568] hover:text-[#FF6B1A] transition-colors">{l}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div>
+            <h4 className="font-tel text-xs uppercase tracking-[0.2em] text-gold">Laboratorium</h4>
+            <ul className="mt-4 space-y-2.5 text-sm text-titanium">
+              <li><a href="#diagnostyka" className="transition-colors hover:text-gold-bright">Diagnostyka AI</a></li>
+              <li><a href="#finder" className="transition-colors hover:text-gold-bright">Turbo Finder 2.0</a></li>
+              <li><a href="#proces" className="transition-colors hover:text-gold-bright">Proces 7 etapów</a></li>
+              <li><a href="#kalkulator" className="transition-colors hover:text-gold-bright">Kalkulator TCO</a></li>
+              <li><a href="#b2b" className="transition-colors hover:text-gold-bright">Program B2B</a></li>
+            </ul>
+          </div>
 
-            {/* CTA */}
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Zadzwoń teraz</h4>
-              <p className="text-sm text-[#4A5568] mb-4 leading-relaxed">
-                Pn–Pt: 8:00–18:00
-                <br />Sobota: 9:00–13:00
-              </p>
-              <a
-                href="tel:+48000000000"
-                className="btn-primary flex items-center justify-center gap-2 text-sm mb-3"
-              >
-                <Phone className="w-4 h-4" />
-                Zadzwoń
-              </a>
-              <a
-                href="#kontakt"
-                onClick={(e) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}
-                className="btn-secondary flex items-center justify-center text-sm"
-              >
-                Wyślij wiadomość
-              </a>
-            </div>
+          <div>
+            <h4 className="font-tel text-xs uppercase tracking-[0.2em] text-gold">Kontakt</h4>
+            <ul className="mt-4 space-y-3 text-sm text-titanium">
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-copper" />
+                <span>{BUSINESS.address}<br />{BUSINESS.region}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-copper" />
+                Gwarancja {BUSINESS.warrantyMonths} mc bez limitu km
+              </li>
+              <li className="flex items-center gap-2">
+                <Star className="h-4 w-4 shrink-0 fill-gold text-gold" />
+                {BUSINESS.rating} / 5 Google · {BUSINESS.positivePct}% pozytywnych
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#4A5568]">
-            © {new Date().getFullYear()} TurboDiesel. Wszelkie prawa zastrzeżone.
-          </p>
-          <div className="flex items-center gap-6">
-            {links.info.map((l) => (
-              <a key={l} href="#" className="text-xs text-[#4A5568] hover:text-[#8A9BB0] transition-colors">
-                {l}
-              </a>
-            ))}
-          </div>
-          <button
-            onClick={scrollTop}
-            className="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center hover:border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 transition-all"
-            aria-label="Do góry"
-          >
-            <ArrowUp className="w-4 h-4" />
-          </button>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[var(--line)] pt-6 text-xs text-titanium sm:flex-row">
+          <p>© {new Date().getFullYear()} TURBO-GIT · {BUSINESS.domain}. Wszelkie prawa zastrzeżone.</p>
+          <p className="font-tel">Established {BUSINESS.establishedYear} · {BUSINESS.yearsExperience} lat inżynierii doładowania</p>
         </div>
       </div>
     </footer>

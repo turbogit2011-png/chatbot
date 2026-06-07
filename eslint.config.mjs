@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Nested standalone project with its own tooling/config.
+    "turbo-git-shop/**",
   ]),
 ]);
 

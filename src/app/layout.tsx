@@ -1,46 +1,47 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Bebas_Neue } from "next/font/google";
+import { Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const sora = Sora({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
+  variable: "--font-sora",
   display: "swap",
 });
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-bebas",
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-grotesk",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TurboDiesel – Regeneracja Turbosprężarek | Profesjonalny Serwis",
+  title: "TURBO-GIT — Laboratorium Regeneracji Turbosprężarek i DPF",
   description:
-    "Profesjonalna regeneracja turbosprężarek, wtryskiwaczy i filtrów DPF. Ponad 10 lat doświadczenia. Gwarancja 12 miesięcy. Diagnostyka CNC. Sprawdź ofertę!",
+    "Elitarna regeneracja turbosprężarek i DPF. Wyważanie VSR 301 (0,001 g/cm²), kalibracja REA-Master, oryginalne części OEM Garrett, BorgWarner, IHI, Holset. Gwarancja 24 miesiące bez limitu kilometrów.",
   keywords: [
     "regeneracja turbosprężarek",
-    "serwis turbo",
-    "naprawa turbosprężarki",
-    "turbodiesel",
-    "wtryskiwacze",
+    "TURBO-GIT",
+    "wyważanie VSR 301",
+    "REA-Master",
+    "G3-MIN-FLOW",
     "DPF",
-    "diesel",
-    "turbosprężarka",
+    "Garrett",
+    "BorgWarner",
+    "Holset",
+    "Wrocław",
   ],
-  authors: [{ name: "TurboDiesel" }],
+  authors: [{ name: "TURBO-GIT" }],
   openGraph: {
-    title: "TurboDiesel – Regeneracja Turbosprężarek",
+    title: "TURBO-GIT — Inżynieria Doładowania",
     description:
-      "Profesjonalna regeneracja turbosprężarek z gwarancją 12 miesięcy",
+      "Elitarne laboratorium regeneracji turbosprężarek i DPF. Gwarancja 24 miesiące bez limitu kilometrów.",
     type: "website",
     locale: "pl_PL",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF6B1A",
+  themeColor: "#060608",
 };
 
 export default function RootLayout({
@@ -49,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
+    <html lang="pl" className={`${sora.variable} ${spaceGrotesk.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );
