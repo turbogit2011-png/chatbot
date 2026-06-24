@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>kodo.studio — Strony internetowe, wizytówki i logo</title>
+<meta name="description" content="Tworzę nowoczesne strony internetowe, strony-wizytówki, sklepy oraz logo i identyfikację wizualną. Szybko, responsywnie, pod SEO. Bezpłatna wycena." />
+<meta name="theme-color" content="#0a0e1a" />
+<meta property="og:title" content="kodo.studio — Strony internetowe, wizytówki i logo" />
+<meta property="og:description" content="Nowoczesne strony www, wizytówki i logo. Szybko, responsywnie, pod SEO. Bezpłatna wycena." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="pl_PL" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        night:'#0a0e1a', panel:'#0e1426', card:'#121a30',
+        slatey:'#8b98b4', mist:'#cdd6ea',
+        ind:'#6366f1', 'ind-600':'#4f46e5', cyan:'#22d3ee', viol:'#a855f7',
+      },
+      fontFamily: {
+        sans:['Inter','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'],
+        display:['"Space Grotesk"','Inter','system-ui','sans-serif'],
+      },
+      boxShadow: {
+        glow:'0 0 0 1px rgba(99,102,241,.35), 0 20px 60px -20px rgba(99,102,241,.5)',
+        card:'0 24px 70px -30px rgba(0,0,0,.8)',
+      },
+      keyframes: {
+        floaty:{ '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-12px)' } },
+        blob:{ '0%,100%':{ transform:'translate(0,0) scale(1)' }, '50%':{ transform:'translate(20px,-20px) scale(1.08)' } },
+      },
+      animation: { floaty:'floaty 6s ease-in-out infinite', blob:'blob 12s ease-in-out infinite' }
+    } }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  :root { color-scheme:dark; }
+  html,body { background:#0a0e1a; }
+  ::selection { background:#6366f1; color:#fff; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#0a0e1a; }
+  ::-webkit-scrollbar-thumb { background:#26304a; border-radius:20px; border:2px solid #0a0e1a; }
+  ::-webkit-scrollbar-thumb:hover { background:#36426a; }
+  .font-display { font-family:'Space Grotesk',Inter,sans-serif; letter-spacing:-.02em; }
+  .grid-bg { background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:46px 46px; mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%); }
+  .text-grad { background:linear-gradient(110deg,#fff 0%,#cdd6ea 30%,#22d3ee 60%,#6366f1 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .text-acc { background:linear-gradient(110deg,#22d3ee,#6366f1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .btn-grad { background:linear-gradient(110deg,#6366f1,#22d3ee); }
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+  .lift { transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s; }
+  .lift:hover { transform:translateY(-6px); }
+  .nav-link { position:relative; }
+  .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,#22d3ee,#6366f1); transition:width .3s; }
+  .nav-link:hover::after,.nav-link.active::after { width:100%; }
+  .nav-link.active { color:#fff; }
+  .glass { background:rgba(14,20,38,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  details>summary { list-style:none; cursor:pointer; }
+  details>summary::-webkit-details-marker { display:none; }
+  details[open] .faq-icon { transform:rotate(45deg); }
+  .ring-card { background:linear-gradient(#121a30,#121a30) padding-box, linear-gradient(120deg,rgba(99,102,241,.5),rgba(34,211,238,.3),transparent) border-box; border:1px solid transparent; }
+  .step-btn.active { border-color:rgba(99,102,241,.45); background:rgba(99,102,241,.08); }
+  .step-btn.active .step-dot { background:linear-gradient(120deg,#6366f1,#22d3ee); color:#fff; border-color:transparent; }
+  .step-btn.active .step-title { color:#fff; }
+  .code-line span { opacity:.92; }
+  @media (prefers-reduced-motion: reduce) { .reveal{transition:none;opacity:1;transform:none;} .animate-floaty,.animate-blob{animation:none!important;} }
+</style>
+</head>
+
+<body class="bg-night text-mist font-sans antialiased">
+
+<!-- ============================ NAVBAR ============================ -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="glass border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-4">
+      <a href="#hero" class="flex items-center gap-3 group shrink-0">
+        <span class="grid place-items-center w-10 h-10 rounded-xl btn-grad shadow-[0_8px_24px_-8px_rgba(99,102,241,.8)]">
+          <i data-lucide="code-2" class="w-5 h-5 text-white"></i>
+        </span>
+        <span class="leading-none">
+          <span class="block font-display font-700 text-lg tracking-tight text-white">kodo<span class="text-acc">.studio</span></span>
+          <span class="block text-[10px] uppercase tracking-[.18em] text-slatey">Strony · Wizytówki · Logo</span>
+        </span>
+      </a>
+      <div class="hidden lg:flex items-center gap-7 text-sm font-medium text-slatey">
+        <a href="#uslugi" class="nav-link" data-nav>Usługi</a>
+        <a href="#realizacje" class="nav-link" data-nav>Realizacje</a>
+        <a href="#proces" class="nav-link" data-nav>Proces</a>
+        <a href="#cennik" class="nav-link" data-nav>Cennik</a>
+        <a href="#opinie" class="nav-link" data-nav>Opinie</a>
+        <a href="#kontakt" class="nav-link" data-nav>Kontakt</a>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="tel:+48000000000" class="hidden sm:flex items-center gap-2 text-sm text-mist hover:text-white transition-colors">
+          <i data-lucide="phone" class="w-4 h-4 text-cyan"></i><span class="font-semibold tabular-nums">000 000 000</span>
+        </a>
+        <a href="#kontakt" class="inline-flex items-center gap-2 rounded-full btn-grad px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_rgba(99,102,241,.7)]">
+          <i data-lucide="sparkles" class="w-4 h-4"></i><span class="hidden sm:inline">Bezpłatna wycena</span><span class="sm:hidden">Wycena</span>
+        </a>
+        <button id="menuBtn" aria-label="Menu" class="lg:hidden grid place-items-center w-10 h-10 rounded-lg border border-white/10 text-mist"><i data-lucide="menu" class="w-5 h-5"></i></button>
+      </div>
+    </nav>
+  </div>
+  <div id="mobileMenu" class="lg:hidden hidden glass border-b border-white/5">
+    <div class="px-6 py-4 flex flex-col gap-1 text-base">
+      <a href="#uslugi" class="py-2 text-slatey hover:text-white" data-mlink>Usługi</a>
+      <a href="#realizacje" class="py-2 text-slatey hover:text-white" data-mlink>Realizacje</a>
+      <a href="#proces" class="py-2 text-slatey hover:text-white" data-mlink>Proces</a>
+      <a href="#cennik" class="py-2 text-slatey hover:text-white" data-mlink>Cennik</a>
+      <a href="#opinie" class="py-2 text-slatey hover:text-white" data-mlink>Opinie</a>
+      <a href="#kontakt" class="py-2 text-slatey hover:text-white" data-mlink>Kontakt</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ HERO ============================ -->
+<section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden pt-[68px]">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="absolute -top-32 left-1/3 w-[700px] h-[600px] rounded-full bg-ind/25 blur-[150px] animate-blob"></div>
+  <div class="absolute top-20 -right-20 w-[500px] h-[500px] rounded-full bg-cyan/15 blur-[150px] animate-blob" style="animation-delay:-4s"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-12 gap-12 items-center">
+    <div class="lg:col-span-6">
+      <div class="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slatey mb-6">
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-cyan"></span></span>
+        Wolne terminy — odpowiadam w 24h
+      </div>
+      <h1 class="reveal font-display font-700 text-white leading-[1.02] text-[40px] sm:text-6xl lg:text-[64px] tracking-tight">
+        Strony, które <span class="text-grad">sprzedają</span>. Logo, które <span class="text-grad">zapada w pamięć</span>.
+      </h1>
+      <p class="reveal mt-6 max-w-xl text-lg text-slatey leading-relaxed">
+        Projektuję i koduję nowoczesne <span class="text-mist font-semibold">strony internetowe, wizytówki i sklepy</span>, a także <span class="text-mist font-semibold">logo i identyfikację wizualną</span>. Szybko, responsywnie i pod Google.
+      </p>
+      <div class="reveal mt-8 flex flex-col sm:flex-row gap-3">
+        <a href="#kontakt" class="group inline-flex items-center justify-center gap-2 rounded-full btn-grad px-7 py-4 font-semibold text-white hover:opacity-90 transition-all shadow-[0_14px_40px_-12px_rgba(99,102,241,.8)]">
+          Zamów bezpłatną wycenę <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+        <a href="#realizacje" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 font-semibold text-mist hover:bg-white/10 transition-all">
+          <i data-lucide="layout-grid" class="w-5 h-5 text-cyan"></i> Zobacz realizacje
+        </a>
+      </div>
+      <div class="reveal mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-slatey">
+        <span class="flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-cyan"></i> Błyskawiczne ładowanie</span>
+        <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4 text-cyan"></i> 100% RWD</span>
+        <span class="flex items-center gap-2"><i data-lucide="search" class="w-4 h-4 text-cyan"></i> SEO-ready</span>
+      </div>
+    </div>
+
+    <!-- Hero visual: okno przeglądarki + kod -->
+    <div class="lg:col-span-6 reveal">
+      <div class="relative mx-auto max-w-lg animate-floaty">
+        <!-- Okno przeglądarki -->
+        <div class="rounded-2xl border border-white/10 bg-card shadow-card overflow-hidden">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
+            <span class="w-3 h-3 rounded-full bg-red-400/80"></span><span class="w-3 h-3 rounded-full bg-yellow-400/80"></span><span class="w-3 h-3 rounded-full bg-green-400/80"></span>
+            <span class="ml-3 flex-1 rounded-md bg-night/60 border border-white/10 px-3 py-1 text-[11px] text-slatey">https://twojafirma.pl</span>
+          </div>
+          <div class="p-5">
+            <div class="h-28 rounded-xl btn-grad opacity-90 grid place-items-center mb-4">
+              <span class="font-display font-700 text-white text-xl">Twoja Marka</span>
+            </div>
+            <div class="space-y-2">
+              <div class="h-3 rounded bg-white/15 w-3/4"></div>
+              <div class="h-3 rounded bg-white/10 w-full"></div>
+              <div class="h-3 rounded bg-white/10 w-5/6"></div>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <div class="h-9 w-28 rounded-lg btn-grad"></div>
+              <div class="h-9 w-24 rounded-lg border border-white/15"></div>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-2">
+              <div class="h-16 rounded-lg bg-white/5 border border-white/10"></div>
+              <div class="h-16 rounded-lg bg-white/5 border border-white/10"></div>
+              <div class="h-16 rounded-lg bg-white/5 border border-white/10"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Karta z kodem -->
+        <div class="absolute -bottom-8 -left-6 w-60 rounded-xl border border-white/10 bg-night/95 shadow-card p-4 font-mono text-[11px] leading-relaxed">
+          <p class="code-line"><span class="text-viol">const</span> <span class="text-cyan">strona</span> = <span class="text-ind">await</span> build({</p>
+          <p class="code-line pl-3"><span class="text-slatey">design</span>: <span class="text-emerald-300">'premium'</span>,</p>
+          <p class="code-line pl-3"><span class="text-slatey">speed</span>: <span class="text-emerald-300">'100/100'</span>,</p>
+          <p class="code-line pl-3"><span class="text-slatey">seo</span>: <span class="text-yellow-300">true</span></p>
+          <p class="code-line">});</p>
+        </div>
+        <!-- Badge -->
+        <div class="absolute -top-5 -right-3 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
+          <p class="text-xl font-display font-700 text-white">100<span class="text-cyan">/100</span></p>
+          <p class="text-[10px] text-slatey">PageSpeed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="#trust" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-slatey/70 hover:text-mist transition-colors animate-floaty"><i data-lucide="chevrons-down" class="w-6 h-6"></i></a>
+</section>
+
+<!-- ============================ TRUST BAR ============================ -->
+<section id="trust" class="relative border-y border-white/5 bg-panel">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 text-center">
+      <div class="reveal"><p class="font-display font-700 text-3xl text-white"><span data-counter data-target="50">0</span>+</p><p class="mt-1 text-xs text-slatey uppercase tracking-wide">zrealizowanych projektów</p></div>
+      <div class="reveal"><p class="font-display font-700 text-3xl text-white"><span data-counter data-target="7">0</span> lat</p><p class="mt-1 text-xs text-slatey uppercase tracking-wide">doświadczenia</p></div>
+      <div class="reveal"><p class="font-display font-700 text-3xl text-white"><span data-counter data-target="100">0</span>%</p><p class="mt-1 text-xs text-slatey uppercase tracking-wide">zadowolonych klientów</p></div>
+      <div class="reveal"><p class="font-display font-700 text-3xl text-white">7–14</p><p class="mt-1 text-xs text-slatey uppercase tracking-wide">dni realizacji</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ USŁUGI ============================ -->
+<section id="uslugi" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute -left-40 top-20 w-[500px] h-[500px] rounded-full bg-ind/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Usługi</span>
+      <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Wszystko, czego potrzebuje Twój <span class="text-grad">biznes online</span>.</h2>
+      <p class="mt-5 text-slatey text-lg">Od pomysłu i logo, przez stronę, aż po sklep i opiekę techniczną — robię to kompleksowo.</p>
+    </div>
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="services"></div>
+  </div>
+</section>
+
+<!-- ============================ DLACZEGO JA ============================ -->
+<section class="relative py-24 sm:py-28 bg-panel border-y border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Dlaczego ja</span>
+      <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Konkret, nie <span class="text-grad">korpo-ściema</span>.</h2>
+      <p class="mt-5 text-slatey text-lg">Pracujesz bezpośrednio ze mną — bez pośredników, bez ukrytych kosztów, z jasnym terminem.</p>
+    </div>
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="benefits"></div>
+  </div>
+</section>
+
+<!-- ============================ REALIZACJE ============================ -->
+<section id="realizacje" class="relative py-24 sm:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Realizacje</span>
+        <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Wybrane <span class="text-grad">projekty</span>.</h2>
+      </div>
+      <div class="flex flex-wrap gap-2" id="workFilters">
+        <button class="work-filter active rounded-full border border-ind/40 bg-ind/10 px-4 py-2 text-sm font-medium text-white" data-cat="all">Wszystkie</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="www">Strony</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="sklep">Sklepy</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="logo">Logo</button>
+      </div>
+    </div>
+    <div id="workGrid" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <p class="mt-8 text-center text-sm text-slatey reveal">* Miejsca na Twoje realne projekty — podmień miniatury i opisy w kodzie (sekcja <code class="text-cyan">works</code> w JS).</p>
+  </div>
+</section>
+
+<!-- ============================ PROCES ============================ -->
+<section id="proces" class="relative py-24 sm:py-28 bg-panel border-y border-white/5 overflow-hidden">
+  <div class="absolute -right-40 top-20 w-[500px] h-[500px] rounded-full bg-cyan/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Proces</span>
+      <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Od pomysłu do <span class="text-grad">publikacji</span> — 5 kroków.</h2>
+      <p class="mt-5 text-slatey text-lg">Kliknij krok, żeby zobaczyć, co dokładnie robię na każdym etapie.</p>
+    </div>
+    <div class="mt-14 grid lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-5 reveal"><div id="stepList" class="relative flex flex-col gap-2"><div class="absolute left-[22px] top-3 bottom-3 w-px bg-white/10"></div></div></div>
+      <div class="lg:col-span-7 reveal">
+        <div class="h-full ring-card rounded-2xl p-7 sm:p-9 shadow-card relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-ind/15 blur-3xl"></div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-3"><span id="stepBadge" class="font-display font-700 text-acc text-sm">KROK 01 / 05</span><span class="h-px flex-1 bg-white/10"></span></div>
+            <div class="w-14 h-14 rounded-2xl btn-grad grid place-items-center mb-5"><i id="stepIcon" data-lucide="messages-square" class="w-7 h-7 text-white"></i></div>
+            <h3 id="stepHeading" class="font-display font-700 text-2xl sm:text-3xl text-white"></h3>
+            <p id="stepDesc" class="mt-4 text-slatey leading-relaxed"></p>
+            <div id="stepList2" class="mt-6 grid sm:grid-cols-2 gap-2 text-sm"></div>
+            <div class="mt-7 flex items-center justify-between">
+              <button id="prevStep" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-mist hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i> Wstecz</button>
+              <button id="nextStep" class="inline-flex items-center gap-2 rounded-full btn-grad px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity">Dalej <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STACK ============================ -->
+<section class="relative py-16 border-y border-white/5 bg-night">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <p class="text-center text-xs uppercase tracking-[.25em] text-slatey reveal">Technologie, na których pracuję</p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 reveal" id="stack"></div>
+  </div>
+</section>
+
+<!-- ============================ CENNIK ============================ -->
+<section id="cennik" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 top-10 w-[800px] h-[500px] rounded-full bg-ind/15 blur-[170px] opacity-70"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Cennik</span>
+      <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Proste pakiety, <span class="text-grad">jasne ceny</span>.</h2>
+      <p class="mt-5 text-slatey text-lg">Ceny orientacyjne „od" — dokładną wycenę przygotuję po krótkiej rozmowie o Twoich potrzebach.</p>
+    </div>
+    <div class="mt-14 grid lg:grid-cols-3 gap-5" id="pricing"></div>
+    <div class="mt-6 reveal rounded-2xl border border-white/10 bg-card p-6 sm:p-7 flex flex-col sm:flex-row items-center gap-5 justify-between">
+      <div class="flex items-center gap-4">
+        <span class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/20 grid place-items-center shrink-0"><i data-lucide="palette" class="w-6 h-6 text-cyan"></i></span>
+        <div><h3 class="font-display font-700 text-xl text-white">Logo i identyfikacja wizualna</h3><p class="mt-1 text-slatey text-sm">Logo od <span class="text-mist font-semibold">400 zł</span> · pełny brand (logo, kolory, wizytówka, social) od <span class="text-mist font-semibold">900 zł</span>.</p></div>
+      </div>
+      <a href="#kontakt" class="shrink-0 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-mist hover:bg-white/10 transition-colors">Zapytaj o logo <i data-lucide="arrow-right" class="w-4 h-4 text-cyan"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ OPINIE ============================ -->
+<section id="opinie" class="relative py-24 sm:py-28 bg-panel border-y border-white/5 overflow-hidden">
+  <div class="absolute -left-40 bottom-0 w-[500px] h-[500px] rounded-full bg-viol/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">Opinie</span>
+        <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Co mówią <span class="text-grad">klienci</span>.</h2>
+      </div>
+      <div class="flex items-center gap-3"><div class="flex items-center gap-1 text-cyan"><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i></div><p class="text-sm text-slatey"><span class="text-white font-semibold">5,0</span> średnia</p></div>
+    </div>
+    <div class="mt-12 relative reveal">
+      <div id="reviewTrack" class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
+      <div class="mt-6 flex items-center justify-between">
+        <p class="text-sm text-slatey">Przeciągnij lub użyj strzałek →</p>
+        <div class="flex gap-2">
+          <button id="revPrev" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-mist hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+          <button id="revNext" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-mist hover:bg-white/5 transition-colors"><i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FAQ ============================ -->
+<section id="faq" class="relative py-24 sm:py-28">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-acc">FAQ</span>
+      <h2 class="mt-4 font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Najczęstsze <span class="text-grad">pytania</span></h2>
+    </div>
+    <div id="faqList" class="mt-12 space-y-3 reveal"></div>
+  </div>
+</section>
+
+<!-- ============================ KONTAKT ============================ -->
+<section id="kontakt" class="relative py-24 sm:py-28 bg-panel border-y border-white/5 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-[900px] h-[500px] rounded-full bg-ind/15 blur-[170px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-2 gap-10 items-stretch">
+      <div class="reveal">
+        <h2 class="font-display font-700 text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Masz pomysł? <span class="text-grad">Zróbmy to.</span></h2>
+        <p class="mt-5 text-slatey text-lg max-w-md">Napisz w kilku zdaniach, czego potrzebujesz — odezwę się w ciągu 24h z propozycją i wyceną. Bez zobowiązań.</p>
+        <div class="mt-8 grid sm:grid-cols-2 gap-3">
+          <a href="tel:+48000000000" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-card p-4 hover:border-ind/40"><span class="w-11 h-11 rounded-lg bg-ind/10 grid place-items-center"><i data-lucide="phone" class="w-5 h-5 text-cyan"></i></span><span><span class="block text-xs text-slatey">Zadzwoń</span><span class="block font-semibold text-white">000 000 000</span></span></a>
+          <a href="https://wa.me/48000000000" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-card p-4 hover:border-ind/40"><span class="w-11 h-11 rounded-lg bg-ind/10 grid place-items-center"><i data-lucide="message-circle" class="w-5 h-5 text-cyan"></i></span><span><span class="block text-xs text-slatey">Napisz</span><span class="block font-semibold text-white">WhatsApp</span></span></a>
+          <a href="mailto:kontakt@kodo.studio" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-card p-4 hover:border-ind/40"><span class="w-11 h-11 rounded-lg bg-ind/10 grid place-items-center"><i data-lucide="mail" class="w-5 h-5 text-cyan"></i></span><span><span class="block text-xs text-slatey">E-mail</span><span class="block font-semibold text-white">kontakt@kodo.studio</span></span></a>
+          <a href="#" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-card p-4 hover:border-ind/40"><span class="w-11 h-11 rounded-lg bg-ind/10 grid place-items-center"><i data-lucide="github" class="w-5 h-5 text-cyan"></i></span><span><span class="block text-xs text-slatey">Portfolio</span><span class="block font-semibold text-white">GitHub / Behance</span></span></a>
+        </div>
+        <div class="mt-6 rounded-2xl ring-card p-6">
+          <p class="flex items-center gap-2 text-sm font-semibold text-white"><i data-lucide="badge-check" class="w-4 h-4 text-cyan"></i> Gwarancja satysfakcji</p>
+          <p class="mt-1 text-sm text-slatey">Poprawki w ramach ustalonego zakresu aż do akceptacji. Płacisz dopiero, gdy projekt Ci się podoba.</p>
+        </div>
+      </div>
+      <div class="reveal">
+        <form id="contactForm" class="rounded-2xl border border-white/10 bg-card p-7 sm:p-8 shadow-card" novalidate>
+          <h3 class="font-display font-700 text-2xl text-white mb-6">Bezpłatna wycena</h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block text-sm text-slatey mb-1.5" for="fName">Imię *</label><input id="fName" name="name" required class="w-full rounded-xl border border-white/15 bg-night px-4 py-3 text-mist outline-none focus:border-ind transition-colors" placeholder="Jan Kowalski" /></div>
+            <div><label class="block text-sm text-slatey mb-1.5" for="fContact">E-mail lub telefon *</label><input id="fContact" name="contact" required class="w-full rounded-xl border border-white/15 bg-night px-4 py-3 text-mist outline-none focus:border-ind transition-colors" placeholder="jan@email.pl / 600 000 000" /></div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm text-slatey mb-1.5">Czego potrzebujesz?</label>
+              <div class="flex flex-wrap gap-2" id="needTags"></div>
+            </div>
+            <div class="sm:col-span-2"><label class="block text-sm text-slatey mb-1.5" for="fMsg">Opis projektu</label><textarea id="fMsg" name="message" rows="3" class="w-full rounded-xl border border-white/15 bg-night px-4 py-3 text-mist outline-none focus:border-ind transition-colors resize-none" placeholder="np. strona-wizytówka dla zakładu fryzjerskiego + logo..."></textarea></div>
+          </div>
+          <label class="mt-4 flex items-start gap-3 text-xs text-slatey"><input type="checkbox" required class="mt-0.5 accent-ind w-4 h-4" /><span>Zgadzam się na kontakt w sprawie wyceny zgodnie z polityką prywatności. *</span></label>
+          <button type="submit" class="group mt-6 flex items-center justify-center gap-2 w-full rounded-full btn-grad px-6 py-4 font-semibold text-white hover:opacity-90 transition-all shadow-[0_14px_40px_-12px_rgba(99,102,241,.8)]">Wyślij zapytanie <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i></button>
+          <p class="mt-3 text-center text-xs text-slatey">Odpowiadam zwykle w ciągu kilku godzin.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="border-t border-white/10 bg-night">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="grid place-items-center w-9 h-9 rounded-xl btn-grad"><i data-lucide="code-2" class="w-4 h-4 text-white"></i></span>
+          <span class="font-display font-700 text-lg text-white">kodo<span class="text-acc">.studio</span></span>
+        </div>
+        <p class="text-sm text-slatey leading-relaxed">Strony internetowe, wizytówki i logo dla firm, które chcą wyglądać profesjonalnie.</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Usługi</p>
+        <ul class="space-y-2 text-sm text-slatey">
+          <li><a href="#uslugi" class="hover:text-white transition-colors">Strony internetowe</a></li>
+          <li><a href="#uslugi" class="hover:text-white transition-colors">Strony-wizytówki</a></li>
+          <li><a href="#uslugi" class="hover:text-white transition-colors">Sklepy internetowe</a></li>
+          <li><a href="#uslugi" class="hover:text-white transition-colors">Logo i branding</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Kontakt</p>
+        <ul class="space-y-2 text-sm text-slatey">
+          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-cyan"></i> 000 000 000</li>
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-cyan"></i> kontakt@kodo.studio</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-cyan"></i> Polska · zdalnie</li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Dlaczego ja</p>
+        <ul class="space-y-2 text-sm text-slatey">
+          <li class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-cyan"></i> Szybka realizacja</li>
+          <li class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-cyan"></i> Uczciwe ceny</li>
+          <li class="flex items-center gap-2"><i data-lucide="headphones" class="w-4 h-4 text-cyan"></i> Wsparcie po wdrożeniu</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slatey">
+      <p>© <span id="year"></span> kodo.studio. Wszelkie prawa zastrzeżone.</p>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Polityka prywatności</a>
+        <a href="#hero" class="hover:text-white transition-colors flex items-center gap-1">Do góry <i data-lucide="arrow-up" class="w-3 h-3"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-close></div>
+  <div class="relative w-full max-w-md rounded-2xl border border-white/10 bg-card p-8 text-center shadow-card">
+    <div class="mx-auto w-16 h-16 rounded-full btn-grad grid place-items-center mb-5"><i data-lucide="check-check" class="w-8 h-8 text-white"></i></div>
+    <h3 class="font-display font-700 text-2xl text-white">Zapytanie wysłane!</h3>
+    <p class="mt-3 text-slatey">Dzięki! Odezwę się w ciągu 24h z propozycją i wyceną.</p>
+    <button data-close class="mt-6 inline-flex items-center justify-center gap-2 rounded-full btn-grad px-6 py-3 font-semibold text-white hover:opacity-90 transition-opacity">Super <i data-lucide="thumbs-up" class="w-4 h-4"></i></button>
+    <p class="mt-4 text-[11px] text-slatey">Wersja demo — formularz nie wysyła jeszcze danych. Instrukcja podpięcia na końcu pliku.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const renderIcons = () => window.lucide && window.lucide.createIcons();
+  renderIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('shadow-[0_10px_40px_-20px_rgba(0,0,0,.9)]', window.scrollY > 20), { passive:true });
+  const menuBtn = document.getElementById('menuBtn'), mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  document.querySelectorAll('[data-mlink]').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+  const navLinks = [...document.querySelectorAll('[data-nav]')];
+  const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const navObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { const id='#'+e.target.id; navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href')===id)); } }), { rootMargin:'-45% 0px -50% 0px' });
+  sections.forEach(s => navObs.observe(s));
+
+  const revObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } }), { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  const animateCounter = (el) => {
+    const target=+el.dataset.target, dur=1500, start=performance.now();
+    const step=(now)=>{ const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3); el.textContent=Math.floor(eased*target).toLocaleString('pl-PL'); if(p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  const cObs=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ animateCounter(e.target); cObs.unobserve(e.target);} }),{threshold:0.6});
+  document.querySelectorAll('[data-counter]').forEach(el=>cObs.observe(el));
+
+  /* USŁUGI */
+  const services=[
+    ['monitor','Strony internetowe','Nowoczesne, szybkie strony firmowe i landing page — zaprojektowane tak, żeby zamieniać odwiedzających w klientów.','Strona firmowa · landing page · blog'],
+    ['id-card','Strony-wizytówki','Elegancka, jednostronicowa wizytówka Twojej firmy w sieci. Idealna na start — gotowa w kilka dni.','One-page · kontakt · mapa · galeria'],
+    ['shopping-cart','Sklepy internetowe','Sprzedawaj online — sklep z koszykiem, płatnościami i panelem do zarządzania produktami.','WooCommerce · Shopify · płatności'],
+    ['pen-tool','Logo i identyfikacja','Logo, dobór kolorów i fontów, wizytówki, grafiki na social media — spójny, zapadający w pamięć wizerunek.','Logo · brandbook · social · wizytówki'],
+    ['search','SEO i Google','Optymalizacja pod wyszukiwarki i konfiguracja Google (Maps, Analytics), żeby klienci Cię znaleźli.','SEO on-page · Google Maps · Analytics'],
+    ['life-buoy','Hosting i opieka','Hosting, domena, certyfikat SSL, kopie zapasowe i aktualizacje — Ty prowadzisz biznes, ja pilnuję techniki.','Hosting · SSL · backup · wsparcie'],
+  ];
+  document.getElementById('services').innerHTML=services.map(([i,t,d,tags])=>`
+    <article class="reveal in lift group rounded-2xl border border-white/10 bg-card p-7 hover:border-ind/40 hover:shadow-glow">
+      <div class="w-12 h-12 rounded-xl btn-grad grid place-items-center mb-5 group-hover:scale-110 transition-transform"><i data-lucide="${i}" class="w-6 h-6 text-white"></i></div>
+      <h3 class="font-display font-700 text-xl text-white">${t}</h3>
+      <p class="mt-3 text-slatey leading-relaxed">${d}</p>
+      <p class="mt-4 text-xs text-cyan/90 font-medium">${tags}</p>
+    </article>`).join('');
+
+  /* BENEFITY */
+  const benefits=[
+    ['user-round','Bezpośredni kontakt','Rozmawiasz ze mną, nie z konsultantem. Szybkie decyzje, zero „przekazania do działu".'],
+    ['zap','Ekspresowe terminy','Wizytówka nawet w kilka dni. Trzymam się ustalonego terminu — albo informuję z wyprzedzeniem.'],
+    ['wallet','Uczciwe ceny','Stała wycena przed startem. Bez ukrytych kosztów i niespodzianek na końcu.'],
+    ['smartphone','Mobile-first','Każdy projekt świetnie wygląda na telefonie, tablecie i komputerze. Sprawdzam na realnych urządzeniach.'],
+    ['gauge-circle','Szybkość i SEO','Lekki, czysty kod, optymalizacja obrazów i podstawy SEO w standardzie — Google to lubi.'],
+    ['refresh-cw','Wsparcie po wdrożeniu','Nie znikam po publikacji. Pomagam z aktualizacjami, zmianami i rozbudową strony.'],
+  ];
+  document.getElementById('benefits').innerHTML=benefits.map(([i,t,d])=>`
+    <article class="reveal in lift rounded-2xl border border-white/10 bg-card p-7 hover:border-cyan/40">
+      <div class="w-11 h-11 rounded-xl bg-cyan/10 border border-cyan/20 grid place-items-center mb-4"><i data-lucide="${i}" class="w-5 h-5 text-cyan"></i></div>
+      <h3 class="font-display font-700 text-lg text-white">${t}</h3>
+      <p class="mt-2 text-slatey leading-relaxed text-sm">${d}</p>
+    </article>`).join('');
+
+  /* REALIZACJE (placeholdery — podmień na realne) */
+  const palettes={www:'from-ind/30 to-cyan/20',sklep:'from-cyan/30 to-emerald-400/20',logo:'from-viol/30 to-ind/20'};
+  const works=[
+    ['www','Salon fryzjerski „Bella”','Strona-wizytówka','Rezerwacje online, galeria, mapa'],
+    ['sklep','Sklep z kawą „Crema”','Sklep internetowy','WooCommerce, płatności, blog'],
+    ['logo','Logo „NordBud”','Logo + branding','Identyfikacja dla firmy budowlanej'],
+    ['www','Kancelaria prawna „Lex”','Strona firmowa','Profesjonalna, pod SEO lokalne'],
+    ['logo','Logo „FitZone”','Logo + social','Dynamiczna marka dla siłowni'],
+    ['sklep','Sklep „EcoHome”','Sklep internetowy','200+ produktów, filtry, koszyk'],
+  ];
+  const workGrid=document.getElementById('workGrid');
+  const renderWorks=(cat='all')=>{ workGrid.innerHTML=works.filter(w=>cat==='all'||w[0]===cat).map(w=>`
+    <article class="reveal in lift rounded-2xl border border-white/10 bg-card overflow-hidden hover:border-ind/40 group">
+      <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${palettes[w[0]]||'from-ind/30 to-cyan/20'}">
+        <div class="absolute inset-0 grid-bg opacity-30"></div>
+        <!-- mini-mockup okna -->
+        <div class="absolute inset-5 rounded-lg border border-white/15 bg-night/70 backdrop-blur-sm overflow-hidden group-hover:scale-[1.03] transition-transform duration-500">
+          <div class="flex items-center gap-1.5 px-3 py-2 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-white/30"></span><span class="w-2 h-2 rounded-full bg-white/30"></span><span class="w-2 h-2 rounded-full bg-white/30"></span></div>
+          <div class="p-3 space-y-2"><div class="h-8 rounded btn-grad opacity-80"></div><div class="h-2 rounded bg-white/20 w-2/3"></div><div class="h-2 rounded bg-white/10 w-full"></div><div class="h-2 rounded bg-white/10 w-4/5"></div></div>
+        </div>
+        <span class="absolute top-3 left-3 z-10 rounded-full bg-black/50 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-mist">${w[2]}</span>
+      </div>
+      <div class="p-6">
+        <h3 class="font-display font-700 text-lg text-white">${w[1]}</h3>
+        <p class="mt-1 text-sm text-slatey">${w[3]}</p>
+      </div>
+    </article>`).join(''); renderIcons(); };
+  renderWorks();
+  document.querySelectorAll('.work-filter').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.work-filter').forEach(b=>{ b.classList.remove('active','border-ind/40','bg-ind/10','text-white'); b.classList.add('border-white/15','text-slatey'); });
+    btn.classList.add('active','border-ind/40','bg-ind/10','text-white'); btn.classList.remove('border-white/15','text-slatey');
+    renderWorks(btn.dataset.cat);
+  }));
+
+  /* PROCES */
+  const steps=[
+    ['Rozmowa i brief','messages-square','Zaczynamy od krótkiej rozmowy: czym się zajmujesz, do kogo kierujesz ofertę i co ma osiągać strona. Zbieram materiały i ustalam zakres.',['Bezpłatna konsultacja','Analiza potrzeb','Wycena i termin']],
+    ['Projekt i makieta','layout-template','Przygotowuję projekt graficzny (makietę) strony lub logo. Widzisz, jak to będzie wyglądać, zanim powstanie kod — i nanosimy poprawki.',['Projekt układu','Dobór kolorów i fontów','Akceptacja makiety']],
+    ['Kodowanie / produkcja','code-2','Zamieniam projekt w szybką, responsywną stronę. Czysty kod, optymalizacja obrazów, podstawy SEO i formularz kontaktowy.',['Responsywny kod','Optymalizacja','Formularze i integracje']],
+    ['Publikacja','rocket','Konfiguruję domenę, hosting i certyfikat SSL, podpinam Google i publikuję stronę. Wszystko gotowe do działania.',['Domena + hosting','SSL','Google Analytics / Maps']],
+    ['Opieka i rozwój','life-buoy','Po starcie zostaję do dyspozycji: aktualizacje, kopie zapasowe, zmiany treści i rozbudowa, gdy biznes urośnie.',['Aktualizacje','Kopie zapasowe','Wsparcie i rozbudowa']],
+  ];
+  const stepList=document.getElementById('stepList');
+  steps.forEach((s,i)=>{ const b=document.createElement('button');
+    b.className='step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all';
+    b.innerHTML=`<span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-card text-sm font-display font-700 text-slatey shrink-0">${String(i+1).padStart(2,'0')}</span><span class="step-title font-semibold text-slatey">${s[0]}</span>`;
+    b.addEventListener('click',()=>setStep(i)); stepList.appendChild(b); });
+  const stepBtns=[...document.querySelectorAll('.step-btn')];
+  const stepHeading=document.getElementById('stepHeading'),stepDesc=document.getElementById('stepDesc'),stepBadge=document.getElementById('stepBadge'),stepIcon=document.getElementById('stepIcon'),stepList2=document.getElementById('stepList2');
+  let curStep=0;
+  const setStep=(i)=>{ curStep=(i+steps.length)%steps.length; const s=steps[curStep];
+    stepBtns.forEach((b,idx)=>b.classList.toggle('active',idx===curStep));
+    stepHeading.textContent=s[0]; stepDesc.textContent=s[2];
+    stepBadge.textContent=`KROK ${String(curStep+1).padStart(2,'0')} / 05`;
+    stepIcon.setAttribute('data-lucide',s[1]);
+    stepList2.innerHTML=s[3].map(x=>`<span class="flex items-center gap-2 text-mist"><i data-lucide="check" class="w-4 h-4 text-cyan"></i> ${x}</span>`).join('');
+    renderIcons(); };
+  document.getElementById('prevStep').addEventListener('click',()=>setStep(curStep-1));
+  document.getElementById('nextStep').addEventListener('click',()=>setStep(curStep+1));
+  setStep(0);
+
+  /* STACK */
+  const stack=['HTML5','CSS3','JavaScript','Tailwind','React','Next.js','WordPress','WooCommerce','Figma','Node.js'];
+  document.getElementById('stack').innerHTML=stack.map(s=>`<span class="font-display font-600 text-base sm:text-lg text-mist/60 hover:text-white transition-colors">${s}</span>`).join('');
+
+  /* CENNIK */
+  const pricing=[
+    ['Wizytówka','od 800 zł','Idealna na start — elegancka strona jednostronicowa.',['Strona one-page','Sekcja o firmie + oferta','Formularz / mapa / kontakt','Responsywność (RWD)','Podpięcie domeny'],false],
+    ['Strona firmowa','od 1 800 zł','Rozbudowana strona z podstronami i blogiem.',['Do 5–7 podstron','Indywidualny projekt','Blog / aktualności','SEO on-page','Google Analytics + Maps','30 dni wsparcia'],true],
+    ['Sklep internetowy','od 3 500 zł','Sprzedawaj online z pełnym panelem.',['Sklep z koszykiem','Bramki płatności','Panel produktów','Integracje wysyłki','Szkolenie z obsługi'],false],
+  ];
+  document.getElementById('pricing').innerHTML=pricing.map(([name,price,desc,feats,hot])=>`
+    <article class="reveal in relative rounded-2xl ${hot?'ring-card shadow-glow':'border border-white/10 bg-card'} p-7 flex flex-col">
+      ${hot?'<span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full btn-grad px-3 py-1 text-[11px] font-semibold text-white">Najczęściej wybierane</span>':''}
+      <h3 class="font-display font-700 text-xl text-white">${name}</h3>
+      <p class="mt-2 font-display font-700 text-3xl text-grad">${price}</p>
+      <p class="mt-2 text-sm text-slatey">${desc}</p>
+      <ul class="mt-5 space-y-2 text-sm flex-1">${feats.map(f=>`<li class="flex items-start gap-2 text-mist"><i data-lucide="check" class="w-4 h-4 text-cyan mt-0.5 shrink-0"></i> ${f}</li>`).join('')}</ul>
+      <a href="#kontakt" class="mt-6 inline-flex items-center justify-center gap-2 rounded-full ${hot?'btn-grad text-white':'border border-white/15 bg-white/5 text-mist hover:bg-white/10'} px-5 py-3 text-sm font-semibold transition-all">Wybieram <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </article>`).join('');
+  renderIcons();
+
+  /* OPINIE */
+  const reviews=[
+    ['Magda — salon kosmetyczny','Strona-wizytówka','Strona gotowa w 4 dni, dokładnie jak chciałam. Klientki same piszą, że ładna i czytelna. Polecam!'],
+    ['Paweł — firma budowlana','Logo + strona','Zrobił mi logo i stronę od zera. Konkret, szybko, bez ściemy. Telefon dzwoni częściej.'],
+    ['Ola — sklep z rękodziełem','Sklep internetowy','Sklep działa rewelacyjnie, płatności bezproblemowe. Pokazał jak wszystkim zarządzać. Wielkie dzięki!'],
+    ['Tomek — kancelaria','Strona firmowa','Profesjonalne podejście i świetny kontakt. Strona wygląda poważnie i wzbudza zaufanie klientów.'],
+    ['Kasia — kawiarnia','Logo + social','Logo i grafiki na Instagram super spójne. Marka od razu wygląda dojrzalej. Mega zadowolona.'],
+  ];
+  document.getElementById('reviewTrack').innerHTML=reviews.map(r=>`
+    <article class="snap-start shrink-0 w-[300px] sm:w-[360px] rounded-2xl border border-white/10 bg-card p-7 flex flex-col">
+      <div class="text-cyan text-lg mb-3">★★★★★</div>
+      <p class="text-mist leading-relaxed flex-1">„${r[2]}”</p>
+      <div class="mt-5 flex items-center gap-3 pt-5 border-t border-white/10">
+        <span class="grid place-items-center w-10 h-10 rounded-full btn-grad text-white font-display font-700">${r[0].charAt(0)}</span>
+        <span><span class="block text-sm font-semibold text-white">${r[0]}</span><span class="block text-xs text-slatey">${r[1]}</span></span>
+      </div>
+    </article>`).join('');
+  const rt=document.getElementById('reviewTrack');
+  document.getElementById('revNext').addEventListener('click',()=>rt.scrollBy({left:380,behavior:'smooth'}));
+  document.getElementById('revPrev').addEventListener('click',()=>rt.scrollBy({left:-380,behavior:'smooth'}));
+
+  /* FAQ */
+  const faqs=[
+    ['Ile kosztuje strona internetowa?','Strona-wizytówka zaczyna się od ok. 800 zł, strona firmowa od ok. 1 800 zł, a sklep od ok. 3 500 zł. Dokładną cenę podam po krótkiej rozmowie o Twoich potrzebach — wycena jest bezpłatna i niezobowiązująca.'],
+    ['Jak długo trwa realizacja?','Wizytówka zwykle 3–7 dni, strona firmowa 1–2 tygodnie, sklep 2–4 tygodnie. Termin ustalamy na starcie i się go trzymam.'],
+    ['Czy zajmujesz się też logo?','Tak — projektuję logo oraz pełną identyfikację wizualną (kolory, fonty, wizytówki, grafiki na social media). Mogę zrobić samo logo albo logo razem ze stroną.'],
+    ['Czy strona będzie działać na telefonie?','Oczywiście. Każdy projekt jest w pełni responsywny (RWD) i testowany na telefonie, tablecie i komputerze.'],
+    ['Czy pomożesz z domeną i hostingiem?','Tak. Doradzę, skonfiguruję domenę, hosting i certyfikat SSL, a stronę opublikuję „pod klucz". Mogę też przejąć opiekę techniczną na stałe.'],
+    ['Czy będę mógł sam edytować stronę?','Jeśli chcesz — tak. Robię strony na systemach (np. WordPress), które pozwalają samodzielnie edytować treści, i pokazuję jak to robić. Mogę też zająć się zmianami za Ciebie.'],
+    ['Czy zajmujesz się pozycjonowaniem (SEO)?','Każdą stronę przygotowuję z podstawami SEO (struktura, szybkość, meta-dane, mapa Google). Oferuję też dalszą optymalizację i pozycjonowanie jako osobną usługę.'],
+    ['Jak wygląda płatność?','Zwykle zaliczka na start i reszta po akceptacji gotowego projektu. Szczegóły ustalamy indywidualnie — wszystko jasne i na piśmie.'],
+  ];
+  document.getElementById('faqList').innerHTML=faqs.map(f=>`
+    <details class="group rounded-2xl border border-white/10 bg-card overflow-hidden">
+      <summary class="flex items-center justify-between gap-4 p-5 sm:p-6">
+        <span class="font-semibold text-mist group-hover:text-white transition-colors">${f[0]}</span>
+        <span class="faq-icon shrink-0 grid place-items-center w-8 h-8 rounded-full border border-white/15 text-cyan transition-transform"><i data-lucide="plus" class="w-4 h-4"></i></span>
+      </summary>
+      <div class="px-5 sm:px-6 pb-6 -mt-1 text-slatey leading-relaxed">${f[1]}</div>
+    </details>`).join('');
+  renderIcons();
+
+  /* TAGI POTRZEB (formularz) */
+  const needs=['Strona internetowa','Strona-wizytówka','Sklep internetowy','Logo','Branding','SEO','Opieka / hosting'];
+  const needTags=document.getElementById('needTags');
+  needTags.innerHTML=needs.map(n=>`<button type="button" class="need-tag rounded-full border border-white/15 px-3 py-1.5 text-sm text-slatey hover:border-ind/40 transition-colors" data-v="${n}">${n}</button>`).join('');
+  const selected=new Set();
+  needTags.querySelectorAll('.need-tag').forEach(t=>t.addEventListener('click',()=>{
+    const v=t.dataset.v;
+    if(selected.has(v)){ selected.delete(v); t.classList.remove('bg-ind/15','border-ind/50','text-white'); t.classList.add('border-white/15','text-slatey'); }
+    else { selected.add(v); t.classList.add('bg-ind/15','border-ind/50','text-white'); t.classList.remove('border-white/15','text-slatey'); }
+  }));
+
+  /* FORMULARZ + MODAL */
+  const form=document.getElementById('contactForm'), modal=document.getElementById('modal');
+  const openModal=()=>{ modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow='hidden'; };
+  const closeModal=()=>{ modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow=''; };
+  form.addEventListener('submit',(e)=>{ e.preventDefault(); if(!form.checkValidity()){ form.reportValidity(); return; } openModal(); form.reset(); selected.clear(); needTags.querySelectorAll('.need-tag').forEach(t=>{t.classList.remove('bg-ind/15','border-ind/50','text-white');t.classList.add('border-white/15','text-slatey');}); });
+  modal.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeModal));
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+})();
+</script>
+
+<!-- =================================================================
+     STRONA-OFERTA FREELANCERA IT (kodo.studio) — samowystarczalny plik
+     CDN: Tailwind, Lucide, Google Fonts. Brak zewnętrznych zdjęć (czysty kod + CSS).
+
+     >>> CO PODMIENIĆ NA SWOJE:
+     1) NAZWA / LOGO: „kodo.studio" w navbarze i stopce — wpisz swoją nazwę lub imię.
+        Akcent/kolory zmienisz w tailwind.config (ind / cyan / viol).
+     2) KONTAKT: numer „000 000 000", e-mail „kontakt@kodo.studio",
+        linki tel:/wa.me oraz GitHub/Behance — wstaw prawdziwe.
+     3) REALIZACJE: tablica `works` w JS — podmień nazwy/opisy; w miejsce mock-upów
+        możesz wstawić <img src="..."> z zrzutami swoich stron.
+     4) CENY: tablica `pricing` oraz blok logo — dostosuj kwoty do siebie.
+     5) OPINIE: tablica `reviews` — wstaw prawdziwe opinie klientów.
+
+     >>> FORMULARZ: w handlerze submit zamień openModal() na wysyłkę do Formspree/
+         własnego backendu (FormData + fetch), aby zapytania trafiały na Twój e-mail.
+     >>> ROZWÓJ: hosting statyczny (Netlify/Vercel/Cloudflare Pages), własna domena,
+         dane strukturalne JSON-LD (LocalBusiness), Google Analytics.
+================================================================= -->
+</body>
+</html>
