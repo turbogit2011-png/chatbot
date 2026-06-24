@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Turbo Diesel London — Remanufactured Turbochargers &amp; Injectors</title>
+<meta name="description" content="Turbo Diesel London Limited — over 10 years remanufacturing turbochargers and diesel injectors. OEM parts, VSR balancing, full testing, 14-day money-back warranty, core deposit refund. Ready to install. Based in London, worldwide shipping." />
+<meta name="theme-color" content="#0a0a0b" />
+<meta property="og:title" content="Turbo Diesel London — Remanufactured Turbochargers &amp; Injectors" />
+<meta property="og:description" content="Where price meets quality. Remanufactured turbos &amp; injectors, ready to install, 14-day money-back warranty." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_GB" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { ink:'#0a0a0b', ink2:'#111114', ink3:'#16161a', steel:'#9aa3ad', silver:'#dfe4ea', power:'#c8102e', 'power-600':'#a50d26', 'power-400':'#e23150' },
+      fontFamily: { sans:['Inter','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'], display:['Archivo','Inter','system-ui','sans-serif'] },
+      boxShadow: { glow:'0 0 0 1px rgba(200,16,46,.35), 0 20px 60px -20px rgba(200,16,46,.55)', card:'0 24px 70px -30px rgba(0,0,0,.85)' },
+      keyframes: { spinSlow:{ to:{ transform:'rotate(360deg)' } }, floaty:{ '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-10px)' } } },
+      animation: { 'spin-slow':'spinSlow 16s linear infinite', 'spin-med':'spinSlow 8s linear infinite', floaty:'floaty 6s ease-in-out infinite' }
+    } }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  :root { color-scheme:dark; }
+  html,body { background:#0a0a0b; }
+  ::selection { background:#c8102e; color:#fff; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#0a0a0b; }
+  ::-webkit-scrollbar-thumb { background:#26262c; border-radius:20px; border:2px solid #0a0a0b; }
+  .font-display { font-family:'Archivo',Inter,sans-serif; letter-spacing:-.02em; }
+  .grid-bg { background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%); }
+  .carbon { background-color:#0d0d10; background-image:linear-gradient(27deg,#15151a 5px,transparent 5px),linear-gradient(207deg,#15151a 5px,transparent 5px),linear-gradient(27deg,#15151a 5px,transparent 5px),linear-gradient(207deg,#15151a 5px,transparent 5px); background-size:20px 20px; background-position:0 0,10px 5px,10px 10px,0 5px; opacity:.5; }
+  .text-gradient { background:linear-gradient(120deg,#fff 0%,#dfe4ea 35%,#e23150 75%,#c8102e 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .text-power-grad { background:linear-gradient(120deg,#e23150,#c8102e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+  .lift { transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s; }
+  .lift:hover { transform:translateY(-6px); }
+  .turbo-ring { background:conic-gradient(from 0deg,transparent 0 70%,rgba(200,16,46,0) 70%,#c8102e 85%,transparent 100%); }
+  .nav-link { position:relative; }
+  .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:#c8102e; transition:width .3s; }
+  .nav-link:hover::after,.nav-link.active::after { width:100%; }
+  .nav-link.active { color:#fff; }
+  .glass { background:rgba(17,17,20,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  details>summary { list-style:none; cursor:pointer; }
+  details>summary::-webkit-details-marker { display:none; }
+  details[open] .faq-icon { transform:rotate(45deg); }
+  .hot { width:22px; height:22px; border-radius:9999px; background:#c8102e; transition:transform .25s; }
+  .hot::after { content:''; position:absolute; inset:-8px; border-radius:9999px; border:1px solid rgba(200,16,46,.5); animation:hotPing 2s ease-out infinite; }
+  .hot:hover,.hot.active { transform:scale(1.25); }
+  .hot.active { background:#fff; box-shadow:0 0 0 4px rgba(200,16,46,.5); }
+  @keyframes hotPing { 0%{transform:scale(.6);opacity:1} 100%{transform:scale(1.4);opacity:0} }
+  .part-tab.active { background:#c8102e; border-color:#c8102e; color:#fff; }
+  .calc-cat.active { background:rgba(200,16,46,.15); border-color:#c8102e; color:#fff; }
+  .step-btn.active { border-color:rgba(200,16,46,.4); background:rgba(200,16,46,.06); }
+  .step-btn.active .step-dot { background:#c8102e; color:#fff; border-color:#c8102e; }
+  .step-btn.active .step-title { color:#fff; }
+  @media (prefers-reduced-motion: reduce) { .reveal { transition:none; opacity:1; transform:none; } .animate-spin-slow,.animate-spin-med,.animate-floaty { animation:none !important; } }
+</style>
+</head>
+
+<body class="bg-ink text-silver font-sans antialiased">
+
+<!-- ===== VECTOR GRAPHICS LIBRARY (own SVG — no third-party photos) ===== -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+  <radialGradient id="hubGrad" cx="38%" cy="32%" r="75%"><stop offset="0%" stop-color="#f4f6f8"/><stop offset="45%" stop-color="#aeb6bf"/><stop offset="100%" stop-color="#3a3d44"/></radialGradient>
+  <linearGradient id="bladeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eef1f4"/><stop offset="55%" stop-color="#9aa3ad"/><stop offset="100%" stop-color="#4a4e56"/></linearGradient>
+  <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b606a"/><stop offset="50%" stop-color="#cfd6dd"/><stop offset="100%" stop-color="#3a3d44"/></linearGradient>
+  <linearGradient id="powerGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e23150"/><stop offset="100%" stop-color="#a50d26"/></linearGradient>
+  <path id="tgBlade" d="M -7,-26 C -14,-48 -28,-62 -13,-86 C -4,-81 4,-81 13,-86 C 28,-62 14,-48 7,-26 C 2,-21 -2,-21 -7,-26 Z" fill="url(#bladeGrad)" stroke="#2a2d33" stroke-width="1"/>
+  <symbol id="tg-wheel" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="96" fill="#16161a"/><circle cx="100" cy="100" r="95" fill="none" stroke="url(#ringGrad)" stroke-width="3"/><circle cx="100" cy="100" r="88" fill="none" stroke="#2a2d33" stroke-width="6"/>
+    <g transform="translate(100,100)"><use href="#tgBlade" transform="rotate(0)"/><use href="#tgBlade" transform="rotate(32.7)"/><use href="#tgBlade" transform="rotate(65.4)"/><use href="#tgBlade" transform="rotate(98.1)"/><use href="#tgBlade" transform="rotate(130.9)"/><use href="#tgBlade" transform="rotate(163.6)"/><use href="#tgBlade" transform="rotate(196.3)"/><use href="#tgBlade" transform="rotate(229.0)"/><use href="#tgBlade" transform="rotate(261.8)"/><use href="#tgBlade" transform="rotate(294.5)"/><use href="#tgBlade" transform="rotate(327.2)"/></g>
+    <circle cx="100" cy="100" r="30" fill="url(#hubGrad)" stroke="#2a2d33" stroke-width="1.5"/><circle cx="100" cy="100" r="11" fill="#2a2d33"/><circle cx="100" cy="100" r="5" fill="url(#ringGrad)"/><circle cx="92" cy="92" r="2.4" fill="#fff" opacity=".7"/>
+  </symbol>
+  <symbol id="tg-unit" viewBox="0 0 220 160">
+    <rect x="86" y="58" width="48" height="44" rx="8" fill="#33363d" stroke="#4a4e56" stroke-width="2"/><rect x="92" y="64" width="36" height="32" rx="5" fill="#22242a"/><rect x="100" y="40" width="20" height="20" rx="4" fill="#3a3d44" stroke="#4a4e56" stroke-width="1.5"/>
+    <circle cx="62" cy="80" r="46" fill="url(#ringGrad)" stroke="#2a2d33" stroke-width="2"/><circle cx="62" cy="80" r="34" fill="#1c1e23"/><circle cx="62" cy="80" r="33" fill="none" stroke="#3a3d44" stroke-width="3"/><path d="M 62,52 a 28,28 0 0 1 24,14" fill="none" stroke="#6b7079" stroke-width="3" stroke-linecap="round"/><circle cx="62" cy="80" r="9" fill="url(#hubGrad)"/>
+    <rect x="20" y="66" width="22" height="28" rx="5" fill="url(#ringGrad)" stroke="#2a2d33" stroke-width="1.5"/>
+    <circle cx="158" cy="80" r="40" fill="url(#powerGrad)" stroke="#7a0c1e" stroke-width="2"/><circle cx="158" cy="80" r="29" fill="#3a0a14"/><circle cx="158" cy="80" r="8" fill="#d9dde2"/><rect x="178" y="64" width="24" height="32" rx="5" fill="url(#powerGrad)" stroke="#7a0c1e" stroke-width="1.5"/>
+  </symbol>
+  <!-- Diesel injector silhouette -->
+  <symbol id="tg-injector" viewBox="0 0 120 220">
+    <rect x="40" y="10" width="40" height="26" rx="6" fill="url(#ringGrad)" stroke="#2a2d33" stroke-width="1.5"/>
+    <rect x="30" y="34" width="60" height="14" rx="4" fill="#3a3d44"/>
+    <rect x="46" y="48" width="28" height="120" rx="6" fill="url(#hubGrad)" stroke="#2a2d33" stroke-width="1.5"/>
+    <rect x="40" y="70" width="40" height="12" rx="3" fill="#2a2d33"/>
+    <rect x="52" y="60" width="16" height="10" rx="3" fill="url(#powerGrad)"/>
+    <rect x="50" y="168" width="20" height="30" rx="3" fill="url(#ringGrad)" stroke="#2a2d33" stroke-width="1.5"/>
+    <path d="M60,198 l-6,14 M60,198 l6,14 M60,198 l0,16" stroke="#6b7079" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+</defs></svg>
+
+<!-- ============================================================= -->
+<!-- 1. NAVBAR                                                      -->
+<!-- ============================================================= -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="glass border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-4">
+      <a href="#hero" class="flex items-center gap-3 group shrink-0">
+        <span class="relative grid place-items-center w-10 h-10">
+          <span class="absolute inset-0 rounded-full turbo-ring animate-spin-slow opacity-80"></span>
+          <span class="absolute inset-[3px] rounded-full bg-ink border border-white/10"></span>
+          <svg class="relative w-6 h-6 animate-spin-slow"><use href="#tg-wheel"/></svg>
+        </span>
+        <span class="leading-none">
+          <span class="block font-display font-[900] text-base tracking-tight text-white">TURBO DIESEL <span class="text-power">LONDON</span></span>
+          <span class="block text-[10px] uppercase tracking-[.18em] text-steel">Where price meets quality</span>
+        </span>
+      </a>
+      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-steel">
+        <a href="#products" class="nav-link" data-nav>Products</a>
+        <a href="#process" class="nav-link" data-nav>Process</a>
+        <a href="#technology" class="nav-link" data-nav>Technology</a>
+        <a href="#deposit" class="nav-link" data-nav>Deposit</a>
+        <a href="#reviews" class="nav-link" data-nav>Reviews</a>
+        <a href="#contact" class="nav-link" data-nav>Contact</a>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="tel:+447840443138" class="hidden sm:flex items-center gap-2 text-sm text-silver hover:text-white transition-colors">
+          <i data-lucide="phone" class="w-4 h-4 text-power"></i><span class="font-semibold tabular-nums">07840 443 138</span>
+        </a>
+        <a href="#contact" class="relative inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors shadow-[0_8px_30px_-8px_rgba(200,16,46,.7)]">
+          <i data-lucide="zap" class="w-4 h-4"></i><span class="hidden sm:inline">Order now</span><span class="sm:hidden">Order</span>
+        </a>
+        <button id="menuBtn" aria-label="Menu" class="lg:hidden grid place-items-center w-10 h-10 rounded-lg border border-white/10 text-silver"><i data-lucide="menu" class="w-5 h-5"></i></button>
+      </div>
+    </nav>
+  </div>
+  <div id="mobileMenu" class="lg:hidden hidden glass border-b border-white/5">
+    <div class="px-6 py-4 flex flex-col gap-1 text-base">
+      <a href="#products" class="py-2 text-steel hover:text-white" data-mlink>Products</a>
+      <a href="#process" class="py-2 text-steel hover:text-white" data-mlink>Process</a>
+      <a href="#technology" class="py-2 text-steel hover:text-white" data-mlink>Technology</a>
+      <a href="#deposit" class="py-2 text-steel hover:text-white" data-mlink>Deposit &amp; warranty</a>
+      <a href="#reviews" class="py-2 text-steel hover:text-white" data-mlink>Reviews</a>
+      <a href="#calculator" class="py-2 text-steel hover:text-white" data-mlink>Calculator</a>
+      <a href="#contact" class="py-2 text-steel hover:text-white" data-mlink>Contact</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================= -->
+<!-- 2. HERO + PART FINDER                                          -->
+<!-- ============================================================= -->
+<section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden pt-[68px]">
+  <img src="assets/img/shelf-red.jpg" alt="Turbocharger workshop" class="absolute inset-0 w-full h-full object-cover opacity-25" loading="eager" />
+  <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/70 to-ink"></div>
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[700px] rounded-full bg-power/20 blur-[160px] opacity-60"></div>
+  <div class="absolute bottom-0 right-0 w-[600px] h-[400px] rounded-full bg-power/10 blur-[140px]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-7">
+      <div class="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-steel mb-6">
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-power opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-power"></span></span>
+        Remanufacturing turbos &amp; injectors for <strong class="text-silver">over 10 years</strong>
+      </div>
+      <h1 class="reveal font-display font-[900] text-white leading-[0.98] text-[40px] sm:text-6xl lg:text-7xl tracking-tight">
+        Your turbo comes back <br class="hidden sm:block"><span class="text-gradient">stronger</span> than factory.
+      </h1>
+      <p class="reveal mt-6 max-w-xl text-lg text-steel leading-relaxed">
+        Professional remanufacturing of <span class="text-silver font-semibold">turbochargers &amp; diesel injectors</span> — 100% ready to install. OEM parts, VSR balancing, full testing, and a <span class="text-silver font-semibold">14-day money-back warranty</span>.
+      </p>
+
+      <form id="finder" class="reveal mt-8 max-w-xl rounded-2xl border border-white/10 bg-ink3/80 p-2 flex flex-col sm:flex-row gap-2 shadow-card">
+        <div class="flex items-center gap-2 flex-1 px-3">
+          <i data-lucide="search" class="w-5 h-5 text-power shrink-0"></i>
+          <input id="finderInput" type="text" placeholder="Enter your part or engine code, e.g. 1.6 HDi, GTB1649V, Bosch 0445110…" class="w-full bg-transparent py-3 text-silver placeholder:text-steel/70 outline-none" />
+        </div>
+        <button class="inline-flex items-center justify-center gap-2 rounded-xl bg-power px-5 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Find my part <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+      </form>
+      <div class="reveal mt-3 flex flex-wrap items-center gap-2 text-xs text-steel">
+        <span>Popular:</span>
+        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">1.6 HDi / TDCi</button>
+        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">2.0 TDCi</button>
+        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">2.0 TDI</button>
+        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">Bosch CR injector</button>
+      </div>
+
+      <div class="reveal mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-steel">
+        <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> 14-day money-back</span>
+        <span class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> OEM parts</span>
+        <span class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Fast worldwide shipping</span>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 reveal">
+      <div class="relative mx-auto max-w-md aspect-square">
+        <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle,rgba(200,16,46,.25),transparent 60%)"></div>
+        <div class="absolute inset-0 rounded-full border border-white/5"></div>
+        <div class="absolute inset-6 rounded-full border border-white/5"></div>
+        <div class="absolute inset-0 rounded-full turbo-ring animate-spin-slow"></div>
+        <div class="absolute inset-10 rounded-full overflow-hidden border border-white/10 shadow-card animate-floaty">
+          <img src="assets/img/turbine-wheel.jpg" alt="Remanufactured turbine wheel" class="absolute inset-0 w-full h-full object-cover scale-110" loading="eager" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 rounded-full ring-1 ring-inset ring-power/25"></div>
+          <p class="absolute bottom-5 inset-x-0 text-center text-xs uppercase tracking-[.25em] text-silver">VSR balanced</p>
+        </div>
+        <div class="absolute -left-4 top-8 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
+          <p class="text-2xl font-display font-[800] text-white"><span data-counter data-target="10">0</span>+</p>
+          <p class="text-[11px] text-steel">years of expertise</p>
+        </div>
+        <div class="absolute -right-2 bottom-10 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
+          <p class="text-2xl font-display font-[800] text-power">100%</p>
+          <p class="text-[11px] text-steel">ready to install</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="#trust" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-steel/70 hover:text-silver transition-colors animate-floaty"><i data-lucide="chevrons-down" class="w-6 h-6"></i></a>
+</section>
+
+<!-- ============================================================= -->
+<!-- 3. TRUST BAR                                                   -->
+<!-- ============================================================= -->
+<section id="trust" class="relative border-y border-white/5 bg-ink2">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-6 text-center">
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white"><span data-counter data-target="10">0</span>+</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">years experience</p></div>
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">14 days</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">money-back warranty</p></div>
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">OEM</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">genuine parts</p></div>
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">VSR</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">balanced cores</p></div>
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">100%</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">tested &amp; ready</p></div>
+      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">🇬🇧</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">London · worldwide</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 4. PRODUCTS (TWO PILLARS)                                      -->
+<!-- ============================================================= -->
+<section id="products" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute top-1/2 -left-40 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">What we remanufacture</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Two specialities. <span class="text-power-grad">One standard.</span></h2>
+      <p class="mt-5 text-steel text-lg">We rebuild turbochargers and diesel injectors to OEM tolerances — so they perform and last like new, for a fraction of the price.</p>
+    </div>
+    <div class="mt-14 grid md:grid-cols-2 gap-6">
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-8 hover:border-power/40 hover:shadow-glow">
+        <div class="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden grid place-items-center bg-gradient-to-br from-ink2 to-ink border-b border-white/10">
+          <div class="absolute inset-0 grid-bg opacity-30"></div>
+          <img src="assets/img/tdl-turbo.png" alt="Remanufactured turbocharger — Turbo Diesel London" class="relative h-44 object-contain drop-shadow-[0_24px_34px_rgba(0,0,0,.7)]" loading="lazy" />
+        </div>
+        <h3 class="font-display font-[800] text-2xl text-white mb-3">Turbochargers</h3>
+        <p class="text-steel leading-relaxed">Full strip-down, OEM repair kits, VSR balancing and flow testing. Variable geometry (VNT) cleaned and calibrated. Single-turbo, bi-turbo, cars, vans, trucks and agri.</p>
+        <ul class="mt-5 space-y-2 text-sm text-silver">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Cars · vans · trucks · agricultural</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> VNT geometry &amp; electronic actuators</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Balanced &amp; tested, ready to install</li>
+        </ul>
+        <a href="#contact" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-power hover:text-power-400 transition-colors">Order a turbo <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </article>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-8 hover:border-power/40 hover:shadow-glow">
+        <div class="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden grid place-items-center bg-gradient-to-br from-ink2 to-ink border-b border-white/10">
+          <div class="absolute inset-0 grid-bg opacity-30"></div>
+          <div class="absolute w-40 h-40 rounded-full" style="background:radial-gradient(circle,rgba(200,16,46,.22),transparent 60%)"></div>
+          <svg class="relative w-16 h-32 drop-shadow-[0_20px_30px_rgba(0,0,0,.6)]"><use href="#tg-injector"/></svg>
+        </div>
+        <h3 class="font-display font-[800] text-2xl text-white mb-3">Diesel injectors</h3>
+        <p class="text-steel leading-relaxed">Common-rail and pump injectors remanufactured and tested on calibrated test benches. Bosch, Delphi, Denso and Siemens — restored to original spray pattern and flow.</p>
+        <ul class="mt-5 space-y-2 text-sm text-silver">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Bosch · Delphi · Denso · Siemens</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Tested on calibrated bench</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Restored spray pattern &amp; flow</li>
+        </ul>
+        <a href="#contact" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-power hover:text-power-400 transition-colors">Order an injector <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 5. WHY US                                                      -->
+<!-- ============================================================= -->
+<section id="why" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Why it's worth it</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Where price <span class="text-power-grad">meets quality</span>.</h2>
+      <p class="mt-5 text-steel text-lg">Six reasons drivers and garages across the UK and beyond trust Turbo Diesel London.</p>
+    </div>
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="benefits"></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 6. PROCESS                                                     -->
+<!-- ============================================================= -->
+<section id="process" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute -right-40 top-20 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Our process</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">7 stages, <span class="text-power-grad">no shortcuts</span>.</h2>
+      <p class="mt-5 text-steel text-lg">Tap any step to see exactly what happens and why it matters.</p>
+    </div>
+    <div class="mt-14 grid lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-5 reveal"><div id="stepList" class="relative flex flex-col gap-2"><div class="absolute left-[22px] top-3 bottom-3 w-px bg-white/10"></div></div></div>
+      <div class="lg:col-span-7 reveal">
+        <div class="h-full rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-9 shadow-card relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-power/10 blur-3xl"></div>
+          <div class="relative aspect-[16/7] rounded-xl border border-white/10 mb-6 overflow-hidden">
+            <img id="stepPhoto" src="assets/img/workbench.jpg" alt="Remanufacturing stage" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink3/70 to-transparent"></div>
+          </div>
+          <div class="flex items-center gap-3 mb-3"><span id="stepBadge" class="font-display font-[900] text-power text-sm">STEP 01 / 07</span><span class="h-px flex-1 bg-white/10"></span></div>
+          <h3 id="stepHeading" class="font-display font-[800] text-2xl sm:text-3xl text-white"></h3>
+          <p id="stepDesc" class="mt-4 text-steel leading-relaxed"></p>
+          <div class="mt-6 rounded-xl bg-power/5 border border-power/15 p-5"><p class="flex items-center gap-2 text-sm font-semibold text-power mb-1"><i data-lucide="key-round" class="w-4 h-4"></i> Why it matters</p><p id="stepWhy" class="text-sm text-silver leading-relaxed"></p></div>
+          <div class="mt-7 flex items-center justify-between">
+            <button id="prevStep" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i> Previous</button>
+            <button id="nextStep" class="inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors">Next <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 7. TECHNOLOGY                                                  -->
+<!-- ============================================================= -->
+<section id="technology" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Technology</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">The kit that makes the <span class="text-power-grad">difference</span>.</h2>
+      <p class="mt-5 text-steel text-lg">Equipment and procedures you won't find in an average workshop — that's why our parts simply work.</p>
+    </div>
+    <div class="mt-14 grid lg:grid-cols-3 gap-5">
+      <article class="reveal lift lg:row-span-2 rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
+        <div class="relative aspect-[4/3] border-b border-white/10 overflow-hidden">
+          <img src="assets/img/vsr-301-machine.jpg" alt="VSR balancing machine with turbo cores" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink3 to-transparent"></div>
+          <span class="absolute top-3 left-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">VSR balancing</span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-display font-[800] text-2xl text-white">VSR core balancing</h3>
+          <p class="mt-3 text-steel leading-relaxed">Assembled cores are balanced at near-operating speed, eliminating the micro-vibrations that destroy bearings. The result: quiet running and OEM-level durability.</p>
+          <ul class="mt-5 space-y-2 text-sm text-silver">
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Dynamic full-core balancing</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Real-time vibration measurement</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Smooth, silent operation</li>
+          </ul>
+        </div>
+      </article>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="cpu" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-[800] text-xl text-white">Actuator calibration</h3>
+        <p class="mt-2 text-steel leading-relaxed">Electronic actuators and VNT geometry programmed and calibrated against the control signal.</p>
+      </article>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="droplets" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-[800] text-xl text-white">Injector test bench</h3>
+        <p class="mt-2 text-steel leading-relaxed">Common-rail injectors tested on calibrated benches — spray pattern, back-leak and flow checked to spec.</p>
+      </article>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="waves" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-[800] text-xl text-white">Ultrasonic cleaning</h3>
+        <p class="mt-2 text-steel leading-relaxed">Removes carbon and oil deposits from every channel without abrasion — production-level cleanliness.</p>
+      </article>
+      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40">
+        <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="ruler" class="w-6 h-6 text-power"></i></div>
+        <h3 class="font-display font-[800] text-xl text-white">Precision metrology</h3>
+        <p class="mt-2 text-steel leading-relaxed">Micrometers and dial gauges — axial and radial clearances measured to 0.01&nbsp;mm.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 8. TURBO EXPLORER                                             -->
+<!-- ============================================================= -->
+<section class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 top-0 w-[700px] h-[400px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Virtual turbo explorer</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Look <span class="text-power-grad">inside</span> a turbocharger.</h2>
+      <p class="mt-5 text-steel text-lg">Pick a component to see what we remanufacture and why it affects your turbo's life.</p>
+    </div>
+    <div class="mt-14 grid lg:grid-cols-12 gap-8 items-stretch">
+      <div class="lg:col-span-6 reveal">
+        <div class="relative h-full min-h-[360px] rounded-2xl border border-white/10 bg-gradient-to-br from-ink3 to-ink p-6 shadow-card grid place-items-center overflow-hidden">
+          <div class="absolute inset-0 grid-bg opacity-50"></div>
+          <div class="relative w-full max-w-sm aspect-square">
+            <div class="absolute inset-2 rounded-full overflow-hidden border border-white/10 shadow-card">
+              <img src="assets/img/turbine-wheel.jpg" alt="Turbocharger cutaway — wheel view" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              <div class="absolute inset-0 bg-ink/30"></div>
+            </div>
+            <div class="absolute inset-8 rounded-full border-2 border-dashed border-white/20 animate-spin-slow pointer-events-none"></div>
+            <button class="hot absolute top-[8%] left-[46%]" data-part="0" aria-label="Compressor wheel"></button>
+            <button class="hot absolute top-[42%] left-[8%]" data-part="1" aria-label="Bearings"></button>
+            <button class="hot absolute top-[44%] right-[6%]" data-part="2" aria-label="Shaft & turbine"></button>
+            <button class="hot absolute bottom-[10%] left-[42%]" data-part="3" aria-label="VNT geometry"></button>
+            <button class="hot absolute top-[22%] right-[26%]" data-part="4" aria-label="Seals"></button>
+          </div>
+          <p class="absolute bottom-4 left-0 right-0 text-center text-xs text-steel">Tap the <span class="text-power font-semibold">red dots</span> or the tabs</p>
+        </div>
+      </div>
+      <div class="lg:col-span-6 reveal">
+        <div class="flex flex-wrap gap-2 mb-5" id="partTabs"></div>
+        <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
+          <div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center"><i id="partIcon" data-lucide="fan" class="w-6 h-6 text-power"></i></div><h3 id="partName" class="font-display font-[800] text-xl text-white"></h3></div>
+          <p id="partDesc" class="text-steel leading-relaxed"></p>
+          <div class="mt-5 grid sm:grid-cols-2 gap-3">
+            <div class="rounded-lg bg-white/5 border border-white/10 p-4"><p class="text-xs uppercase tracking-wide text-steel mb-1">What we restore</p><p id="partFix" class="text-sm text-silver"></p></div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-4"><p class="text-xs uppercase tracking-wide text-steel mb-1">Why it matters</p><p id="partWhy" class="text-sm text-silver"></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 8B. BRANDS                                                     -->
+<!-- ============================================================= -->
+<section class="relative py-16 border-y border-white/5 bg-ink">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <p class="text-center text-xs uppercase tracking-[.25em] text-steel reveal">We remanufacture parts for all popular makes</p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 reveal" id="brands"></div>
+    <p class="mt-10 text-center text-xs uppercase tracking-[.25em] text-steel reveal">Using genuine OEM components</p>
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 reveal">
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Garrett</span>
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">BorgWarner</span>
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Bosch</span>
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Delphi</span>
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Denso</span>
+      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Siemens</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 9. COMPARISON                                                  -->
+<!-- ============================================================= -->
+<section class="relative py-24 sm:py-28">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Comparison</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Brand-new <span class="text-steel">vs</span> remanufactured at <span class="text-power-grad">TDL</span></h2>
+    </div>
+    <div class="mt-12 reveal overflow-hidden rounded-2xl border border-white/10 bg-ink3 shadow-card">
+      <table class="w-full text-left">
+        <thead><tr class="border-b border-white/10 text-sm">
+          <th class="p-5 font-medium text-steel">Criteria</th>
+          <th class="p-5 font-display font-[800] text-silver">Brand-new</th>
+          <th class="p-5 font-display font-[800] text-power bg-power/5">Turbo Diesel London</th>
+        </tr></thead>
+        <tbody class="text-sm">
+          <tr class="border-b border-white/5"><td class="p-5 text-silver">Price</td><td class="p-5 text-steel">Very high</td><td class="p-5 text-white bg-power/5 font-semibold">Up to 50–65% less</td></tr>
+          <tr class="border-b border-white/5"><td class="p-5 text-silver">Parts</td><td class="p-5 text-steel">OEM</td><td class="p-5 text-white bg-power/5 font-semibold">Genuine OEM</td></tr>
+          <tr class="border-b border-white/5"><td class="p-5 text-silver">Balancing &amp; testing</td><td class="p-5 text-steel"><i data-lucide="minus" class="w-4 h-4 inline text-steel"></i> varies</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Always, 100% tested</span></td></tr>
+          <tr class="border-b border-white/5"><td class="p-5 text-silver">Warranty</td><td class="p-5 text-steel">Varies</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">14-day money-back</span></td></tr>
+          <tr class="border-b border-white/5"><td class="p-5 text-silver">Old part</td><td class="p-5 text-steel">Scrap / no value</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Deposit refunded on return</span></td></tr>
+          <tr><td class="p-5 text-silver">Lead time</td><td class="p-5 text-steel">Often back-order</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">In stock + fast shipping</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 10. DEPOSIT / RETURN THE OLD PART                              -->
+<!-- ============================================================= -->
+<section id="deposit" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5 overflow-hidden">
+  <div class="absolute -left-40 top-10 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Deposit &amp; warranty</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Return the old part. <span class="text-power-grad">Get your money back.</span></h2>
+      <p class="mt-5 text-steel text-lg leading-relaxed">A small refundable deposit is added to your order to cover your old core. Send it back after fitting your remanufactured part and the deposit is returned to you — simple and fair.</p>
+      <p class="mt-4 text-steel text-lg leading-relaxed">Every order is also covered by our <span class="text-white font-semibold">14-day money-back warranty</span>. If you're not satisfied, you're protected.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#contact" class="inline-flex items-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Order now <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+        <a href="https://www.youtube.com/@TDLL-TEAM" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 font-semibold text-silver hover:bg-white/10 transition-colors"><i data-lucide="youtube" class="w-4 h-4 text-power"></i> Watch about us</a>
+      </div>
+      <div class="mt-8 grid grid-cols-2 gap-4">
+        <div class="rounded-xl border border-white/10 bg-ink3 p-4 text-center"><img src="assets/img/tdl-boxes.png" alt="Return your old core" class="h-24 mx-auto object-contain" loading="lazy" /><p class="mt-2 text-xs text-steel uppercase tracking-wide">Return your old core</p></div>
+        <div class="rounded-xl border border-white/10 bg-ink3 p-4 text-center"><img src="assets/img/tdl-money.png" alt="Deposit refunded" class="h-24 mx-auto object-contain" loading="lazy" /><p class="mt-2 text-xs text-steel uppercase tracking-wide">Deposit refunded</p></div>
+      </div>
+    </div>
+    <div class="reveal grid sm:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-6"><div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="shopping-cart" class="w-5 h-5 text-power"></i></div><p class="font-display font-[800] text-lg text-white">1. Order</p><p class="mt-1 text-sm text-steel">Choose your remanufactured part. A refundable deposit covers the core.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-6"><div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="wrench" class="w-5 h-5 text-power"></i></div><p class="font-display font-[800] text-lg text-white">2. Fit</p><p class="mt-1 text-sm text-steel">Install the part — it arrives 100% ready to work.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-6"><div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="package" class="w-5 h-5 text-power"></i></div><p class="font-display font-[800] text-lg text-white">3. Return core</p><p class="mt-1 text-sm text-steel">Send back your old part using the same packaging.</p></div>
+      <div class="rounded-2xl border border-power/25 bg-power/10 p-6"><div class="w-11 h-11 rounded-xl bg-power/20 border border-power/30 grid place-items-center mb-4"><i data-lucide="banknote" class="w-5 h-5 text-power"></i></div><p class="font-display font-[800] text-lg text-white">4. Refund</p><p class="mt-1 text-sm text-silver">We refund your deposit. Done.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 11. REVIEWS                                                    -->
+<!-- ============================================================= -->
+<section id="reviews" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute -left-40 bottom-0 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Reviews</span>
+        <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Trusted by <span class="text-power-grad">drivers &amp; garages</span>.</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 text-power"><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i></div>
+        <p class="text-sm text-steel"><span class="text-white font-semibold">5.0</span> from customers</p>
+      </div>
+    </div>
+    <div class="mt-12 relative reveal">
+      <div id="reviewTrack" class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
+      <div class="mt-6 flex items-center justify-between">
+        <p class="text-sm text-steel">Swipe or use the arrows →</p>
+        <div class="flex gap-2">
+          <button id="revPrev" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+          <button id="revNext" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 12. SAVINGS CALCULATOR                                         -->
+<!-- ============================================================= -->
+<section id="calculator" class="relative py-24 sm:py-28 overflow-hidden bg-ink2 border-y border-white/5">
+  <div class="absolute left-1/2 -translate-x-1/2 top-10 w-[800px] h-[500px] rounded-full bg-power/15 blur-[170px] opacity-70"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Calculator</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">See how much you <span class="text-power-grad">save</span>.</h2>
+      <p class="mt-5 text-steel text-lg">A quick estimate in seconds. We'll confirm the exact price once we know your part.</p>
+    </div>
+    <div class="mt-12 grid lg:grid-cols-2 gap-6 reveal">
+      <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
+        <label class="block text-sm font-semibold text-silver mb-3">1. Part type</label>
+        <div id="calcCats" class="grid grid-cols-2 gap-2 mb-7">
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="turbo"><i data-lucide="fan" class="w-5 h-5 mx-auto mb-1"></i> Turbocharger</button>
+          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="injector"><i data-lucide="droplets" class="w-5 h-5 mx-auto mb-1"></i> Injector</button>
+        </div>
+        <label for="calcModel" class="block text-sm font-semibold text-silver mb-3">2. Engine / part</label>
+        <select id="calcModel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors mb-7"></select>
+        <label class="block text-sm font-semibold text-silver mb-3" id="calcQtyLabel">3. Quantity: <span id="calcQtyVal" class="text-power font-display font-[800]">1</span></label>
+        <input id="calcQty" type="range" min="1" max="8" step="1" value="1" class="w-full accent-power" />
+        <div class="flex justify-between text-xs text-steel mt-2"><span>1</span><span>8</span></div>
+      </div>
+      <div class="relative rounded-2xl border border-power/25 bg-gradient-to-br from-ink3 to-ink p-7 sm:p-8 shadow-glow overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-power/20 blur-3xl"></div>
+        <p class="text-sm text-steel mb-6">Your estimate</p>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-5"><p class="text-xs text-steel mb-1">Brand-new</p><p class="font-display font-[800] text-2xl text-silver">£<span id="resNew">0</span></p></div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-5"><p class="text-xs text-steel mb-1">Remanufactured</p><p class="font-display font-[800] text-2xl text-white">£<span id="resRegen">0</span></p></div>
+        </div>
+        <div class="rounded-2xl bg-power/10 border border-power/25 p-6 mb-5">
+          <p class="text-sm text-silver mb-1">You save</p>
+          <div class="flex items-end gap-3 flex-wrap"><p class="font-display font-[900] text-4xl sm:text-5xl text-white">£<span id="resSave">0</span></p><p class="font-display font-[800] text-2xl text-power mb-1"><span id="resPct">0</span>%</p></div>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-steel mb-6"><i data-lucide="info" class="w-4 h-4 text-power"></i> Includes refundable core deposit on return.</div>
+        <a href="#contact" class="group flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all">Get an exact quote <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i></a>
+        <p class="mt-3 text-xs text-steel text-center">Indicative figures only — not a binding offer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 13. FAQ                                                        -->
+<!-- ============================================================= -->
+<section id="faq" class="relative py-24 sm:py-28">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center reveal">
+      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">FAQ</span>
+      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Frequently asked <span class="text-power-grad">questions</span></h2>
+    </div>
+    <div id="faqList" class="mt-12 space-y-3 reveal"></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- 14. CONTACT                                                    -->
+<!-- ============================================================= -->
+<section id="contact" class="relative py-24 sm:py-28 overflow-hidden">
+  <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-[900px] h-[500px] rounded-full bg-power/15 blur-[170px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-2 gap-10 items-stretch">
+      <div class="reveal">
+        <h2 class="font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Ready for a part that works <span class="text-power-grad">like new</span>?</h2>
+        <p class="mt-5 text-steel text-lg max-w-md">Send an enquiry or call us. We'll advise, identify your part and prepare a no-obligation quote. Shipping across the UK and worldwide.</p>
+        <div class="mt-8 grid sm:grid-cols-2 gap-3">
+          <a href="tel:+447840443138" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="phone" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Call us</span><span class="block font-semibold text-white">07840 443 138</span></span></a>
+          <a href="https://wa.me/447840443138" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="message-circle" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Message</span><span class="block font-semibold text-white">WhatsApp</span></span></a>
+          <a href="mailto:contact@turbodiesel.cc" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="mail" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Email</span><span class="block font-semibold text-white">contact@turbodiesel.cc</span></span></a>
+          <a href="https://maps.google.com/?q=7C+Staines+Road+TW19+5BY" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="map-pin" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Address</span><span class="block font-semibold text-white">7C Staines Road, TW19 5BY</span></span></a>
+        </div>
+        <div class="mt-6 rounded-xl border border-white/10 overflow-hidden">
+          <iframe title="Turbo Diesel London location" src="https://www.google.com/maps?q=7C%20Staines%20Road%2C%20TW19%205BY&output=embed" class="w-full aspect-[16/6] grayscale contrast-125 opacity-90" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <div class="reveal">
+        <form id="contactForm" class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card" novalidate>
+          <h3 class="font-display font-[800] text-2xl text-white mb-6">Request a quote</h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block text-sm text-steel mb-1.5" for="fName">Full name *</label><input id="fName" name="name" required class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="John Smith" /></div>
+            <div><label class="block text-sm text-steel mb-1.5" for="fPhone">Phone *</label><input id="fPhone" name="phone" required inputmode="tel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="07000 000000" /></div>
+            <div class="sm:col-span-2"><label class="block text-sm text-steel mb-1.5" for="fCar">Vehicle / part / engine code</label><input id="fCar" name="car" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="e.g. Ford Transit 2.2 TDCi turbo / Bosch 0445110xxx" /></div>
+            <div class="sm:col-span-2"><label class="block text-sm text-steel mb-1.5" for="fMsg">Describe the issue</label><textarea id="fMsg" name="message" rows="3" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors resize-none" placeholder="e.g. smoking, loss of power, whistling under acceleration..."></textarea></div>
+          </div>
+          <label class="mt-4 flex items-start gap-3 text-xs text-steel"><input type="checkbox" required class="mt-0.5 accent-power w-4 h-4" /><span>I agree to my data being processed to handle this enquiry, per the privacy policy. *</span></label>
+          <button type="submit" class="group mt-6 flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all shadow-[0_14px_40px_-12px_rgba(200,16,46,.8)]">Send enquiry <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i></button>
+          <p class="mt-3 text-center text-xs text-steel">We usually reply within a few hours on working days.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============================================================= -->
+<!-- 15. FOOTER                                                     -->
+<!-- ============================================================= -->
+<footer class="border-t border-white/10 bg-ink">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="relative grid place-items-center w-9 h-9"><span class="absolute inset-0 rounded-full turbo-ring opacity-70"></span><span class="absolute inset-[3px] rounded-full bg-ink border border-white/10"></span><svg class="relative w-5 h-5"><use href="#tg-wheel"/></svg></span>
+          <span class="font-display font-[900] text-base text-white">TURBO DIESEL <span class="text-power">LONDON</span></span>
+        </div>
+        <p class="text-sm text-steel leading-relaxed">Remanufactured turbochargers &amp; diesel injectors. Where price meets quality.</p>
+        <p class="mt-4 text-xs text-steel leading-relaxed">Turbo Diesel London Limited<br>7C Staines Road, TW19 5BY<br>London, United Kingdom</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Products</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li><a href="#products" class="hover:text-white transition-colors">Turbochargers</a></li>
+          <li><a href="#products" class="hover:text-white transition-colors">Injectors</a></li>
+          <li><a href="#process" class="hover:text-white transition-colors">Process</a></li>
+          <li><a href="#technology" class="hover:text-white transition-colors">Technology</a></li>
+          <li><a href="#calculator" class="hover:text-white transition-colors">Calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Contact</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-power"></i> 07840 443 138</li>
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-power"></i> contact@turbodiesel.cc</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-power"></i> 7C Staines Road, TW19 5BY</li>
+          <li class="flex items-center gap-2"><i data-lucide="youtube" class="w-4 h-4 text-power"></i> <a href="https://www.youtube.com/@TDLL-TEAM" target="_blank" rel="noopener" class="hover:text-white transition-colors">@TDLL-TEAM</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-white mb-4">Our promise</p>
+        <ul class="space-y-2 text-sm text-steel">
+          <li class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> 14-day money-back</li>
+          <li class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> Genuine OEM parts</li>
+          <li class="flex items-center gap-2"><i data-lucide="banknote" class="w-4 h-4 text-power"></i> Core deposit refunded</li>
+          <li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Fast worldwide shipping</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-steel">
+      <p>© <span id="year"></span> Turbo Diesel London Limited. All rights reserved.</p>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition-colors">Terms &amp; Conditions</a>
+        <a href="#hero" class="hover:text-white transition-colors flex items-center gap-1">Top <i data-lucide="arrow-up" class="w-3 h-3"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-close></div>
+  <div class="relative w-full max-w-md rounded-2xl border border-white/10 bg-ink3 p-8 text-center shadow-card">
+    <div class="mx-auto w-16 h-16 rounded-full bg-power/15 border border-power/30 grid place-items-center mb-5"><i data-lucide="check-check" class="w-8 h-8 text-power"></i></div>
+    <h3 class="font-display font-[800] text-2xl text-white">Enquiry sent!</h3>
+    <p class="mt-3 text-steel">Thank you. We'll get back to you as soon as possible to arrange the details.</p>
+    <button data-close class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Great <i data-lucide="thumbs-up" class="w-4 h-4"></i></button>
+    <p class="mt-4 text-[11px] text-steel">Demo only — the form doesn't send real data yet. Wiring instructions at the end of the HTML file.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const renderIcons = () => window.lucide && window.lucide.createIcons();
+  renderIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('shadow-[0_10px_40px_-20px_rgba(0,0,0,.9)]', window.scrollY > 20), { passive:true });
+  const menuBtn = document.getElementById('menuBtn'), mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  document.querySelectorAll('[data-mlink]').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+  const navLinks = [...document.querySelectorAll('[data-nav]')];
+  const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const navObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { const id='#'+e.target.id; navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href')===id)); } }), { rootMargin:'-45% 0px -50% 0px' });
+  sections.forEach(s => navObs.observe(s));
+
+  const revObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } }), { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  const animateCounter = (el) => {
+    const target=+el.dataset.target, suffix=el.dataset.suffix||'', dur=1600, start=performance.now();
+    const step=(now)=>{ const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3); el.textContent=Math.floor(eased*target).toLocaleString('en-GB')+(p===1?suffix:''); if(p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  const cObs=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ animateCounter(e.target); cObs.unobserve(e.target);} }),{threshold:0.6});
+  document.querySelectorAll('[data-counter]').forEach(el=>cObs.observe(el));
+
+  const finder=document.getElementById('finder'), finderInput=document.getElementById('finderInput');
+  finder.addEventListener('submit',(e)=>{ e.preventDefault(); const q=finderInput.value.trim(); document.getElementById('contact').scrollIntoView({behavior:'smooth'}); const fCar=document.getElementById('fCar'); if(q&&fCar) fCar.value=q; });
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{ finderInput.value=c.textContent.trim(); finderInput.focus(); }));
+
+  const benefits=[
+    ['box','100% ready to install','Every part leaves us assembled, balanced and tested — fit it and drive. No surprises, no extra work.'],
+    ['badge-check','Genuine OEM parts','Only original repair kits and components — no unknown-origin copies. Built to factory tolerance.'],
+    ['gauge','VSR balanced cores','Cores balanced at operating speed for zero vibration, quiet running and long life.'],
+    ['banknote','Core deposit refunded','Send back your old part and we refund the deposit. Your old core has value with us.'],
+    ['shield-check','14-day money-back','Not happy? Our 14-day money-back warranty has you covered. Buy with confidence.'],
+    ['users','Qualified team','A professional team with 10+ years of experience behind every single part we ship.'],
+  ];
+  document.getElementById('benefits').innerHTML=benefits.map(([i,t,d])=>`
+    <article class="reveal in lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
+      <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform"><i data-lucide="${i}" class="w-6 h-6 text-power"></i></div>
+      <h3 class="font-display font-[800] text-xl text-white">${t}</h3>
+      <p class="mt-3 text-steel leading-relaxed">${d}</p>
+    </article>`).join('');
+
+  const steps=[
+    ['Intake & inspection','assets/img/workbench.jpg','Your part arrives in person or by courier. We inspect it and take the symptoms into account (smoking, power loss, whistling, oil leaks), documenting its as-is condition.','A correct diagnosis up front separates a faulty turbo/injector from an engine problem — so you don’t pay for a repair that won’t fix the cause.'],
+    ['Full strip-down','assets/img/turbine-wheel.jpg','We dismantle to individual components: CHRA, wheels, shaft, bearings, geometry (or injector body, nozzle, valve). Every part goes to separate inspection.','Only a full strip-down reveals hidden damage — cracks, wear, contact marks. Without it, remanufacturing is a gamble.'],
+    ['Ultrasonic cleaning','assets/img/compressor-macro.jpg','Components are cleaned in an ultrasonic bath that removes carbon and oil deposits from the smallest channels without abrasion.','Clean surfaces are essential for accurate measurement and proper balancing. Leftover carbon skews results and shortens life.'],
+    ['Measurement & grading','assets/img/chra-cores.jpg','Micrometers and dial gauges measure clearances, shaft run-out and seat condition. We grade what can be reused and what must be replaced.','Decisions based on numbers, not guesswork — so you know the part meets factory tolerance, not just “runs okay”.'],
+    ['Genuine OEM parts','assets/img/ford-kit-dark.jpg','We fit original OEM repair kits — bearings, seals, rings; for injectors, nozzles and valves from Bosch, Delphi, Denso or Siemens.','Copies are often out of tolerance and wear fast. OEM parts guarantee performance and durability like the production line.'],
+    ['VSR balancing & calibration','assets/img/vsr-301-running.jpg','Assembled cores are dynamically balanced; geometry and actuators calibrated. Injectors are set to original spray pattern.','At 150,000–250,000 rpm even a microgram of imbalance kills bearings. This is the difference between a quiet, lasting part and an early failure.'],
+    ['Final test & shipping','assets/img/biturbo-studio.jpg','We test flow, sealing and operation on the bench, pack securely and ship — fast, with a 14-day money-back warranty.','The part leaves tested, not “on hope”. You get something ready to install, plus full warranty support.'],
+  ];
+  const stepList=document.getElementById('stepList');
+  steps.forEach((s,i)=>{ const b=document.createElement('button');
+    b.className='step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all';
+    b.innerHTML=`<span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-[800] text-steel shrink-0">${String(i+1).padStart(2,'0')}</span><span class="step-title font-semibold text-steel">${s[0]}</span>`;
+    b.addEventListener('click',()=>setStep(i)); stepList.appendChild(b); });
+  const stepBtns=[...document.querySelectorAll('.step-btn')];
+  const stepHeading=document.getElementById('stepHeading'),stepDesc=document.getElementById('stepDesc'),stepWhy=document.getElementById('stepWhy'),stepBadge=document.getElementById('stepBadge'),stepPhoto=document.getElementById('stepPhoto');
+  let curStep=0;
+  const setStep=(i)=>{ curStep=(i+steps.length)%steps.length; const s=steps[curStep];
+    stepBtns.forEach((b,idx)=>b.classList.toggle('active',idx===curStep));
+    stepHeading.textContent=s[0]; stepDesc.textContent=s[2]; stepWhy.textContent=s[3];
+    stepBadge.textContent=`STEP ${String(curStep+1).padStart(2,'0')} / 07`;
+    if(stepPhoto){ stepPhoto.style.opacity='0'; setTimeout(()=>{ stepPhoto.src=s[1]; stepPhoto.alt=s[0]; stepPhoto.style.opacity='1'; },200); } };
+  document.getElementById('prevStep').addEventListener('click',()=>setStep(curStep-1));
+  document.getElementById('nextStep').addEventListener('click',()=>setStep(curStep+1));
+  setStep(0);
+
+  const parts=[
+    ['Compressor wheel','fan','The cold-side aluminium wheel that compresses air into the engine. Sensitive to foreign-object damage and blade-edge wear.','Blade inspection, replacement if damaged, cleaning and balancing.','Damaged blades = lost boost and lost power.'],
+    ['Bearings','circle-dot','Journal or ball bearings the shaft spins on. They run at extreme speed and temperature, lubricated by engine oil.','Replaced with genuine OEM bearings, plus new thrust parts and rings.','Worn bearings mean play, noise and a write-off of the whole turbo.'],
+    ['Shaft & turbine','git-commit-horizontal','The steel shaft and hot-side turbine wheel, driven by exhaust gas at over 800°C.','Shaft run-out and wheel condition checked; straightened/replaced as needed.','Shaft run-out ruins balance and destroys seals and bearings.'],
+    ['VNT geometry','settings-2','Variable nozzle geometry regulates boost pressure with engine speed.','De-carbonised, mechanism restored, calibrated on the bench.','Seized geometry = limp mode, smoke and no low-end power.'],
+    ['Seals','shield','Hot- and cold-side sealing rings that keep oil out of the intake and exhaust.','All rings replaced with new OEM at every rebuild.','Leaks mean oil burning, blue smoke and runaway risk.'],
+  ];
+  const partTabsEl=document.getElementById('partTabs');
+  partTabsEl.innerHTML=parts.map((p,i)=>`<button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="${i}">${p[0]}</button>`).join('');
+  const partTabs=[...document.querySelectorAll('.part-tab')], hots=[...document.querySelectorAll('.hot')];
+  const setPart=(i)=>{ const p=parts[i];
+    partTabs.forEach((t,idx)=>t.classList.toggle('active',idx===i));
+    hots.forEach((h,idx)=>h.classList.toggle('active',idx===i));
+    document.getElementById('partName').textContent=p[0];
+    document.getElementById('partDesc').textContent=p[2];
+    document.getElementById('partFix').textContent=p[3];
+    document.getElementById('partWhy').textContent=p[4];
+    document.getElementById('partIcon').setAttribute('data-lucide',p[1]); renderIcons(); };
+  partTabs.forEach((t,i)=>t.addEventListener('click',()=>setPart(i)));
+  hots.forEach((h,i)=>h.addEventListener('click',()=>setPart(i)));
+  setPart(0);
+
+  const brands=['Audi','BMW','Ford','Mercedes','Vauxhall','Volkswagen','Volvo','Renault','Nissan','Land Rover'];
+  document.getElementById('brands').innerHTML=brands.map(b=>`<span class="font-display font-[700] text-lg sm:text-xl text-silver/60 hover:text-white transition-colors">${b}</span>`).join('');
+
+  const reviews=[
+    ['James P.','Ford Transit 2.2 TDCi','Turbo arrived next day, fitted straight on and pulls like new. No smoke, no whistle. Cracking service.'],
+    ['Sandra K.','BMW 320d','Was quoted a fortune for a new one. TDL remanufactured mine for half the price and it’s perfect. Highly recommend.'],
+    ['Mark D.','Vauxhall Vivaro (fleet)','I run a fleet of vans and use TDL for turbos and injectors. Always on time, no comebacks. Proper job.'],
+    ['Tomasz R.','VW Passat 2.0 TDI','Injectors tested and sorted, deposit refunded as promised once I sent the old ones back. Honest company.'],
+    ['Gavin H.','Land Rover 3.0 TDV6','Power and economy back to normal. The 14-day warranty gave me real peace of mind. Top marks.'],
+    ['Priya S.','Nissan Qashqai 1.5 dCi','Easy to deal with, clear pricing, fast shipping. Car runs spot on now. Will use again.'],
+  ];
+  document.getElementById('reviewTrack').innerHTML=reviews.map(r=>`
+    <article class="snap-start shrink-0 w-[300px] sm:w-[360px] rounded-2xl border border-white/10 bg-ink3 p-7 flex flex-col">
+      <div class="text-power text-lg mb-3">★★★★★</div>
+      <p class="text-silver leading-relaxed flex-1">“${r[2]}”</p>
+      <div class="mt-5 flex items-center gap-3 pt-5 border-t border-white/10">
+        <span class="grid place-items-center w-10 h-10 rounded-full bg-power/15 text-power font-display font-[800]">${r[0].charAt(0)}</span>
+        <span><span class="block text-sm font-semibold text-white">${r[0]}</span><span class="block text-xs text-steel">${r[1]}</span></span>
+      </div>
+    </article>`).join('');
+  const rt=document.getElementById('reviewTrack');
+  document.getElementById('revNext').addEventListener('click',()=>rt.scrollBy({left:380,behavior:'smooth'}));
+  document.getElementById('revPrev').addEventListener('click',()=>rt.scrollBy({left:-380,behavior:'smooth'}));
+
+  /* CALCULATOR (GBP) */
+  const calcData={
+    turbo:{unit:'turbo', max:8, models:[
+      ['1.6 HDi / TDCi (Ford, Peugeot, Citroen)',520,230],
+      ['2.0 TDCi (Ford)',640,290],
+      ['1.9 / 2.0 TDI (VW, Audi, Skoda)',610,270],
+      ['2.0d (BMW)',720,330],
+      ['1.5 dCi (Renault, Nissan)',430,200],
+      ['3.0 TDV6 (Land Rover, Jaguar)',1450,690],
+    ]},
+    injector:{unit:'injector', max:8, models:[
+      ['Bosch common-rail (CR)',260,120],
+      ['Delphi common-rail',240,110],
+      ['Denso common-rail',300,140],
+      ['Siemens / VDO',280,130],
+      ['Bosch PD / unit injector',320,160],
+    ]},
+  };
+  let cstate={cat:'turbo',modelIdx:0,qty:1};
+  const calcCats=[...document.querySelectorAll('.calc-cat')], calcModel=document.getElementById('calcModel'),
+        calcQty=document.getElementById('calcQty'), calcQtyVal=document.getElementById('calcQtyVal'), calcQtyLabel=document.getElementById('calcQtyLabel');
+  const fmt=(n)=>Math.round(n).toLocaleString('en-GB');
+  const animNum=(el,to)=>{ const from=parseInt((el.textContent||'0').replace(/\D/g,''))||0, dur=600, start=performance.now();
+    const step=(now)=>{ const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3); el.textContent=fmt(from+(to-from)*eased); if(p<1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
+  const popModels=()=>{ calcModel.innerHTML=calcData[cstate.cat].models.map((m,i)=>`<option value="${i}">${m[0]}</option>`).join(''); cstate.modelIdx=0; };
+  const recalc=()=>{ const d=calcData[cstate.cat], m=d.models[cstate.modelIdx];
+    const qty=cstate.cat==='injector'?cstate.qty:1;
+    const newP=m[1]*qty, regen=m[2]*qty, save=newP-regen, pct=Math.round(save/newP*100);
+    animNum(document.getElementById('resNew'),newP); animNum(document.getElementById('resRegen'),regen);
+    animNum(document.getElementById('resSave'),save); animNum(document.getElementById('resPct'),pct); };
+  calcCats.forEach(btn=>btn.addEventListener('click',()=>{ calcCats.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); cstate.cat=btn.dataset.cat;
+    calcQtyLabel.parentElement; document.getElementById('calcQty').closest('div')?.classList;
+    const showQty = cstate.cat==='injector';
+    calcQty.disabled=!showQty; calcQty.style.opacity=showQty?'1':'.4';
+    calcQtyLabel.innerHTML = showQty ? '3. Quantity: <span id="calcQtyVal" class="text-power font-display font-[800]">'+cstate.qty+'</span>' : '3. Quantity: <span class="text-power font-display font-[800]">1</span> <span class="text-steel font-normal">(per turbo)</span>';
+    popModels(); recalc(); }));
+  calcModel.addEventListener('change',()=>{ cstate.modelIdx=+calcModel.value; recalc(); });
+  calcQty.addEventListener('input',()=>{ cstate.qty=+calcQty.value; const v=document.getElementById('calcQtyVal'); if(v) v.textContent=cstate.qty; recalc(); });
+  calcCats[0].classList.add('active'); popModels(); recalc();
+
+  const faqs=[
+    ['How long does remanufacturing take?','Typically 2–4 working days once we receive your part, plus shipping. We also offer an express service — ask when you enquire.'],
+    ['What warranty do I get?','Every order is covered by our 14-day money-back warranty. If you’re not satisfied, you’re protected.'],
+    ['How does the core deposit work?','A small refundable deposit covers your old part (“core”). Once you send the old part back after fitting, we refund the deposit in full.'],
+    ['Do you use genuine parts?','Yes — only OEM repair kits and components (Garrett, BorgWarner for turbos; Bosch, Delphi, Denso, Siemens for injectors). No unknown-origin copies.'],
+    ['Do you ship outside the UK?','Yes. We’re based in London and ship across the UK and worldwide. Get in touch for a delivery quote.'],
+    ['Is a remanufactured part as reliable as new?','With OEM parts, VSR balancing and full bench testing, parts meet factory tolerances — reliability is comparable to new, at a fraction of the price.'],
+    ['How much can I save?','Usually 50–65% versus a brand-new part. Use our calculator for an estimate, and we’ll confirm the exact price for your part.'],
+    ['What if my part can’t be remanufactured?','It’s rare. If a core is beyond repair we’ll tell you before any work and suggest the best option — no hidden costs.'],
+    ['Do you do injectors as well as turbos?','Yes — both are our speciality. Common-rail and unit injectors are tested on calibrated benches and restored to original spec.'],
+    ['Can I watch how you work?','Absolutely — see our work on YouTube @TDLL-TEAM.'],
+  ];
+  document.getElementById('faqList').innerHTML=faqs.map(f=>`
+    <details class="group rounded-2xl border border-white/10 bg-ink3 overflow-hidden">
+      <summary class="flex items-center justify-between gap-4 p-5 sm:p-6">
+        <span class="font-semibold text-silver group-hover:text-white transition-colors">${f[0]}</span>
+        <span class="faq-icon shrink-0 grid place-items-center w-8 h-8 rounded-full border border-white/15 text-power transition-transform"><i data-lucide="plus" class="w-4 h-4"></i></span>
+      </summary>
+      <div class="px-5 sm:px-6 pb-6 -mt-1 text-steel leading-relaxed">${f[1]}</div>
+    </details>`).join('');
+  renderIcons();
+
+  const form=document.getElementById('contactForm'), modal=document.getElementById('modal');
+  const openModal=()=>{ modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow='hidden'; };
+  const closeModal=()=>{ modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow=''; };
+  form.addEventListener('submit',(e)=>{ e.preventDefault(); if(!form.checkValidity()){ form.reportValidity(); return; } openModal(); form.reset(); });
+  modal.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeModal));
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+})();
+</script>
+
+<!-- =================================================================
+     TURBO DIESEL LONDON — built on the same premium template (own SVG, no photos)
+     Company data (from turbodiesel.cc):
+       Turbo Diesel London Limited · 7C Staines Road, TW19 5BY, London, UK
+       Phone 07840 443 138 · Email contact@turbodiesel.cc · YouTube @TDLL-TEAM
+       Services: remanufactured turbochargers & diesel injectors · 10+ years
+       14-day money-back warranty · refundable core deposit · OEM parts
+     Self-contained (CDN: Tailwind, Lucide, fonts). No third-party photos used.
+
+     TO DO when you send real Turbo Diesel London photos: swap any <svg><use .../></svg>
+     for <img src="..."> (workshop, VSR machine, injector bench, packaging, team).
+     FORM: wire the submit handler to Formspree / your backend (replace openModal()).
+================================================================= -->
+</body>
+</html>
