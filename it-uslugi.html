@@ -251,13 +251,13 @@
       </div>
       <div class="flex flex-wrap gap-2" id="workFilters">
         <button class="work-filter active rounded-full border border-ind/40 bg-ind/10 px-4 py-2 text-sm font-medium text-white" data-cat="all">Wszystkie</button>
-        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="www">Strony</button>
-        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="sklep">Sklepy</button>
-        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="logo">Logo</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="jedzenie">Jedzenie &amp; picie</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="moda">Moda &amp; uroda</button>
+        <button class="work-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slatey hover:text-white" data-cat="dom">Dom &amp; hobby</button>
       </div>
     </div>
     <div id="workGrid" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-    <p class="mt-8 text-center text-sm text-slatey reveal">* Miejsca na Twoje realne projekty — podmień miniatury i opisy w kodzie (sekcja <code class="text-cyan">works</code> w JS).</p>
+    <p class="mt-8 text-center text-sm text-slatey reveal"><i data-lucide="mouse-pointer-click" class="w-4 h-4 inline text-cyan"></i> Kliknij dowolny kafelek, aby otworzyć <span class="text-mist font-semibold">w pełni działające demo sklepu</span> (z koszykiem!) — 12 przykładowych realizacji.</p>
   </div>
 </section>
 
@@ -516,32 +516,38 @@
     </article>`).join('');
 
   /* REALIZACJE (placeholdery — podmień na realne) */
-  const palettes={www:'from-ind/30 to-cyan/20',sklep:'from-cyan/30 to-emerald-400/20',logo:'from-viol/30 to-ind/20'};
   const works=[
-    ['www','Salon fryzjerski „Bella”','Strona-wizytówka','Rezerwacje online, galeria, mapa'],
-    ['sklep','Sklep z kawą „Crema”','Sklep internetowy','WooCommerce, płatności, blog'],
-    ['logo','Logo „NordBud”','Logo + branding','Identyfikacja dla firmy budowlanej'],
-    ['www','Kancelaria prawna „Lex”','Strona firmowa','Profesjonalna, pod SEO lokalne'],
-    ['logo','Logo „FitZone”','Logo + social','Dynamiczna marka dla siłowni'],
-    ['sklep','Sklep „EcoHome”','Sklep internetowy','200+ produktów, filtry, koszyk'],
+    ['jedzenie','Crema','Sklep z kawą','☕','#b45309','#f59e0b','sklepy/crema.html'],
+    ['jedzenie','Kakao','Czekolada rzemieślnicza','🍫','#92400e','#d97706','sklepy/kakao.html'],
+    ['jedzenie','Vinoteka','Sklep z winami','🍷','#9f1239','#be123c','sklepy/vinoteka.html'],
+    ['moda','Lumière','Sklep z kosmetykami','💄','#db2777','#f472b6','sklepy/lumiere.html'],
+    ['moda','Aurora','Sklep z biżuterią','💍','#9333ea','#c026d3','sklepy/aurora.html'],
+    ['moda','Sprint','Obuwie sportowe','👟','#1d4ed8','#06b6d4','sklepy/sprint.html'],
+    ['dom','Verde','Rośliny doniczkowe','🌿','#15803d','#65a30d','sklepy/verde.html'],
+    ['dom','NordHome','Meble i wnętrza','🪑','#0f766e','#0ea5e9','sklepy/nordhome.html'],
+    ['dom','ŁapkaShop','Sklep zoologiczny','🐾','#ea580c','#f59e0b','sklepy/lapka.html'],
+    ['dom','Stronnica','Księgarnia','📚','#4338ca','#7c3aed','sklepy/stronnica.html'],
+    ['dom','PixelPlay','Sklep dla graczy','🎮','#0891b2','#7c3aed','sklepy/pixelplay.html'],
+    ['dom','VeloCity','Rowery i akcesoria','🚲','#65a30d','#16a34a','sklepy/velocity.html'],
   ];
   const workGrid=document.getElementById('workGrid');
   const renderWorks=(cat='all')=>{ workGrid.innerHTML=works.filter(w=>cat==='all'||w[0]===cat).map(w=>`
-    <article class="reveal in lift rounded-2xl border border-white/10 bg-card overflow-hidden hover:border-ind/40 group">
-      <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${palettes[w[0]]||'from-ind/30 to-cyan/20'}">
-        <div class="absolute inset-0 grid-bg opacity-30"></div>
-        <!-- mini-mockup okna -->
-        <div class="absolute inset-5 rounded-lg border border-white/15 bg-night/70 backdrop-blur-sm overflow-hidden group-hover:scale-[1.03] transition-transform duration-500">
-          <div class="flex items-center gap-1.5 px-3 py-2 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-white/30"></span><span class="w-2 h-2 rounded-full bg-white/30"></span><span class="w-2 h-2 rounded-full bg-white/30"></span></div>
-          <div class="p-3 space-y-2"><div class="h-8 rounded btn-grad opacity-80"></div><div class="h-2 rounded bg-white/20 w-2/3"></div><div class="h-2 rounded bg-white/10 w-full"></div><div class="h-2 rounded bg-white/10 w-4/5"></div></div>
+    <a href="${w[6]}" target="_blank" rel="noopener" class="reveal in lift block rounded-2xl border border-white/10 bg-card overflow-hidden hover:border-ind/40 group">
+      <div class="relative aspect-[16/10] overflow-hidden" style="background:linear-gradient(135deg, ${w[4]}, ${w[5]})">
+        <div class="absolute inset-0 grid-bg opacity-20"></div>
+        <div class="absolute inset-5 rounded-lg border border-white/20 bg-night/70 backdrop-blur-sm overflow-hidden group-hover:scale-[1.04] transition-transform duration-500">
+          <div class="flex items-center gap-1.5 px-3 py-2 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-white/40"></span><span class="w-2 h-2 rounded-full bg-white/40"></span><span class="w-2 h-2 rounded-full bg-white/40"></span></div>
+          <div class="p-3 flex items-center gap-3"><span class="grid place-items-center w-12 h-12 rounded-lg text-2xl shrink-0" style="background:linear-gradient(135deg, ${w[4]}, ${w[5]})">${w[3]}</span><div class="flex-1 space-y-1.5"><div class="h-2.5 rounded bg-white/30 w-2/3"></div><div class="h-2 rounded bg-white/10 w-full"></div><div class="h-2 rounded bg-white/10 w-4/5"></div></div></div>
+          <div class="px-3 grid grid-cols-3 gap-1.5"><div class="h-8 rounded bg-white/10"></div><div class="h-8 rounded bg-white/10"></div><div class="h-8 rounded bg-white/10"></div></div>
         </div>
-        <span class="absolute top-3 left-3 z-10 rounded-full bg-black/50 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-mist">${w[2]}</span>
+        <span class="absolute top-3 left-3 z-10 rounded-full bg-black/50 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-white">${w[2]}</span>
+        <span class="absolute inset-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30"><span class="inline-flex items-center gap-2 rounded-full bg-white text-night px-5 py-2.5 text-sm font-semibold shadow-lg">Otwórz demo <i data-lucide="external-link" class="w-4 h-4"></i></span></span>
       </div>
-      <div class="p-6">
-        <h3 class="font-display font-700 text-lg text-white">${w[1]}</h3>
-        <p class="mt-1 text-sm text-slatey">${w[3]}</p>
+      <div class="p-6 flex items-center justify-between gap-3">
+        <div><h3 class="font-display font-700 text-lg text-white">${w[3]} ${w[1]}</h3><p class="mt-1 text-sm text-slatey">${w[2]} · działający koszyk</p></div>
+        <i data-lucide="arrow-up-right" class="w-5 h-5 text-cyan shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
       </div>
-    </article>`).join(''); renderIcons(); };
+    </a>`).join(''); renderIcons(); };
   renderWorks();
   document.querySelectorAll('.work-filter').forEach(btn=>btn.addEventListener('click',()=>{
     document.querySelectorAll('.work-filter').forEach(b=>{ b.classList.remove('active','border-ind/40','bg-ind/10','text-white'); b.classList.add('border-white/15','text-slatey'); });

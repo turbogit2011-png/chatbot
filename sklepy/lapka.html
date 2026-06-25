@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ŁapkaShop — Wszystko dla Twojego pupila</title>
+<meta name="description" content="ŁapkaShop — Wszystko dla Twojego pupila. Sklep internetowy (demo portfolio kodo.studio)." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root{ --acc:#ea580c; --acc2:#f59e0b; }
+  *{ -webkit-tap-highlight-color:transparent; }
+  body{ font-family:'Inter',system-ui,sans-serif; }
+  .font-d{ font-family:'Plus Jakarta Sans',Inter,sans-serif; }
+  .acc-bg{ background:var(--acc); } .acc-text{ color:var(--acc); } .acc-border{ border-color:var(--acc); }
+  .acc-grad{ background:linear-gradient(120deg,var(--acc),var(--acc2)); }
+  .acc-grad-text{ background:linear-gradient(120deg,var(--acc),var(--acc2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .acc-soft{ background:color-mix(in srgb, var(--acc) 12%, #fff); }
+  .reveal{ opacity:0; transform:translateY(22px); transition:.7s cubic-bezier(.2,.7,.2,1); } .reveal.in{ opacity:1; transform:none; }
+  .drawer{ transition:transform .4s cubic-bezier(.2,.7,.2,1); }
+  ::-webkit-scrollbar{ width:9px; height:9px } ::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:9px }
+  .card-img{ transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  .pcard:hover .card-img{ transform:scale(1.08); }
+  .pcard .quick{ opacity:0; transform:translateY(8px); transition:.3s; }
+  .pcard:hover .quick{ opacity:1; transform:none; }
+  .fly{ position:fixed; z-index:80; border-radius:14px; object-fit:cover; pointer-events:none; transition:all .8s cubic-bezier(.2,.8,.3,1); }
+  @keyframes pop{ 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
+  .pop{ animation:pop .4s ease; }
+  .heartbeat.on{ color:#e11d48; }
+  .heartbeat.on svg{ fill:#e11d48; }
+  .marquee{ display:flex; gap:3rem; white-space:nowrap; animation:scrollx 26s linear infinite; }
+  @keyframes scrollx{ to{ transform:translateX(-50%) } }
+  @media (prefers-reduced-motion:reduce){ .reveal{transition:none;opacity:1;transform:none} .marquee{animation:none} }
+</style>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+
+<!-- PROMO COUNTDOWN BAR -->
+<div class="acc-grad text-white text-center text-[13px] py-2 px-3 font-medium flex items-center justify-center gap-2 flex-wrap">
+  <i data-lucide="zap" class="w-4 h-4"></i> Promocja <strong>-10%</strong> na wszystko z kodem <strong class="px-1.5 py-0.5 rounded bg-white/20">WELCOME10</strong> · kończy się za <span id="cd" class="tabular-nums font-bold">--:--:--</span>
+</div>
+
+<!-- DEMO STRIP -->
+<div class="bg-slate-900 text-slate-300 text-center text-[11px] py-1.5 px-3">
+  ✦ Sklep demonstracyjny z portfolio <strong class="text-white">kodo.studio</strong> — <a href="../it-uslugi.html" class="underline hover:text-white">inne realizacje</a> · <a href="../it-uslugi.html#kontakt" class="underline hover:text-white">zamów taki sklep</a>
+</div>
+
+<!-- HEADER -->
+<header id="top" class="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <a href="#top" class="flex items-center gap-2.5 shrink-0">
+      <span class="grid place-items-center w-10 h-10 rounded-2xl acc-grad text-white text-xl shadow-lg">🐾</span>
+      <span class="font-d font-800 text-xl tracking-tight text-slate-900">ŁapkaShop</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+      <a href="#sklep" class="hover:acc-text transition-colors">Sklep</a>
+      <a href="#kategorie" class="hover:acc-text transition-colors">Kategorie</a>
+      <a href="#onas" class="hover:acc-text transition-colors">O nas</a>
+      <a href="#kontakt" class="hover:acc-text transition-colors">Kontakt</a>
+    </nav>
+    <div class="flex items-center gap-1.5">
+      <button onclick="toast('Wyszukiwarka — demo 🔎')" class="grid place-items-center w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-600"><i data-lucide="search" class="w-5 h-5"></i></button>
+      <button id="wishBtn" onclick="toast('Lista życzeń: '+wish.size+' ❤️')" class="relative grid place-items-center w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-600"><i data-lucide="heart" class="w-5 h-5"></i><span id="wishCount" class="absolute -top-0.5 -right-0.5 grid place-items-center min-w-4 h-4 px-1 rounded-full acc-bg text-white text-[10px] font-bold hidden">0</span></button>
+      <button id="cartBtn" class="relative inline-flex items-center gap-2 rounded-full acc-bg text-white px-4 py-2.5 text-sm font-semibold hover:opacity-90 shadow-lg">
+        <i data-lucide="shopping-bag" class="w-4 h-4"></i><span class="hidden sm:inline">Koszyk</span>
+        <span id="cartCount" class="grid place-items-center min-w-5 h-5 px-1 rounded-full bg-white text-[11px] font-bold acc-text">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="relative overflow-hidden">
+  <div class="absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full acc-grad opacity-20 blur-[120px]"></div>
+  <div class="absolute top-10 right-0 w-[420px] h-[420px] rounded-full acc-grad opacity-15 blur-[120px]"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <span class="inline-flex items-center gap-2 rounded-full acc-soft acc-text px-3 py-1.5 text-xs font-semibold">Dla pupila 🐶</span>
+      <h1 class="mt-5 font-d font-800 text-[40px] sm:text-6xl leading-[1.04] tracking-tight text-slate-900">Bo zasługują na najlepsze.</h1>
+      <p class="mt-5 text-lg text-slate-600 max-w-md">Karma, zabawki i akcesoria dla psów i kotów — sprawdzone marki i błyskawiczna dostawa.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#sklep" class="inline-flex items-center gap-2 rounded-full acc-bg text-white px-7 py-4 font-semibold hover:opacity-90 shadow-xl shadow-black/5">Kupuj teraz <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+        <a href="#onas" class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-4 font-semibold text-slate-700 hover:bg-slate-50">Poznaj nas</a>
+      </div>
+      <div class="mt-8 flex items-center gap-4">
+        <div class="flex -space-x-2">
+          <span class="w-9 h-9 rounded-full acc-grad border-2 border-white grid place-items-center text-white text-sm">😊</span>
+          <span class="w-9 h-9 rounded-full acc-grad border-2 border-white grid place-items-center text-white text-sm">🤩</span>
+          <span class="w-9 h-9 rounded-full acc-grad border-2 border-white grid place-items-center text-white text-sm">👍</span>
+        </div>
+        <div class="text-sm"><span class="text-amber-400">★★★★★</span><p class="text-slate-500">1530+ zadowolonych klientów</p></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="relative max-w-md mx-auto">
+        <div class="relative aspect-[4/5] rounded-[28px] overflow-hidden shadow-2xl">
+          <div class="absolute inset-0 acc-grad grid place-items-center text-[150px]">🐾</div>
+          <img src="https://loremflickr.com/720/900/dog,cat?lock=307" onerror="this.remove()" loading="eager" class="absolute inset-0 w-full h-full object-cover" alt="ŁapkaShop" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        </div>
+        <div class="absolute -bottom-5 -left-3 sm:-left-6 rounded-2xl bg-white shadow-xl p-4 flex items-center gap-3 w-[220px]">
+          <span class="grid place-items-center w-12 h-12 rounded-xl acc-soft text-2xl">🐾</span>
+          <div><p class="text-[11px] text-slate-400">Bestseller</p><p class="font-d font-700 text-slate-900 text-sm leading-tight">Karma premium 12kg</p><p class="font-d font-800 acc-text">159 zł</p></div>
+        </div>
+        <div class="absolute -top-4 -right-2 rounded-2xl bg-white shadow-xl px-4 py-3 text-center">
+          <p class="font-d font-800 text-xl text-slate-900">4,9<span class="acc-text">★</span></p><p class="text-[10px] text-slate-400">1530 opinii</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- marquee trust -->
+  <div class="border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
+    <div class="marquee text-slate-500 text-sm font-medium">
+      <span class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 acc-text"></i> Darmowa wysyłka od 199 zł</span>
+      <span class="flex items-center gap-2"><i data-lucide="undo-2" class="w-4 h-4 acc-text"></i> 30 dni na zwrot</span>
+      <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 acc-text"></i> Bezpieczne płatności</span>
+      <span class="flex items-center gap-2"><i data-lucide="star" class="w-4 h-4 acc-text"></i> 4,9/5 ocena</span>
+      <span class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 acc-text"></i> 100% oryginalne produkty</span>
+      <span class="flex items-center gap-2"><i data-lucide="headphones" class="w-4 h-4 acc-text"></i> Wsparcie 7 dni w tygodniu</span>
+      <span class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 acc-text"></i> Darmowa wysyłka od 199 zł</span>
+      <span class="flex items-center gap-2"><i data-lucide="undo-2" class="w-4 h-4 acc-text"></i> 30 dni na zwrot</span>
+      <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 acc-text"></i> Bezpieczne płatności</span>
+      <span class="flex items-center gap-2"><i data-lucide="star" class="w-4 h-4 acc-text"></i> 4,9/5 ocena</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUKTY -->
+<section id="sklep" class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+  <div id="kategorie" class="flex flex-wrap items-end justify-between gap-4 mb-8 reveal">
+    <div>
+      <span class="text-xs font-semibold uppercase tracking-widest acc-text">Sklep</span>
+      <h2 class="mt-2 font-d font-800 text-3xl sm:text-4xl text-slate-900">Wybierz coś dla siebie</h2>
+    </div>
+    <div id="filters" class="flex flex-wrap gap-2"></div>
+  </div>
+  <div id="grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
+</section>
+
+<!-- O NAS -->
+<section id="onas" class="bg-slate-50 border-y border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="reveal relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl">
+      <div class="absolute inset-0 acc-grad grid place-items-center text-[120px]">🐾</div>
+      <img src="https://loremflickr.com/800/600/dog,cat?lock=312" onerror="this.remove()" loading="lazy" class="absolute inset-0 w-full h-full object-cover" alt="" />
+    </div>
+    <div class="reveal">
+      <span class="text-xs font-semibold uppercase tracking-widest acc-text">O nas</span>
+      <h2 class="mt-3 font-d font-800 text-3xl sm:text-4xl text-slate-900">Kochamy zwierzęta</h2>
+      <p class="mt-4 text-slate-600 leading-relaxed">Sami mamy pupili, więc wiemy, co dobre. Polecamy tylko produkty, które dalibyśmy własnym zwierzakom.</p>
+      <div class="mt-7 grid grid-cols-3 gap-4">
+        <div><p class="font-d font-800 text-3xl acc-text" data-counter data-target="2000" data-suffix="+">0</p><p class="text-xs text-slate-500 mt-1">produktów</p></div>
+        <div><p class="font-d font-800 text-3xl acc-text">24h</p><p class="text-xs text-slate-500 mt-1">wysyłka</p></div>
+        <div><p class="font-d font-800 text-3xl acc-text">4,9★</p><p class="text-xs text-slate-500 mt-1">ocena klientów</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="kontakt" class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+  <div class="relative rounded-[28px] acc-grad p-8 sm:p-14 text-white text-center overflow-hidden">
+    <div class="absolute -top-16 -right-10 w-64 h-64 rounded-full bg-white/10 blur-2xl"></div>
+    <h2 class="relative font-d font-800 text-3xl sm:text-4xl">Dołącz i odbierz -10%</h2>
+    <p class="relative mt-3 text-white/90 max-w-md mx-auto">Zapisz się do newslettera po kod rabatowy i dostęp do nowości oraz limitowanych dropów.</p>
+    <form onsubmit="event.preventDefault(); this.reset(); toast('Dzięki! Sprawdź skrzynkę 📩');" class="relative mt-6 max-w-md mx-auto flex gap-2">
+      <input type="email" required placeholder="Twój e-mail" class="flex-1 rounded-full px-5 py-3.5 text-slate-800 outline-none" />
+      <button class="rounded-full bg-white acc-text font-semibold px-6 py-3.5 hover:bg-slate-100">Zapisz się</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-slate-900 text-slate-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid sm:grid-cols-4 gap-8 text-sm">
+    <div>
+      <div class="flex items-center gap-2.5 mb-3"><span class="grid place-items-center w-9 h-9 rounded-xl acc-grad text-white">🐾</span><span class="font-d font-800 text-white text-lg">ŁapkaShop</span></div>
+      <p class="text-slate-400">Wszystko dla Twojego pupila.</p>
+      <div class="mt-4 flex gap-2 text-slate-500"><i data-lucide="instagram" class="w-5 h-5"></i><i data-lucide="facebook" class="w-5 h-5"></i><i data-lucide="youtube" class="w-5 h-5"></i></div>
+    </div>
+    <div><p class="font-semibold text-white mb-3">Sklep</p><ul class="space-y-2 text-slate-400"><li><a href="#sklep" class="hover:text-white">Nowości</a></li><li><a href="#sklep" class="hover:text-white">Bestsellery</a></li><li><a href="#sklep" class="hover:text-white">Promocje</a></li><li>Karty podarunkowe</li></ul></div>
+    <div><p class="font-semibold text-white mb-3">Pomoc</p><ul class="space-y-2 text-slate-400"><li>Wysyłka i zwroty</li><li>Regulamin</li><li>Polityka prywatności</li><li>Kontakt</li></ul></div>
+    <div><p class="font-semibold text-white mb-3">Kontakt</p><ul class="space-y-2 text-slate-400"><li>kontakt@lapka.pl</li><li>+48 000 000 000</li><li>Pon–Pt 9–17</li></ul>
+      <div class="mt-4 flex gap-1.5 text-2xl">💳 🏦 📱</div>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-5 text-center text-xs text-slate-500">© <span id="yr"></span> ŁapkaShop · sklep demo wykonany przez <a href="../it-uslugi.html" class="acc-text hover:underline">kodo.studio</a></div>
+</footer>
+
+<!-- QUICK VIEW MODAL -->
+<div id="qv" class="fixed inset-0 z-[55] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQV()"></div>
+  <div class="relative w-full max-w-3xl rounded-3xl bg-white shadow-2xl overflow-hidden grid sm:grid-cols-2">
+    <button onclick="closeQV()" class="absolute top-3 right-3 z-10 grid place-items-center w-9 h-9 rounded-full bg-white/90 shadow hover:bg-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="qvImg" class="relative aspect-square sm:aspect-auto min-h-[260px] acc-grad grid place-items-center text-[110px]"></div>
+    <div class="p-6 sm:p-8 flex flex-col">
+      <p id="qvCat" class="text-[11px] uppercase tracking-wide text-slate-400"></p>
+      <h3 id="qvName" class="font-d font-800 text-2xl text-slate-900 mt-1"></h3>
+      <div class="mt-1 text-amber-400 text-sm">★★★★★ <span id="qvR" class="text-slate-400"></span></div>
+      <p id="qvDesc" class="mt-4 text-slate-600 text-sm leading-relaxed"></p>
+      <div class="mt-auto pt-6">
+        <div class="flex items-end gap-3"><span id="qvPrice" class="font-d font-800 text-3xl text-slate-900"></span><span id="qvOld" class="text-slate-400 line-through mb-1"></span></div>
+        <button id="qvAdd" class="mt-4 w-full rounded-full acc-bg text-white py-3.5 font-semibold hover:opacity-90 flex items-center justify-center gap-2"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Dodaj do koszyka</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="closeCart()"></div>
+  <aside id="cartDrawer" class="drawer absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl translate-x-full flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-slate-200">
+      <h3 class="font-d font-800 text-xl text-slate-900">Twój koszyk</h3>
+      <button onclick="closeCart()" class="grid place-items-center w-9 h-9 rounded-lg hover:bg-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <div id="freeShip" class="px-5 pt-4"></div>
+    <div id="cartItems" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+    <div class="border-t border-slate-200 p-5">
+      <div class="flex items-center justify-between mb-1 text-sm text-slate-500"><span>Suma częściowa</span><span id="cartSub">0 zł</span></div>
+      <div class="flex items-center justify-between mb-4"><span class="font-d font-700 text-slate-900">Razem</span><span id="cartTotal" class="font-d font-800 text-2xl text-slate-900">0 zł</span></div>
+      <button onclick="toast('To wersja demo — checkout nieaktywny ✨')" class="w-full rounded-full acc-bg text-white py-3.5 font-semibold hover:opacity-90 flex items-center justify-center gap-2"><i data-lucide="credit-card" class="w-5 h-5"></i> Przejdź do kasy</button>
+      <p class="mt-2 text-center text-xs text-slate-400">Demo portfolio — płatność nieaktywna</p>
+    </div>
+  </aside>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] hidden">
+  <div class="bg-slate-900 text-white px-5 py-3 rounded-full shadow-2xl text-sm font-medium flex items-center gap-2"></div>
+</div>
+
+<script>
+const PRODUCTS = [{"id": 1, "n": "Karma premium 12kg", "cat": "Pies", "p": 159, "e": "🦴", "r": 720, "tag": "Bestseller", "kw": "dog,food", "old": 200}, {"id": 2, "n": "Drapak dla kota", "cat": "Kot", "p": 129, "e": "🐈", "r": 380, "tag": "Hit", "kw": "cat,tree", "old": 160}, {"id": 3, "n": "Piłka interaktywna", "cat": "Zabawki", "p": 29, "e": "🎾", "r": 260, "tag": "", "kw": "dog,toy"}, {"id": 4, "n": "Legowisko XL", "cat": "Akcesoria", "p": 119, "e": "🛏️", "r": 310, "tag": "", "kw": "pet,bed"}, {"id": 5, "n": "Karma mokra 6-pak", "cat": "Kot", "p": 49, "e": "🥫", "r": 290, "tag": "", "kw": "cat,food"}, {"id": 6, "n": "Smycz automatyczna", "cat": "Akcesoria", "p": 59, "e": "🦮", "r": 210, "tag": "Nowość", "kw": "dog,leash"}, {"id": 7, "n": "Mysz dla kota", "cat": "Zabawki", "p": 19, "e": "🐭", "r": 140, "tag": "", "kw": "cat,toy"}, {"id": 8, "n": "Szampon dla psa", "cat": "Pies", "p": 39, "e": "🧴", "r": 95, "tag": "", "kw": "dog,grooming"}];
+const CATS = ["Pies", "Kot", "Zabawki", "Akcesoria"];
+const LOCK = 307;
+const HERO_KW = "dog,cat";
+const EMO = "🐾";
+const DESCS = ["Starannie wyselekcjonowany produkt najwyższej jakości — pokochasz go od pierwszego użycia.","Bestseller naszego sklepu. Świetny stosunek jakości do ceny i tysiące zadowolonych klientów.","Idealny wybór na prezent lub dla siebie. Wysyłamy w 24h, z możliwością łatwego zwrotu."];
+const fmt = n => n.toLocaleString('pl-PL');
+const imgUrl = p => `https://loremflickr.com/600/600/${p.kw}?lock=${p.id+LOCK}`;
+let cart = {}; let wish = new Set();
+const $ = s => document.querySelector(s);
+lucide.createIcons();
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// countdown
+(function(){ const end=Date.now()+ (3*3600+27*60)*1000; const el=$('#cd');
+  setInterval(()=>{ let s=Math.max(0,Math.floor((end-Date.now())/1000)); const h=String(Math.floor(s/3600)).padStart(2,'0'),m=String(Math.floor(s%3600/60)).padStart(2,'0'),x=String(s%60).padStart(2,'0'); el.textContent=`${h}:${m}:${x}`; },1000);
+})();
+
+// reveal
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+// counters
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=+el.dataset.target,sx=el.dataset.suffix||'',st=performance.now();const f=now=>{const p=Math.min((now-st)/1400,1),v=Math.floor((1-Math.pow(1-p,3))*t);el.textContent=fmt(v)+sx;if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);co.unobserve(el);}}),{threshold:.6});
+document.querySelectorAll('[data-counter]').forEach(el=>co.observe(el));
+
+let curCat='all';
+function renderFilters(){ const all=['all',...CATS];
+  $('#filters').innerHTML=all.map(c=>`<button onclick="setCat('${c}')" class="rounded-full border px-4 py-2 text-sm font-medium transition-all ${c===curCat?'acc-bg text-white acc-border':'border-slate-300 text-slate-600 hover:border-slate-400'}">${c==='all'?'Wszystkie':c}</button>`).join('');
+}
+function setCat(c){ curCat=c; renderFilters(); renderGrid(); }
+
+function renderGrid(){
+  const items=PRODUCTS.filter(p=>curCat==='all'||p.cat===curCat);
+  $('#grid').innerHTML=items.map(p=>`
+    <article class="pcard group bg-white rounded-3xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:border-transparent transition-all duration-300">
+      <div class="relative aspect-square overflow-hidden cursor-pointer" onclick="openQV(${p.id})">
+        <div class="absolute inset-0 acc-grad grid place-items-center text-7xl">${p.e}</div>
+        <img src="${imgUrl(p)}" onerror="this.remove()" loading="lazy" class="card-img absolute inset-0 w-full h-full object-cover" alt="${p.n}" />
+        <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+          ${p.tag?`<span class="rounded-full acc-bg text-white text-[10px] font-bold px-2.5 py-1 shadow">${p.tag}</span>`:''}
+          ${p.old?`<span class="rounded-full bg-rose-500 text-white text-[10px] font-bold px-2.5 py-1 shadow">-${Math.round((1-p.p/p.old)*100)}%</span>`:''}
+        </div>
+        <button onclick="event.stopPropagation();toggleWish(${p.id},this)" class="heartbeat absolute top-3 right-3 grid place-items-center w-9 h-9 rounded-full bg-white/90 backdrop-blur shadow text-slate-500 hover:scale-110 transition-transform"><i data-lucide="heart" class="w-4 h-4"></i></button>
+        <div class="quick absolute bottom-3 inset-x-3 flex gap-2">
+          <button onclick="event.stopPropagation();addToCart(${p.id},this)" class="flex-1 rounded-full acc-bg text-white py-2.5 text-sm font-semibold shadow-lg hover:opacity-90 flex items-center justify-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i> Do koszyka</button>
+          <button onclick="event.stopPropagation();openQV(${p.id})" class="grid place-items-center w-11 rounded-full bg-white text-slate-700 shadow-lg hover:bg-slate-50"><i data-lucide="eye" class="w-4 h-4"></i></button>
+        </div>
+      </div>
+      <div class="p-4">
+        <p class="text-[11px] uppercase tracking-wide text-slate-400">${p.cat}</p>
+        <h3 class="font-d font-700 text-slate-900 leading-tight mt-0.5 cursor-pointer hover:acc-text" onclick="openQV(${p.id})">${p.n}</h3>
+        <div class="mt-1 flex items-center gap-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-400">(${p.r})</span></div>
+        <div class="mt-2 flex items-end gap-2">
+          <span class="font-d font-800 text-lg text-slate-900">${fmt(p.p)} zł</span>
+          ${p.old?`<span class="text-sm text-slate-400 line-through mb-0.5">${fmt(p.old)} zł</span>`:''}
+        </div>
+      </div>
+    </article>`).join('');
+  lucide.createIcons();
+}
+
+function toggleWish(id,btn){ if(wish.has(id)){wish.delete(id);btn.classList.remove('on');} else {wish.add(id);btn.classList.add('on');} const c=$('#wishCount'); c.textContent=wish.size; c.classList.toggle('hidden',wish.size===0); lucide.createIcons(); }
+
+// fly to cart
+function flyToCart(srcEl){ const img=srcEl.closest('.pcard,.qv-root')?.querySelector('img.card-img, #qvImg img'); const cartRect=$('#cartBtn').getBoundingClientRect();
+  const rect=(img||srcEl).getBoundingClientRect(); const f=document.createElement(img?'img':'div'); if(img) f.src=img.src; else { f.style.background='var(--acc)'; f.textContent=EMO; }
+  f.className='fly'; f.style.left=rect.left+'px'; f.style.top=rect.top+'px'; f.style.width=Math.min(rect.width,120)+'px'; f.style.height=Math.min(rect.height,120)+'px'; f.style.opacity='1';
+  document.body.appendChild(f);
+  requestAnimationFrame(()=>{ f.style.left=cartRect.left+cartRect.width/2-15+'px'; f.style.top=cartRect.top+'px'; f.style.width='30px'; f.style.height='30px'; f.style.opacity='.2'; f.style.transform='rotate(25deg)'; });
+  setTimeout(()=>f.remove(),820);
+}
+function addToCart(id,btn){ cart[id]=(cart[id]||0)+1; updateCart(); if(btn) flyToCart(btn); const cc=$('#cartCount'); cc.classList.remove('pop'); void cc.offsetWidth; cc.classList.add('pop'); }
+function add(id){ addToCart(id); }
+function setQty(id,d){ cart[id]=(cart[id]||0)+d; if(cart[id]<=0) delete cart[id]; updateCart(); }
+function updateCart(){
+  const ids=Object.keys(cart); const count=ids.reduce((s,id)=>s+cart[id],0); const total=ids.reduce((s,id)=>s+cart[id]*PRODUCTS.find(p=>p.id==id).p,0);
+  $('#cartCount').textContent=count; $('#cartTotal').textContent=fmt(total)+' zł'; $('#cartSub').textContent=fmt(total)+' zł';
+  const TH=199, left=Math.max(0,TH-total), pct=Math.min(100,total/TH*100);
+  $('#freeShip').innerHTML = left>0 ? `<div class="rounded-xl bg-slate-50 p-3 text-xs text-slate-600">Brakuje <strong class="acc-text">${fmt(left)} zł</strong> do darmowej dostawy<div class="mt-2 h-1.5 rounded-full bg-slate-200 overflow-hidden"><div class="h-full acc-bg" style="width:${pct}%"></div></div></div>` : `<div class="rounded-xl acc-soft p-3 text-xs acc-text font-semibold flex items-center gap-2"><i data-lucide="party-popper" class="w-4 h-4"></i> Masz darmową dostawę!</div>`;
+  $('#cartItems').innerHTML = ids.length? ids.map(id=>{const p=PRODUCTS.find(x=>x.id==id);return `
+    <div class="flex items-center gap-3">
+      <span class="relative grid place-items-center w-16 h-16 rounded-xl overflow-hidden text-2xl shrink-0 acc-grad">${p.e}<img src="${imgUrl(p)}" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover"></span>
+      <div class="flex-1 min-w-0"><p class="font-semibold text-slate-900 truncate text-sm">${p.n}</p><p class="text-sm text-slate-500">${fmt(p.p)} zł</p></div>
+      <div class="flex items-center gap-2"><button onclick="setQty(${id},-1)" class="grid place-items-center w-7 h-7 rounded-lg border border-slate-300 hover:bg-slate-50">−</button><span class="w-5 text-center font-semibold">${cart[id]}</span><button onclick="setQty(${id},1)" class="grid place-items-center w-7 h-7 rounded-lg border border-slate-300 hover:bg-slate-50">+</button></div>
+    </div>`;}).join('') : '<p class="text-center text-slate-400 py-12">Koszyk jest pusty 🛒</p>';
+  lucide.createIcons();
+}
+function openCart(){ $('#cartOverlay').classList.remove('hidden'); setTimeout(()=>$('#cartDrawer').classList.remove('translate-x-full'),10); }
+function closeCart(){ $('#cartDrawer').classList.add('translate-x-full'); setTimeout(()=>$('#cartOverlay').classList.add('hidden'),400); }
+$('#cartBtn').addEventListener('click',openCart);
+
+// quick view
+let qvId=null;
+function openQV(id){ qvId=id; const p=PRODUCTS.find(x=>x.id===id);
+  $('#qvImg').innerHTML=`${p.e}<img src="${imgUrl(p)}" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover">`;
+  $('#qvCat').textContent=p.cat; $('#qvName').textContent=p.n; $('#qvR').textContent='('+p.r+' opinii)';
+  $('#qvDesc').textContent=DESCS[id%DESCS.length]; $('#qvPrice').textContent=fmt(p.p)+' zł'; $('#qvOld').textContent=p.old?fmt(p.old)+' zł':'';
+  $('#qv').classList.remove('hidden'); $('#qv').classList.add('flex'); document.body.style.overflow='hidden'; lucide.createIcons();
+}
+function closeQV(){ $('#qv').classList.add('hidden'); $('#qv').classList.remove('flex'); document.body.style.overflow=''; }
+$('#qvAdd').addEventListener('click',()=>{ addToCart(qvId,$('#qvImg')); closeQV(); openCart(); });
+
+let toastT; function toast(msg){ const t=$('#toast'); t.firstElementChild.textContent=msg; t.classList.remove('hidden'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.add('hidden'),2200); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeCart();closeQV();} });
+
+renderFilters(); renderGrid(); updateCart();
+</script>
+</body>
+</html>
