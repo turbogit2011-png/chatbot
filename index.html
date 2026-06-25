@@ -1,1015 +1,114 @@
-<!DOCTYPE html>
-<html lang="pl" class="scroll-smooth">
+<!doctype html>
+<html lang="pl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TURBO-GIT — Regeneracja turbosprężarek. Na poziomie.</title>
-<meta name="description" content="Regeneracja turbosprężarek oraz filtrów DPF / FAP / SCR i katalizatorów (myjka Metalserw) od 2012 roku. Balansowanie VSR 301 (0,001 g/cm²), kalibracja REA-MASTER, test G3-MIN-FLOW, diagnostyka CHRA, części OEM, gwarancja 24 miesiące bez limitu km, wysyłka 24h. 8000+ turbin na stanie." />
-<meta name="theme-color" content="#0a0a0b" />
-<meta property="og:title" content="TURBO-GIT — Regeneracja turbosprężarek na poziomie" />
-<meta property="og:description" content="Twoja turbosprężarka wraca silniejsza niż z fabryki. VSR 301, REA-MASTER, gwarancja 24 miesiące, wysyłka 24h." />
-<meta property="og:type" content="website" />
-<meta property="og:locale" content="pl_PL" />
-
-<!-- ===================== TAILWIND CSS 3.4+ (CDN) ===================== -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: { extend: {
-      colors: {
-        ink:'#0a0a0b', ink2:'#111114', ink3:'#16161a',
-        steel:'#9aa3ad', silver:'#dfe4ea',
-        power:'#c8102e', 'power-600':'#a50d26', 'power-400':'#e23150',
-      },
-      fontFamily: {
-        sans:['Inter','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'],
-        display:['Archivo','Inter','system-ui','sans-serif'],
-      },
-      boxShadow: {
-        glow:'0 0 0 1px rgba(200,16,46,.35), 0 20px 60px -20px rgba(200,16,46,.55)',
-        card:'0 24px 70px -30px rgba(0,0,0,.85)',
-      },
-      keyframes: {
-        spinSlow:{ to:{ transform:'rotate(360deg)' } },
-        floaty:{ '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-10px)' } },
-      },
-      animation: { 'spin-slow':'spinSlow 16s linear infinite', 'spin-med':'spinSlow 8s linear infinite', floaty:'floaty 6s ease-in-out infinite' }
-    } }
-  }
-</script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
-<style>
-  :root { color-scheme:dark; }
-  html,body { background:#0a0a0b; }
-  ::selection { background:#c8102e; color:#fff; }
-  ::-webkit-scrollbar { width:10px; height:10px; }
-  ::-webkit-scrollbar-track { background:#0a0a0b; }
-  ::-webkit-scrollbar-thumb { background:#26262c; border-radius:20px; border:2px solid #0a0a0b; }
-  ::-webkit-scrollbar-thumb:hover { background:#3a3a44; }
-  .font-display { font-family:'Archivo',Inter,sans-serif; letter-spacing:-.02em; }
-  .grid-bg {
-    background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
-    background-size:48px 48px; mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);
-  }
-  .text-gradient { background:linear-gradient(120deg,#fff 0%,#dfe4ea 35%,#e23150 75%,#c8102e 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .text-power-grad { background:linear-gradient(120deg,#e23150,#c8102e); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity:1; transform:none; }
-  .lift { transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s; }
-  .lift:hover { transform:translateY(-6px); }
-  .turbo-ring { background:conic-gradient(from 0deg,transparent 0 70%,rgba(200,16,46,0) 70%,#c8102e 85%,transparent 100%); }
-  .nav-link { position:relative; }
-  .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:#c8102e; transition:width .3s; }
-  .nav-link:hover::after,.nav-link.active::after { width:100%; }
-  .nav-link.active { color:#fff; }
-  .glass { background:rgba(17,17,20,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
-  details>summary { list-style:none; cursor:pointer; }
-  details>summary::-webkit-details-marker { display:none; }
-  details[open] .faq-icon { transform:rotate(45deg); }
-  .hot { position:absolute; width:28px; height:28px; border-radius:9999px; background:#c8102e; display:grid; place-items:center; color:#fff; font:700 12px/1 Inter,sans-serif; transform:translate(-50%,-50%); transition:transform .25s; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.45); }
-  .hot::after { content:''; position:absolute; inset:-7px; border-radius:9999px; border:1px solid rgba(200,16,46,.6); animation:hotPing 2s ease-out infinite; }
-  .hot:hover,.hot.active { transform:translate(-50%,-50%) scale(1.22); }
-  .hot.active { background:#fff; color:#c8102e; box-shadow:0 0 0 4px rgba(200,16,46,.5); }
-  @keyframes hotPing { 0%{transform:scale(.6);opacity:1} 100%{transform:scale(1.4);opacity:0} }
-  .part-tab.active { background:#c8102e; border-color:#c8102e; color:#fff; }
-  .calc-cat.active { background:rgba(200,16,46,.15); border-color:#c8102e; color:#fff; }
-  .step-btn.active { border-color:rgba(200,16,46,.4); background:rgba(200,16,46,.06); }
-  .step-btn.active .step-dot { background:#c8102e; color:#fff; border-color:#c8102e; }
-  .step-btn.active .step-title { color:#fff; }
-  @media (prefers-reduced-motion: reduce) { .reveal { transition:none; opacity:1; transform:none; } .animate-spin-slow,.animate-spin-med,.animate-floaty { animation:none !important; } }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <!-- Usuń noindex po wdrożeniu pod turbo-git.com i ustaw canonical w Rank Math. -->
+  <title>Regeneracja turbosprężarek na nowym rdzeniu CHRA | TURBO-GIT</title>
+  <meta name="description" content="Regeneracja turbosprężarek TURBO-GIT: nowy rdzeń CHRA, wyważanie VSR 301, kalibracja REA-MASTER, test G3-MIN-FLOW, 24 miesiące gwarancji i dobór techniczny.">
+  <meta name="theme-color" content="#0a0b0d">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pl_PL">
+  <meta property="og:title" content="Regeneracja turbosprężarek na nowym rdzeniu CHRA | TURBO-GIT">
+  <meta property="og:description" content="Techniczna regeneracja, kontrola przyczyny uszkodzenia i 24 miesiące gwarancji.">
+  <style>
+    :root{--bg:#090a0c;--panel:#111318;--panel2:#16191f;--line:rgba(255,255,255,.11);--muted:#a9b1bd;--text:#f4f6f8;--red:#d41435;--red2:#ff4765;--max:1180px;--radius:22px}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5} a{color:inherit;text-decoration:none} button,input,textarea{font:inherit} button{cursor:pointer}.container{width:min(var(--max),calc(100% - 40px));margin:auto}.eyebrow{color:#ff8296;font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.16em}.muted{color:var(--muted)}.grid{display:grid;gap:22px}.card{border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border-radius:var(--radius);box-shadow:0 24px 70px rgba(0,0,0,.24)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid transparent;border-radius:999px;padding:14px 20px;font-weight:800;transition:.22s transform,.22s background,.22s border-color}.btn:hover{transform:translateY(-2px)}.btn-primary{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;box-shadow:0 18px 40px rgba(212,20,53,.25)}.btn-secondary{background:rgba(255,255,255,.04);border-color:var(--line);color:#fff}.btn-secondary:hover{background:rgba(255,255,255,.08)}.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:16px;z-index:100;background:#fff;color:#000;padding:10px;border-radius:8px}
+    header{position:sticky;top:0;z-index:40;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(9,10,12,.87);backdrop-filter:blur(16px)}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:conic-gradient(from 30deg,var(--red),transparent 22%,transparent 60%,var(--red2));position:relative}.brand-mark:after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--bg)}.brand-mark span{position:relative;z-index:1;color:#fff;font-size:13px}.nav-links{display:flex;gap:20px;color:#c3cad3;font-size:.9rem}.nav-links a:hover{color:#fff}.nav-actions{display:flex;align-items:center;gap:10px}.phone{font-weight:800;white-space:nowrap}.menu{display:none;background:none;border:1px solid var(--line);color:#fff;border-radius:10px;padding:9px}.mobile{display:none;padding:10px 0 18px;border-top:1px solid var(--line)}.mobile.open{display:grid;gap:5px}.mobile a{padding:10px;color:#c3cad3}
+    .hero{position:relative;isolation:isolate;overflow:hidden;min-height:720px;display:grid;align-items:center}.hero:before{content:"";position:absolute;inset:0;z-index:-3;background:url("assets/img/shelf-red.jpg") center/cover}.hero:after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(6,7,9,.96) 0%,rgba(6,7,9,.82) 46%,rgba(6,7,9,.58) 100%)}.glow{position:absolute;z-index:-1;width:620px;height:620px;left:45%;top:-250px;border-radius:50%;background:rgba(212,20,53,.27);filter:blur(130px)}.hero-wrap{padding:90px 0}.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:48px}.hero h1{font-size:clamp(2.7rem,6vw,5.6rem);line-height:.98;letter-spacing:-.065em;margin:16px 0 20px;max-width:850px}.accent{background:linear-gradient(130deg,#fff,#ff5570);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-copy{font-size:1.08rem;max-width:680px;color:#c3cad3}.hero-note{margin-top:15px;font-size:.87rem;color:#a9b1bd}.leadbox{padding:22px;margin-top:32px;max-width:720px}.quick{display:grid;grid-template-columns:1fr auto;gap:10px}.input{width:100%;border:1px solid var(--line);border-radius:14px;background:#0c0e12;color:#fff;padding:14px 15px;outline:none}.input:focus{border-color:rgba(255,71,101,.8);box-shadow:0 0 0 4px rgba(212,20,53,.13)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.chip{border:1px solid var(--line);background:rgba(255,255,255,.035);color:#c8cfd8;padding:7px 10px;border-radius:999px;font-size:.8rem}.chip:hover{border-color:rgba(255,71,101,.7);color:#fff}.hero-side{display:grid;gap:14px}.hero-photo{overflow:hidden;min-height:420px;position:relative}.hero-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(.85)}.hero-photo:after{content:"VSR 301 • kontrola techniczna";position:absolute;left:17px;bottom:16px;border:1px solid var(--line);background:rgba(7,8,10,.77);backdrop-filter:blur(10px);padding:10px 12px;border-radius:11px;font-size:.8rem;font-weight:700}.floating{display:flex;gap:10px;align-items:flex-start;padding:15px}.floating b{display:block;font-size:1.15rem}.dot{width:12px;height:12px;background:var(--red);border-radius:50%;margin-top:6px;box-shadow:0 0 0 6px rgba(212,20,53,.15)}
+    .trust{border-block:1px solid var(--line);background:#0e1014}.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:22px 0}.trust-grid div{padding:8px 12px;border-right:1px solid var(--line)}.trust-grid div:last-child{border:0}.trust-grid b{display:block;font-size:1rem}.trust-grid span{display:block;font-size:.79rem;color:var(--muted);margin-top:2px}
+    section{padding:100px 0}.section-head{max-width:760px;margin-bottom:38px}.section-head h2{font-size:clamp(2rem,4vw,3.8rem);line-height:1.04;letter-spacing:-.055em;margin:13px 0}.section-head p{font-size:1.05rem;color:var(--muted)}.problem{grid-template-columns:1fr 1fr;align-items:center}.photo{overflow:hidden}.photo img{display:block;width:100%;height:100%;object-fit:cover}.photo.tall{min-height:500px}.list{display:grid;gap:12px;margin:26px 0}.list-item{display:flex;gap:12px;align-items:flex-start}.check{width:24px;height:24px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:rgba(212,20,53,.16);color:#ff7087;font-weight:900}.feature-grid{grid-template-columns:repeat(3,1fr)}.feature{padding:25px}.feature h3{margin:15px 0 8px;font-size:1.18rem}.icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:rgba(212,20,53,.13);border:1px solid rgba(255,71,101,.24);color:#ff8094;font-weight:900}.step-grid{grid-template-columns:repeat(4,1fr)}.step{padding:22px;position:relative}.step-num{color:#ff7890;font-weight:900;font-size:.78rem;letter-spacing:.1em}.step h3{margin:12px 0 8px;font-size:1.08rem}.tech{grid-template-columns:repeat(3,1fr)}.tech .card{overflow:hidden}.tech img{width:100%;height:210px;object-fit:cover;display:block}.tech-copy{padding:22px}.tech-copy h3{margin:0 0 8px;font-size:1.25rem}.service-grid{grid-template-columns:repeat(3,1fr)}.service{padding:24px}.service h3{margin:15px 0 8px}.service p{margin:0;color:var(--muted)}
+    .comparison{overflow:auto}.comparison table{border-collapse:collapse;width:100%;min-width:650px}.comparison th,.comparison td{padding:15px;border-bottom:1px solid var(--line);text-align:left}.comparison th{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:#a9b1bd}.comparison td:last-child,.comparison th:last-child{background:rgba(212,20,53,.07)}.notice{padding:24px;border-color:rgba(255,71,101,.35);background:linear-gradient(130deg,rgba(212,20,53,.16),rgba(255,255,255,.025))}.notice h3{margin:0 0 9px}.notice p{margin:0;color:#d0d6df}.cases{grid-template-columns:repeat(3,1fr)}.case{overflow:hidden}.case img{width:100%;aspect-ratio:1.25;object-fit:cover;display:block}.case-copy{padding:18px}.case-copy h3{margin:0 0 5px;font-size:1.08rem}.case-copy p{margin:0;color:var(--muted);font-size:.92rem}.faq{display:grid;gap:10px}.faq details{padding:0 19px}.faq summary{padding:18px 0;cursor:pointer;font-weight:750;list-style:none}.faq summary::-webkit-details-marker{display:none}.faq p{margin:0 0 18px;color:var(--muted)}
+    .contact{grid-template-columns:.9fr 1.1fr;align-items:start}.contact-copy{padding:28px}.contact-copy h2{font-size:clamp(2rem,4vw,3.5rem);line-height:1.02;letter-spacing:-.05em;margin:14px 0}.contact-actions{display:grid;gap:10px;margin-top:24px}.action{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);padding:14px;border-radius:14px}.action small{color:var(--muted);display:block}.form{padding:28px}.form h3{margin:0 0 18px;font-size:1.6rem}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.fields .full{grid-column:1/-1}.form label{display:grid;gap:7px;color:#c5ccd6;font-size:.9rem}.form textarea{min-height:105px;resize:vertical}.consent{margin:17px 0;color:#a9b1bd;font-size:.8rem;display:flex;gap:9px;align-items:flex-start}.status{min-height:22px;margin:12px 0 0;font-size:.88rem;color:#cfd6df}.status.success{color:#9be2ae}.status.error{color:#ff8799}
+    footer{border-top:1px solid var(--line);padding:42px 0;background:#0b0d10}.foot{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.foot p{color:#a9b1bd;font-size:.85rem;margin:8px 0}.foot-links{display:flex;gap:16px;flex-wrap:wrap;color:#a9b1bd;font-size:.85rem}.foot-links a:hover{color:#fff}.hide{display:none!important}
+    @media(max-width:980px){.nav-links{display:none}.menu{display:block}.hero-grid,.problem,.contact{grid-template-columns:1fr}.hero-side{max-width:620px}.feature-grid,.tech,.service-grid{grid-template-columns:repeat(2,1fr)}.step-grid{grid-template-columns:repeat(2,1fr)}.cases{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.container{width:min(var(--max),calc(100% - 28px))}.phone{display:none}.hero{min-height:auto}.hero-wrap{padding:68px 0}.hero h1{font-size:3rem}.quick{grid-template-columns:1fr}.trust-grid{grid-template-columns:1fr 1fr}.trust-grid div:nth-child(2){border-right:0}.trust-grid div:nth-child(-n+2){border-bottom:1px solid var(--line)}section{padding:72px 0}.feature-grid,.tech,.service-grid,.step-grid,.cases,.fields{grid-template-columns:1fr}.photo.tall{min-height:320px}.foot{display:block}.hero-photo{min-height:320px}.nav-actions .btn{padding:10px 13px;font-size:.84rem}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"AutoRepair","name":"TURBO-GIT","telephone":"+48694706140","email":"biuro@turbo-git.com","address":{"@type":"PostalAddress","streetAddress":"ul. Wrocławska 7","postalCode":"55-095","addressLocality":"Januszkowice","addressCountry":"PL"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"07:00","closes":"16:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"08:00","closes":"13:00"}]}
+  </script>
 </head>
-
-<body class="bg-ink text-silver font-sans antialiased">
-
-<!-- 1. NAVBAR -->
-<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-  <div class="glass border-b border-white/5">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-4">
-      <a href="#hero" class="flex items-center gap-3 group shrink-0">
-        <span class="relative grid place-items-center w-10 h-10">
-          <span class="absolute inset-0 rounded-full turbo-ring animate-spin-slow opacity-80"></span>
-          <span class="absolute inset-[3px] rounded-full bg-ink border border-white/10"></span>
-          <i data-lucide="fan" class="relative w-5 h-5 text-power group-hover:rotate-90 transition-transform duration-500"></i>
-        </span>
-        <span class="leading-none">
-          <span class="block font-display font-[900] text-lg tracking-tight text-white">TURBO<span class="text-power">-</span>GIT</span>
-          <span class="block text-[10px] uppercase tracking-[.22em] text-steel">Regeneracja. Na poziomie.</span>
-        </span>
-      </a>
-      <div class="hidden lg:flex items-center gap-7 text-sm font-medium text-steel">
-        <a href="#uslugi" class="nav-link" data-nav>Usługi</a>
-        <a href="#dpf" class="nav-link" data-nav>DPF</a>
-        <a href="#proces" class="nav-link" data-nav>Proces</a>
-        <a href="#technologia" class="nav-link" data-nav>Technologia</a>
-        <a href="#realizacje" class="nav-link" data-nav>Realizacje</a>
-        <a href="#opinie" class="nav-link" data-nav>Opinie</a>
-        <a href="#kontakt" class="nav-link" data-nav>Kontakt</a>
-      </div>
-      <div class="flex items-center gap-3 shrink-0">
-        <a href="tel:+48694706140" class="hidden sm:flex items-center gap-2 text-sm text-silver hover:text-white transition-colors">
-          <i data-lucide="phone" class="w-4 h-4 text-power"></i><span class="font-semibold tabular-nums">694 706 140</span>
-        </a>
-        <a href="#kontakt" class="relative inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors shadow-[0_8px_30px_-8px_rgba(200,16,46,.7)]">
-          <i data-lucide="zap" class="w-4 h-4"></i><span class="hidden sm:inline">Zamów regenerację</span><span class="sm:hidden">Zamów</span>
-        </a>
-        <button id="menuBtn" aria-label="Menu" class="lg:hidden grid place-items-center w-10 h-10 rounded-lg border border-white/10 text-silver"><i data-lucide="menu" class="w-5 h-5"></i></button>
-      </div>
-    </nav>
+<body>
+<a class="skip" href="#content">Przejdź do treści</a>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#start" aria-label="TURBO-GIT — strona główna"><span class="brand-mark"><span>TG</span></span><span>TURBO<span style="color:var(--red2)">-</span>GIT</span></a>
+    <nav class="nav-links" aria-label="Główna nawigacja"><a href="#proces">Proces</a><a href="#technologia">Technologia</a><a href="#uslugi">Usługi</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a></nav>
+    <div class="nav-actions"><a class="phone" href="tel:+48694706140">694 706 140</a><a class="btn btn-primary" href="#kontakt">Dobierz turbinę</a><button class="menu" id="menu" aria-expanded="false" aria-controls="mobileNav">Menu</button></div>
   </div>
-  <div id="mobileMenu" class="lg:hidden hidden glass border-b border-white/5">
-    <div class="px-6 py-4 flex flex-col gap-1 text-base">
-      <a href="#uslugi" class="py-2 text-steel hover:text-white" data-mlink>Usługi</a>
-      <a href="#dpf" class="py-2 text-steel hover:text-white" data-mlink>DPF / FAP / SCR</a>
-      <a href="#proces" class="py-2 text-steel hover:text-white" data-mlink>Proces</a>
-      <a href="#technologia" class="py-2 text-steel hover:text-white" data-mlink>Technologia</a>
-      <a href="#realizacje" class="py-2 text-steel hover:text-white" data-mlink>Realizacje</a>
-      <a href="#opinie" class="py-2 text-steel hover:text-white" data-mlink>Opinie</a>
-      <a href="#kalkulator" class="py-2 text-steel hover:text-white" data-mlink>Kalkulator</a>
-      <a href="#kontakt" class="py-2 text-steel hover:text-white" data-mlink>Kontakt</a>
-    </div>
-  </div>
+  <div id="mobileNav" class="container mobile" aria-label="Menu mobilne"><a href="#proces">Proces</a><a href="#technologia">Technologia</a><a href="#uslugi">Usługi</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a></div>
 </header>
-
-<main>
-
-<!-- 2. HERO + WYSZUKIWARKA -->
-<section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden pt-[68px]">
-  <img src="assets/img/shelf-red.jpg" alt="Magazyn turbosprężarek TURBO-GIT" class="absolute inset-0 w-full h-full object-cover opacity-25" loading="eager" />
-  <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/70 to-ink"></div>
-  <div class="absolute inset-0 grid-bg"></div>
-  <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[700px] rounded-full bg-power/20 blur-[160px] opacity-60"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-12 gap-10 items-center">
-    <div class="lg:col-span-7">
-      <div class="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-steel mb-6">
-        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-power opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-power"></span></span>
-        Specjaliści od regeneracji turbo od <strong class="text-silver">2012 roku</strong>
-      </div>
-      <h1 class="reveal font-display font-[900] text-white leading-[0.98] text-[42px] sm:text-6xl lg:text-7xl tracking-tight">
-        Twoja turbosprężarka <br class="hidden sm:block">wraca <span class="text-gradient">silniejsza</span> <br class="hidden sm:block">niż z fabryki.
-      </h1>
-      <p class="reveal mt-6 max-w-xl text-lg text-steel leading-relaxed">
-        Regeneracja z <span class="text-silver font-semibold">24-miesięczną gwarancją</span> bez limitu km. Części OEM, balansowanie <span class="text-silver font-semibold">VSR&nbsp;301</span>, kalibracja REA-MASTER. Wysyłka w 24h w całej Polsce.
-      </p>
-
-      <form id="finder" class="reveal mt-8 max-w-xl rounded-2xl border border-white/10 bg-ink3/80 p-2 flex flex-col sm:flex-row gap-2 shadow-card">
-        <div class="flex items-center gap-2 flex-1 px-3">
-          <i data-lucide="search" class="w-5 h-5 text-power shrink-0"></i>
-          <input id="finderInput" type="text" placeholder="Wpisz model lub kod silnika, np. 1.9 TDI, N47D20, OM651" class="w-full bg-transparent py-3 text-silver placeholder:text-steel/70 outline-none" />
+<main id="content">
+  <section class="hero" id="start">
+    <div class="glow"></div>
+    <div class="container hero-wrap hero-grid">
+      <div>
+        <div class="eyebrow">Od 2012 roku • regeneracja turbosprężarek</div>
+        <h1>Nie zgadujemy.<br><span class="accent">Regenerujemy technicznie.</span></h1>
+        <p class="hero-copy">Turbosprężarka na <strong>nowym rdzeniu CHRA</strong>, dobrana i sprawdzona pod konkretną konstrukcję. VSR 301, REA-MASTER, G3-MIN-FLOW oraz dokumentowana kontrola przed wysyłką.</p>
+        <div class="leadbox card">
+          <form id="quickFinder" class="quick">
+            <input id="quickInput" class="input" autocomplete="off" placeholder="Wpisz VIN, numer turbo, OE lub kod silnika" aria-label="VIN, numer turbosprężarki, OE lub kod silnika">
+            <button class="btn btn-primary" type="submit">Sprawdź dopasowanie</button>
+          </form>
+          <div class="chips" aria-label="Przykładowe wyszukiwania"><button type="button" class="chip">1.9 TDI</button><button type="button" class="chip">N47D20</button><button type="button" class="chip">OM651</button><button type="button" class="chip">Numer Garrett</button><button type="button" class="chip">Numer OE</button></div>
         </div>
-        <button class="inline-flex items-center justify-center gap-2 rounded-xl bg-power px-5 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Sprawdź turbinę <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
-      </form>
-      <div class="reveal mt-3 flex flex-wrap items-center gap-2 text-xs text-steel">
-        <span>Popularne:</span>
-        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">1.9 TDI</button>
-        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">N47D20</button>
-        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">2.0 TFSI</button>
-        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">OM651</button>
-        <button class="chip rounded-full border border-white/10 px-3 py-1 hover:border-power/40 hover:text-silver transition-colors">1.5 dCi</button>
+        <p class="hero-note">Najpewniejszy dobór: VIN + zdjęcie tabliczki znamionowej turbosprężarki.</p>
       </div>
-
-      <div class="reveal mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-steel">
-        <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> Gwarancja 24 mies.</span>
-        <span class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> Części OEM</span>
-        <span class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Wysyłka 24h</span>
+      <div class="hero-side">
+        <figure class="card hero-photo"><img src="assets/img/turbine-wheel.jpg" alt="Wirnik turbosprężarki TURBO-GIT" width="900" height="900" fetchpriority="high"></figure>
+        <div class="floating card"><span class="dot"></span><div><b>Najpierw diagnoza przyczyny uszkodzenia.</b><span class="muted">Sama wymiana turbiny bez sprawdzenia olejowania, dolotu, DPF lub sterowania może nie rozwiązać problemu.</span></div></div>
       </div>
     </div>
+  </section>
 
-    <div class="lg:col-span-5 reveal">
-      <div class="relative mx-auto max-w-md aspect-square">
-        <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle,rgba(200,16,46,.25),transparent 60%)"></div>
-        <div class="absolute inset-0 rounded-full border border-white/5"></div>
-        <div class="absolute inset-6 rounded-full border border-white/5"></div>
-        <div class="absolute inset-0 rounded-full turbo-ring animate-spin-slow"></div>
-        <div class="absolute inset-10 rounded-full overflow-hidden border border-white/10 shadow-card animate-floaty">
-          <img src="assets/img/turbine-wheel.jpg" alt="Czołowy widok zregenerowanego wirnika turbiny TURBO-GIT" class="absolute inset-0 w-full h-full object-cover scale-110" loading="eager" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent"></div>
-          <div class="absolute inset-0 rounded-full ring-1 ring-inset ring-power/25"></div>
-          <p class="absolute bottom-5 inset-x-0 text-center text-xs uppercase tracking-[.25em] text-silver">VSR&nbsp;301 balanced</p>
-        </div>
-        <div class="absolute -left-4 top-8 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
-          <p class="text-2xl font-display font-[800] text-white" data-counter data-target="8000" data-suffix="+">0</p>
-          <p class="text-[11px] text-steel">turbin na stanie</p>
-        </div>
-        <div class="absolute -right-2 bottom-10 glass rounded-xl border border-white/10 px-4 py-3 shadow-card">
-          <p class="text-2xl font-display font-[800] text-power">24<span class="text-base align-top">h</span></p>
-          <p class="text-[11px] text-steel">wysyłka w PL</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <a href="#trust" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-steel/70 hover:text-silver transition-colors animate-floaty"><i data-lucide="chevrons-down" class="w-6 h-6"></i></a>
-</section>
+  <section class="trust" aria-label="Najważniejsze informacje"><div class="container trust-grid"><div><b>24 miesiące</b><span>gwarancji bez limitu km</span></div><div><b>Nowy rdzeń CHRA</b><span>fundament regeneracji</span></div><div><b>VSR 301</b><span>wyważanie wysokich obrotów</span></div><div><b>Dobór po VIN / numerze</b><span>bez przypadkowego zakupu</span></div></div></section>
 
-<!-- 3. TRUST BAR -->
-<section id="trust" class="relative border-y border-white/5 bg-ink2">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-6 text-center">
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white"><span data-counter data-target="8000" data-suffix="+">0</span></p><p class="mt-1 text-xs text-steel uppercase tracking-wide">turbin na stanie</p></div>
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white"><span data-counter data-target="14">0</span> lat</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">doświadczenia</p></div>
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">24 mies.</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">gwarancji bez limitu km</p></div>
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white"><span data-counter data-target="98">0</span>%</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">opinii 5★</p></div>
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">VSR&nbsp;301</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">balans 0,001 g/cm²</p></div>
-      <div class="reveal"><p class="font-display font-[800] text-2xl lg:text-3xl text-white">24h</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">ekspresowa wysyłka</p></div>
+  <section>
+    <div class="container grid problem">
+      <div>
+        <div class="section-head"><div class="eyebrow">Najpierw przyczyna, później część</div><h2>Turbo nie psuje się <span class="accent">bez powodu.</span></h2><p>Brak mocy, gwizd, dymienie lub olej w dolocie mogą wynikać z uszkodzenia turbosprężarki, ale również z problemu z olejowaniem, dolotem, DPF, wtryskami albo sterowaniem. Dlatego nie sprzedajemy „w ciemno”.</p></div>
+        <div class="list"><div class="list-item"><span class="check">✓</span><div><strong>Weryfikacja numeru i zastosowania</strong><br><span class="muted">VIN, numer turbo, OE, kod silnika i parametry wersji auta.</span></div></div><div class="list-item"><span class="check">✓</span><div><strong>Ocena elementów turbosprężarki</strong><br><span class="muted">Obudowy, zmienna geometria, aktuator oraz elementy montażowe.</span></div></div><div class="list-item"><span class="check">✓</span><div><strong>Kontrola źródła awarii</strong><br><span class="muted">Aby nowa lub zregenerowana turbina nie została uszkodzona przez problem pozostawiony w pojeździe.</span></div></div></div>
+        <a class="btn btn-primary" href="#kontakt">Wyślij dane do weryfikacji</a>
+      </div>
+      <figure class="card photo tall"><img src="assets/img/workbench.jpg" alt="Stanowisko pracy TURBO-GIT" width="1000" height="1200" loading="lazy"></figure>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 4. PROBLEM + ROZWIĄZANIE -->
-<section class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute top-1/2 -left-40 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-14 items-center">
-    <div class="reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Problem &amp; Rozwiązanie</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Nowa turbina potrafi zrujnować <span class="text-power-grad">budżet</span>.</h2>
-      <p class="mt-5 text-steel text-lg leading-relaxed">Cena fabrycznie nowej turbosprężarki to często <span class="text-silver font-semibold">3 000 – 9 000 zł</span> i więcej. A zużywa się przede wszystkim jedno — rdzeń (CHRA). Dlatego w Twojej turbinie montujemy <span class="text-white font-semibold">zawsze nowy rdzeń</span>, wykorzystując Twoje sprawne obudowy.</p>
-      <p class="mt-4 text-steel text-lg leading-relaxed">Efekt: niezawodność <span class="text-white font-semibold">jak w nowej turbinie</span> — za ułamek ceny. <span class="text-silver">Nigdy nie czyścimy ani nie „odświeżamy” starego, zużytego rdzenia.</span></p>
-      <div class="mt-8"><a href="#kalkulator" class="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm font-semibold text-silver hover:bg-white/10 transition-colors"><i data-lucide="calculator" class="w-4 h-4 text-power"></i> Policz swoją oszczędność</a></div>
-    </div>
-    <div class="reveal">
-      <div class="rounded-2xl border border-white/10 bg-ink3 overflow-hidden shadow-card">
-        <div class="relative aspect-[16/8]">
-          <img src="assets/img/shelf-blue.jpg" alt="Regały z turbosprężarkami w warsztacie TURBO-GIT" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3 via-ink3/30 to-transparent"></div>
-          <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
-            <span class="text-[11px] uppercase tracking-widest text-silver/90">Nasz magazyn rdzeni i turbin</span>
-            <span class="rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">8000+ na stanie</span>
-          </div>
-        </div>
-        <div class="p-6 sm:p-8">
-          <p class="text-sm text-steel mb-6">Przykład: turbina do popularnego diesla 2.0 TDI</p>
-          <div class="mb-6">
-            <div class="flex justify-between items-end mb-2"><span class="text-silver font-medium">Nowa turbina</span><span class="font-display font-[800] text-xl text-white">~4&nbsp;800 zł</span></div>
-            <div class="h-3 rounded-full bg-white/5 overflow-hidden"><div class="h-full w-full bg-gradient-to-r from-steel/40 to-steel/70 rounded-full"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between items-end mb-2"><span class="text-silver font-medium">Regeneracja w TURBO-GIT</span><span class="font-display font-[800] text-xl text-power">~1&nbsp;900 zł</span></div>
-            <div class="h-3 rounded-full bg-white/5 overflow-hidden"><div class="h-full bg-gradient-to-r from-power-600 to-power rounded-full transition-all duration-1000" data-bar style="width:0%" data-width="40%"></div></div>
-          </div>
-          <div class="mt-8 flex items-center justify-between rounded-xl bg-power/10 border border-power/20 px-5 py-4"><span class="text-sm text-silver">Twoja oszczędność</span><span class="font-display font-[900] text-2xl text-white">45–65%</span></div>
-          <p class="mt-3 text-xs text-steel">* Wartości poglądowe. Dokładną wycenę otrzymasz po bezpłatnej diagnostyce.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <section id="proces" style="background:#0e1014;border-block:1px solid var(--line)"><div class="container"><div class="section-head"><div class="eyebrow">Proces regeneracji</div><h2>Nie kosmetyka. <span class="accent">Pełna procedura.</span></h2><p>Każdy etap ma wpływ na trwałość, szczelność oraz prawidłowe doładowanie po montażu.</p></div><div class="grid step-grid"><article class="card step"><div class="step-num">01 / WERYFIKACJA</div><h3>Przyjęcie i diagnostyka</h3><p class="muted">Opis objawów, oględziny, dokumentacja i analiza właściwego zastosowania.</p></article><article class="card step"><div class="step-num">02 / ROZBIÓRKA</div><h3>Ocena podzespołów</h3><p class="muted">Sprawdzenie obudów, geometrii, aktuatora i elementów kwalifikowanych do regeneracji.</p></article><article class="card step"><div class="step-num">03 / MONTAŻ</div><h3>Nowy rdzeń CHRA</h3><p class="muted">Montaż nowego rdzenia oraz elementów wymaganych przez daną konstrukcję.</p></article><article class="card step"><div class="step-num">04 / KONTROLA</div><h3>Wyważanie i test</h3><p class="muted">VSR 301, kalibracja i kontrola parametrów przed wysyłką.</p></article></div></div></section>
 
-<!-- 5. USŁUGI / BENEFITY -->
-<section id="uslugi" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Dlaczego TURBO-GIT</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">To nie naprawa. To <span class="text-power-grad">rewolucja</span> w regeneracji.</h2>
-      <p class="mt-5 text-steel text-lg">Sześć powodów, dla których kierowcy i warsztaty z całej Polski wysyłają turbiny właśnie do nas.</p>
-    </div>
-    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="benefits"></div>
-  </div>
-</section>
+  <section id="technologia"><div class="container"><div class="section-head"><div class="eyebrow">Technologia i kontrola</div><h2>Maszyny są ważne. <span class="accent">Procedura jeszcze ważniejsza.</span></h2><p>Stosujemy narzędzia dopasowane do rodzaju turbiny. Wynik ma być mierzalny, nie oparty na domyśle.</p></div><div class="grid tech"><article class="card"><img src="assets/img/vsr-301-machine.jpg" alt="Maszyna VSR 301" width="800" height="540" loading="lazy"><div class="tech-copy"><h3>VSR 301</h3><p class="muted">Wyważanie zmontowanego rdzenia przy wysokich obrotach roboczych. Ogranicza mikrowibracje, które skracają żywotność łożyskowania.</p></div></article><article class="card"><img src="assets/img/rea-master.jpg" alt="Stanowisko REA-MASTER" width="800" height="540" loading="lazy"><div class="tech-copy"><h3>REA-MASTER</h3><p class="muted">Kalibracja elektronicznych aktuatorów oraz sterowania zmienną geometrią, gdy dana turbosprężarka tego wymaga.</p></div></article><article class="card"><img src="assets/img/flow-station.jpg" alt="Stanowisko G3-MIN-FLOW" width="800" height="540" loading="lazy"><div class="tech-copy"><h3>G3-MIN-FLOW</h3><p class="muted">Kontrola przepływu i szczelności w procesie finalnej weryfikacji turbosprężarki.</p></div></article></div></div></section>
 
-<!-- 5B. KOMPLET OEM -->
-<section class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute -right-40 top-10 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
-    <div class="reveal order-2 lg:order-1">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Zawsze nowy rdzeń</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Sercem regeneracji jest <span class="text-power-grad">nowy rdzeń</span> — nie czyszczenie starego.</h2>
-      <p class="mt-5 text-steel text-lg leading-relaxed">W każdej turbinie montujemy fabrycznie nowy rdzeń (CHRA), a do tego komplet nowych uszczelnień i sprawdzonych części — bez przypadkowych, najtańszych zamienników. Montujesz raz i masz spokój na lata.</p>
-      <ul class="mt-7 space-y-3 text-silver">
-        <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span><strong class="text-white">Zawsze fabrycznie nowy rdzeń (CHRA)</strong> — nigdy nie regenerujemy starego</span></li>
-        <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Pełny zestaw nowych uszczelnień, pierścieni i tulei</span></li>
-        <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Obejma V-band, podkładki i komplet śrub montażowych</span></li>
-        <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Wszystko zbalansowane na VSR 301 i gotowe do montażu</span></li>
-      </ul>
-      <div class="mt-8"><a href="#kontakt" class="inline-flex items-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Zamów regenerację <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
-    </div>
-    <div class="reveal order-1 lg:order-2">
-      <div class="relative rounded-2xl border border-white/10 bg-ink3 p-2 shadow-card overflow-hidden">
-        <img src="assets/img/ford-kit-dark.jpg" alt="Zregenerowana turbosprężarka Ford z nowym rdzeniem i kompletem części" class="w-full rounded-xl" loading="lazy" />
-        <span class="absolute top-4 left-4 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">Nowy rdzeń</span>
-      </div>
-    </div>
-  </div>
-</section>
+  <section id="uslugi" style="background:#0e1014;border-block:1px solid var(--line)"><div class="container"><div class="section-head"><div class="eyebrow">Zakres obsługi</div><h2>Jedna firma. <span class="accent">Techniczna odpowiedzialność.</span></h2><p>Obsługujemy kierowców oraz warsztaty, dla których liczy się właściwy dobór i możliwie krótki przestój pojazdu.</p></div><div class="grid service-grid"><article class="card service"><span class="icon">01</span><h3>Turbosprężarki</h3><p>Dobór i regeneracja turbosprężarek do aut osobowych, dostawczych, ciężarowych i maszyn.</p></article><article class="card service"><span class="icon">02</span><h3>Warsztaty B2B</h3><p>Wsparcie techniczne, dobór po VIN i numerze oraz procedury ograniczające przestój auta klienta.</p></article><article class="card service"><span class="icon">03</span><h3>DPF / FAP / SCR</h3><p>Usługi czyszczenia filtrów i katalizatorów po uprzedniej ocenie stanu podzespołu.</p></article></div></div></section>
 
-<!-- 5C. SHOWCASE bi-turbo -->
-<section class="relative">
-  <div class="relative h-[60vh] min-h-[420px] overflow-hidden">
-    <img src="assets/img/biturbo-studio.jpg" alt="Zregenerowane turbosprężarki w układzie bi-turbo — TURBO-GIT" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/30"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-ink/70 to-transparent"></div>
-    <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-end pb-12 sm:pb-16">
-      <div class="reveal max-w-xl">
-        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Efekt końcowy</span>
-        <h2 class="mt-3 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Wracają tak, że trudno odróżnić je od <span class="text-power-grad">nowych</span>.</h2>
-        <p class="mt-4 text-silver text-lg">Pojedyncze turbo, bi-turbo, zmienna geometria — każdą oddajemy w stanie gotowym do montażu, zbalansowaną i przetestowaną.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  <section><div class="container"><div class="section-head"><div class="eyebrow">Porównanie</div><h2>Regeneracja ma sens, gdy jest wykonana <span class="accent">bez drogi na skróty.</span></h2></div><div class="card comparison"><table><thead><tr><th>Obszar</th><th>Przypadkowa „regeneracja”</th><th>TURBO-GIT — standard pracy</th></tr></thead><tbody><tr><td>Dobór części</td><td>Po samym modelu auta</td><td>VIN, numer turbo / OE, kod silnika i weryfikacja techniczna</td></tr><tr><td>Rdzeń</td><td>Niejasne pochodzenie</td><td>Nowy rdzeń CHRA dobierany do konstrukcji</td></tr><tr><td>Wyważanie</td><td>Brak potwierdzenia procesu</td><td>VSR 301 w procedurze regeneracji</td></tr><tr><td>Zmienne geometrie / aktuatory</td><td>Ustawienie „na oko”</td><td>Kalibracja oraz test tam, gdzie konstrukcja tego wymaga</td></tr><tr><td>Po montażu</td><td>Brak wskazówek o przyczynie awarii</td><td>Wskazówki montażowe i kontrola czynników, które mogły uszkodzić turbo</td></tr></tbody></table></div><div class="card notice" style="margin-top:22px"><h3>Ważne dla trwałości gwarancji</h3><p>Przed montażem należy usunąć przyczynę poprzedniej awarii, zweryfikować układ smarowania i dolot, wymienić olej oraz filtr zgodnie z procedurą. To nie „formalność” — to warunek prawidłowej pracy turbosprężarki.</p></div></div></section>
 
-<!-- 5D. DPF / FAP / SCR + KATALIZATORY -->
-<section id="dpf" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5 overflow-hidden">
-  <div class="absolute -left-40 top-10 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <div class="reveal">
-        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Nie tylko turbo</span>
-        <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Regeneracja <span class="text-power-grad">DPF · FAP · SCR</span> i katalizatorów.</h2>
-        <p class="mt-5 text-steel text-lg leading-relaxed">Zatkany filtr cząstek stałych to brak mocy, tryb awaryjny i kosztowny komunikat na desce. Zanim kupisz nowy za grube pieniądze — wyczyścimy Twój.</p>
-        <p class="mt-4 text-steel text-lg leading-relaxed">Filtry <span class="text-silver font-semibold">DPF, FAP, SCR</span> oraz <span class="text-silver font-semibold">katalizatory</span> regenerujemy na profesjonalnej myjce <span class="text-white font-semibold">Metalserw</span> — skutecznie usuwamy popiół i nagar, przywracając pełną drożność i sprawność. Bez rozcinania, z pomiarem wagi przed i po.</p>
-        <ul class="mt-7 space-y-3 text-silver">
-          <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Mycie ciśnieniowe na maszynie <strong>Metalserw</strong> — bez rozcinania filtra</span></li>
-          <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Kontrola masy i drożności <strong>przed i po</strong> — masz dowód skuteczności</span></li>
-          <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-power mt-0.5 shrink-0"></i><span>Osobowe · dostawcze · TIR · autobusy — także duże rdzenie</span></li>
-        </ul>
-        <div class="mt-8"><a href="#kontakt" class="inline-flex items-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Umów regenerację DPF <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
-      </div>
+  <section style="background:#0e1014;border-block:1px solid var(--line)"><div class="container"><div class="section-head"><div class="eyebrow">Realny warsztat</div><h2>Liczą się szczegóły, które <span class="accent">widać na stanowisku.</span></h2><p>Zdjęcia i parametry mają budować zaufanie tylko wtedy, gdy pokazują rzeczywisty proces pracy. Na tej stronie zostawiamy przestrzeń na Twoje prawdziwe realizacje.</p></div><div class="grid cases"><article class="card case"><img src="assets/img/ford-kit-dark.jpg" alt="Turbosprężarka z nowym rdzeniem CHRA" width="900" height="700" loading="lazy"><div class="case-copy"><h3>Nowy rdzeń CHRA</h3><p>Element regeneracji dobierany do konkretnej turbosprężarki.</p></div></article><article class="card case"><img src="assets/img/biturbo-studio.jpg" alt="Układ bi-turbo po regeneracji" width="900" height="700" loading="lazy"><div class="case-copy"><h3>Układy bi-turbo</h3><p>Precyzyjny dobór obu jednostek i kontrola ich parametrów.</p></div></article><article class="card case"><img src="assets/img/packaging.jpg" alt="Zapakowana turbosprężarka TURBO-GIT" width="900" height="700" loading="lazy"><div class="case-copy"><h3>Gotowe do wysyłki</h3><p>Bezpieczne pakowanie, dokumentacja i kontakt techniczny.</p></div></article></div></div></section>
 
-      <div class="reveal">
-        <div class="rounded-2xl border border-white/10 bg-ink3 p-6 sm:p-8 shadow-card">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center"><i data-lucide="filter" class="w-6 h-6 text-power"></i></span>
-            <div><p class="font-display font-[800] text-xl text-white">Cennik regeneracji</p><p class="text-xs text-steel">DPF / FAP / SCR / katalizator</p></div>
-          </div>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-5 py-4">
-              <span class="flex items-center gap-3 text-silver"><i data-lucide="car" class="w-5 h-5 text-power"></i> Samochody osobowe</span>
-              <span class="font-display font-[800] text-2xl text-white">350 zł</span>
-            </div>
-            <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-5 py-4">
-              <span class="flex items-center gap-3 text-silver"><i data-lucide="truck" class="w-5 h-5 text-power"></i> Dostawcze</span>
-              <span class="font-display font-[800] text-2xl text-white">550 zł</span>
-            </div>
-            <div class="flex items-center justify-between rounded-xl border border-power/25 bg-power/10 px-5 py-4">
-              <span class="flex items-center gap-3 text-silver"><i data-lucide="bus" class="w-5 h-5 text-power"></i> TIR / autobus</span>
-              <span class="font-display font-[900] text-2xl text-white">950 zł</span>
-            </div>
-          </div>
-          <p class="mt-5 text-xs text-steel">Ceny brutto za regenerację. Dla skrajnie zapieczonych rdzeni wycena indywidualna — ustalimy ją przed rozpoczęciem prac.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <section id="faq"><div class="container" style="max-width:900px"><div class="section-head"><div class="eyebrow">FAQ</div><h2>Najczęstsze pytania przed <span class="accent">regeneracją turbo.</span></h2></div><div class="faq"><details class="card"><summary>Czy dobieracie turbinę po VIN?</summary><p>Tak. VIN jest jednym z najważniejszych danych. Dla pełnej pewności warto przesłać również numer turbosprężarki lub zdjęcie tabliczki znamionowej.</p></details><details class="card"><summary>Czy każda turbosprężarka dostaje nowy rdzeń?</summary><p>W regeneracjach wykonywanych przez TURBO-GIT stosujemy nowy rdzeń CHRA dobrany do konstrukcji turbosprężarki. Zakres pozostałych elementów zależy od wyniku diagnostyki.</p></details><details class="card"><summary>Co trzeba sprawdzić przed montażem?</summary><p>Olej i filtr, przewody zasilające i spływ oleju, dolot, intercooler, szczelność układu oraz przyczynę awarii starej turbosprężarki. Mechanik powinien postępować zgodnie z instrukcją montażu.</p></details><details class="card"><summary>Czy mogę wysłać turbinę kurierem?</summary><p>Tak. Skontaktuj się z nami, podaj dane pojazdu i opis objawów. Ustalimy sposób odbioru lub wysyłki.</p></details><details class="card"><summary>Jak zgłosić reklamację?</summary><p>Skontaktuj się z TURBO-GIT i przygotuj dokumenty montażowe oraz opis objawów. Każde zgłoszenie jest analizowane technicznie, aby ustalić rzeczywistą przyczynę problemu.</p></details></div></div></section>
 
-<!-- 6. PROCES — STEPPER (ze zdjęciami) -->
-<section id="proces" class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute -right-40 top-20 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Proces krok po kroku</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">7 etapów, w których nie ma <span class="text-power-grad">drogi na skróty</span>.</h2>
-      <p class="mt-5 text-steel text-lg">Kliknij dowolny krok, żeby zobaczyć co dokładnie się dzieje i dlaczego to ma znaczenie.</p>
-    </div>
-    <div class="mt-14 grid lg:grid-cols-12 gap-8">
-      <div class="lg:col-span-5 reveal">
-        <div id="stepList" class="relative flex flex-col gap-2"><div class="absolute left-[22px] top-3 bottom-3 w-px bg-white/10"></div></div>
-      </div>
-      <div class="lg:col-span-7 reveal">
-        <div class="h-full rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-9 shadow-card relative overflow-hidden">
-          <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-power/10 blur-3xl"></div>
-          <div class="relative aspect-[16/7] rounded-xl border border-white/10 mb-6 overflow-hidden">
-            <img id="stepPhoto" src="assets/img/workbench.jpg" alt="Etap regeneracji turbosprężarki" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-ink3/70 to-transparent"></div>
-          </div>
-          <div class="flex items-center gap-3 mb-3"><span id="stepBadge" class="font-display font-[900] text-power text-sm">ETAP 01 / 07</span><span class="h-px flex-1 bg-white/10"></span></div>
-          <h3 id="stepHeading" class="font-display font-[800] text-2xl sm:text-3xl text-white"></h3>
-          <p id="stepDesc" class="mt-4 text-steel leading-relaxed"></p>
-          <div class="mt-6 rounded-xl bg-power/5 border border-power/15 p-5">
-            <p class="flex items-center gap-2 text-sm font-semibold text-power mb-1"><i data-lucide="key-round" class="w-4 h-4"></i> Dlaczego to kluczowe</p>
-            <p id="stepWhy" class="text-sm text-silver leading-relaxed"></p>
-          </div>
-          <div class="mt-7 flex items-center justify-between">
-            <button id="prevStep" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i> Poprzedni</button>
-            <button id="nextStep" class="inline-flex items-center gap-2 rounded-full bg-power px-4 py-2 text-sm font-semibold text-white hover:bg-power-600 transition-colors">Następny <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. TECHNOLOGIA -->
-<section id="technologia" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Technologia</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Arsenał, który robi <span class="text-power-grad">różnicę</span>.</h2>
-      <p class="mt-5 text-steel text-lg">Sprzęt i procedury, których nie znajdziesz w przeciętnym warsztacie. Dlatego nasze turbiny po prostu działają.</p>
-    </div>
-    <div class="mt-14 grid lg:grid-cols-3 gap-5">
-      <article class="reveal lift lg:row-span-2 rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <div class="relative aspect-[4/3] border-b border-white/10 overflow-hidden">
-          <img src="assets/img/vsr-301-machine.jpg" alt="Maszyna balansująca Turbo Technics VSR 301 z rdzeniami CHRA" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3 to-transparent"></div>
-          <span class="absolute top-3 left-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">VSR 301</span>
-        </div>
-        <div class="p-7">
-          <h3 class="font-display font-[800] text-2xl text-white">Balansowanie VSR 301</h3>
-          <p class="mt-3 text-steel leading-relaxed">Balansowanie zmontowanego rdzenia przy obrotach roboczych z dokładnością <span class="text-silver font-semibold">0,001 g/cm²</span>. Eliminuje mikrowibracje, które niszczą łożyskowanie.</p>
-          <ul class="mt-5 space-y-2 text-sm text-silver">
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Balans dynamiczny pełnego rdzenia</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Pomiar drgań w czasie rzeczywistym</li>
-            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-power"></i> Cicha, kulturalna praca turbiny</li>
-          </ul>
-        </div>
-      </article>
-      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
-          <img src="assets/img/rea-master.jpg" alt="Tester REA-MASTER do kalibracji aktuatorów i geometrii VNT — TURBO-GIT" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3/80 to-transparent"></div>
-        </div>
-        <div class="p-7">
-          <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="cpu" class="w-6 h-6 text-power"></i></div>
-          <h3 class="font-display font-[800] text-xl text-white">Kalibracja REA-MASTER</h3>
-          <p class="mt-2 text-steel leading-relaxed">Programowanie i kalibracja elektronicznych aktuatorów oraz zmiennej geometrii (VNT) pod sygnał sterujący.</p>
-        </div>
-      </article>
-      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
-          <img src="assets/img/flow-station.jpg" alt="Stanowisko testu przepływu G3-MIN-FLOW z miernikami ciśnienia i przepływu" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3/80 to-transparent"></div>
-          <span class="absolute top-3 left-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">G3-MIN-FLOW</span>
-        </div>
-        <div class="p-7">
-          <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="wind" class="w-6 h-6 text-power"></i></div>
-          <h3 class="font-display font-[800] text-xl text-white">Test G3-MIN-FLOW</h3>
-          <p class="mt-2 text-steel leading-relaxed">Kontrola przepływu i szczelności rdzenia na stanowisku z pomiarem ciśnienia — turbina musi spełnić parametry, zanim trafi do wysyłki.</p>
-        </div>
-      </article>
-      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
-          <img src="assets/img/chra-cores.jpg" alt="Rdzenie CHRA z wirnikami kompresora gotowe do regeneracji" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3/80 to-transparent"></div>
-        </div>
-        <div class="p-7">
-          <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="scan-search" class="w-6 h-6 text-power"></i></div>
-          <h3 class="font-display font-[800] text-xl text-white">Diagnostyka CHRA</h3>
-          <p class="mt-2 text-steel leading-relaxed">Pełna ocena korpusu środkowego: luzy osiowe i promieniowe, bicie wału, stan gniazd i uszczelnień.</p>
-        </div>
-      </article>
-      <article class="reveal lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40">
-        <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
-          <img src="assets/img/parts-branded.jpg" alt="Części regeneracyjne znakowane logo TURBO-GIT" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink3/60 to-transparent"></div>
-          <span class="absolute top-3 left-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">TURBO-GIT</span>
-        </div>
-        <div class="p-7">
-          <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-4"><i data-lucide="stamp" class="w-6 h-6 text-power"></i></div>
-          <h3 class="font-display font-[800] text-xl text-white">Znakowane podzespoły</h3>
-          <p class="mt-2 text-steel leading-relaxed">Kołnierze i elementy montażowe z naszym oznaczeniem — pełna identyfikowalność i jakość, której nie znajdziesz w „garażowej” regeneracji.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- 8. TURBO EXPLORER -->
-<section class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute left-1/2 -translate-x-1/2 top-0 w-[700px] h-[400px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Wirtualny Turbo Explorer</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Zajrzyj <span class="text-power-grad">do środka</span> turbosprężarki.</h2>
-      <p class="mt-5 text-steel text-lg">Wybierz element, żeby zobaczyć co regenerujemy i dlaczego ma to wpływ na trwałość Twojej turbiny.</p>
-    </div>
-    <div class="mt-14 grid lg:grid-cols-12 gap-8 items-stretch">
-      <div class="lg:col-span-6 reveal">
-        <div class="relative rounded-2xl border border-white/10 bg-ink3 shadow-card overflow-hidden">
-          <img src="assets/img/turbo-cutaway.jpg" alt="Przekrój turbosprężarki — kliknij elementy, aby dowiedzieć się więcej" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent pointer-events-none"></div>
-          <button class="hot" style="left:22%;top:55%" data-part="0" aria-label="Wirnik kompresora">1</button>
-          <button class="hot" style="left:48%;top:53%" data-part="1" aria-label="Łożyskowanie">2</button>
-          <button class="hot" style="left:64%;top:57%" data-part="2" aria-label="Wał i wirnik turbiny">3</button>
-          <button class="hot" style="left:73%;top:37%" data-part="3" aria-label="Geometria VNT">4</button>
-          <button class="hot" style="left:38%;top:49%" data-part="4" aria-label="Uszczelnienia">5</button>
-          <p class="absolute bottom-3 left-0 right-0 text-center text-xs text-silver/90 pointer-events-none">Kliknij <span class="text-power font-semibold">numerowane punkty</span> na przekroju lub zakładki obok</p>
-        </div>
-      </div>
-      <div class="lg:col-span-6 reveal">
-        <div class="flex flex-wrap gap-2 mb-5" id="partTabs"></div>
-        <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
-          <div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-xl bg-power/10 border border-power/20 grid place-items-center"><i id="partIcon" data-lucide="fan" class="w-6 h-6 text-power"></i></div><h3 id="partName" class="font-display font-[800] text-xl text-white"></h3></div>
-          <p id="partDesc" class="text-steel leading-relaxed"></p>
-          <div class="mt-5 grid sm:grid-cols-2 gap-3">
-            <div class="rounded-lg bg-white/5 border border-white/10 p-4"><p class="text-xs uppercase tracking-wide text-steel mb-1">Co regenerujemy</p><p id="partFix" class="text-sm text-silver"></p></div>
-            <div class="rounded-lg bg-white/5 border border-white/10 p-4"><p class="text-xs uppercase tracking-wide text-steel mb-1">Dlaczego to ważne</p><p id="partWhy" class="text-sm text-silver"></p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8B. MAGAZYN — parallax -->
-<section class="relative overflow-hidden">
-  <div class="absolute inset-0 bg-fixed bg-center bg-cover" style="background-image:url('assets/img/shelf-redblue-1.jpg')"></div>
-  <div class="absolute inset-0 bg-ink/80"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/60 to-transparent"></div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Nasz magazyn</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Półki, które mówią <span class="text-power-grad">więcej niż słowa</span>.</h2>
-      <p class="mt-5 text-silver text-lg leading-relaxed">Setki rdzeni, geometrii i kompletnych turbin na stanie — dlatego potrafimy działać ekspresowo i dobrać właściwą część do niemal każdego silnika. To nie magazynowe zdjęcia z internetu. To nasz realny warsztat.</p>
-      <div class="mt-10 grid grid-cols-3 gap-6 max-w-lg">
-        <div><p class="font-display font-[900] text-3xl sm:text-4xl text-white"><span data-counter data-target="8000" data-suffix="+">0</span></p><p class="mt-1 text-xs text-steel uppercase tracking-wide">turbin</p></div>
-        <div><p class="font-display font-[900] text-3xl sm:text-4xl text-white"><span data-counter data-target="14">0</span></p><p class="mt-1 text-xs text-steel uppercase tracking-wide">lat</p></div>
-        <div><p class="font-display font-[900] text-3xl sm:text-4xl text-power">4,9</p><p class="mt-1 text-xs text-steel uppercase tracking-wide">ocena Google</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8C. MARKI + B2B -->
-<section class="relative py-16 border-y border-white/5 bg-ink">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <p class="text-center text-xs uppercase tracking-[.25em] text-steel reveal">Regenerujemy turbiny do wszystkich popularnych marek</p>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 reveal" id="brands"></div>
-    <p class="mt-10 text-center text-xs uppercase tracking-[.25em] text-steel reveal">Na oryginalnych częściach i geometriach OEM</p>
-    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 reveal">
-      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Garrett</span>
-      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">BorgWarner</span>
-      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">IHI</span>
-      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Holset</span>
-      <span class="font-display font-[800] text-xl sm:text-2xl text-silver/70 hover:text-white transition-colors">Melett</span>
-    </div>
-    <div class="mt-12 reveal rounded-2xl border border-white/10 bg-ink3 p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 justify-between">
-      <div class="flex items-center gap-4">
-        <span class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center shrink-0"><i data-lucide="handshake" class="w-6 h-6 text-power"></i></span>
-        <div>
-          <h3 class="font-display font-[800] text-xl text-white">Program B2B — ponad 500 warsztatów partnerskich</h3>
-          <p class="mt-1 text-steel text-sm max-w-xl">Stała współpraca dla certyfikowanych warsztatów: rabat 10%, odroczenie płatności do 30 dni i priorytetowa realizacja.</p>
-        </div>
-      </div>
-      <a href="#kontakt" class="shrink-0 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-silver hover:bg-white/10 transition-colors">Dołącz do programu <i data-lucide="arrow-right" class="w-4 h-4 text-power"></i></a>
-    </div>
-  </div>
-</section>
-
-<!-- 9. PORÓWNANIE -->
-<section class="relative py-24 sm:py-28">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Porównanie</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Nowa turbina <span class="text-steel">vs</span> regeneracja w <span class="text-power-grad">TURBO-GIT</span></h2>
-    </div>
-    <div class="mt-12 reveal overflow-hidden rounded-2xl border border-white/10 bg-ink3 shadow-card">
-      <table class="w-full text-left">
-        <thead><tr class="border-b border-white/10 text-sm">
-          <th class="p-5 font-medium text-steel">Kryterium</th>
-          <th class="p-5 font-display font-[800] text-silver">Nowa turbina</th>
-          <th class="p-5 font-display font-[800] text-power bg-power/5">TURBO-GIT</th>
-        </tr></thead>
-        <tbody class="text-sm">
-          <tr class="border-b border-white/5"><td class="p-5 text-silver">Cena</td><td class="p-5 text-steel">Bardzo wysoka (3–9 tys. zł+)</td><td class="p-5 text-white bg-power/5 font-semibold">Niższa o 45–65%</td></tr>
-          <tr class="border-b border-white/5"><td class="p-5 text-silver">Części</td><td class="p-5 text-steel">OEM</td><td class="p-5 text-white bg-power/5 font-semibold">Oryginalne OEM</td></tr>
-          <tr class="border-b border-white/5"><td class="p-5 text-silver">Balans VSR 301</td><td class="p-5 text-steel"><i data-lucide="minus" class="w-4 h-4 inline text-steel"></i> zależnie od producenta</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Zawsze, 0,001 g/cm²</span></td></tr>
-          <tr class="border-b border-white/5"><td class="p-5 text-silver">Gwarancja</td><td class="p-5 text-steel">12–24 mies.</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">24 mies. bez limitu km</span></td></tr>
-          <tr class="border-b border-white/5"><td class="p-5 text-silver">Czas realizacji</td><td class="p-5 text-steel">Często zamówienie z dostawą</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Ekspres + wysyłka 24h</span></td></tr>
-          <tr><td class="p-5 text-silver">Ekologia</td><td class="p-5 text-steel">Pełna produkcja od zera</td><td class="p-5 bg-power/5"><i data-lucide="check" class="w-4 h-4 inline text-power"></i> <span class="text-white font-semibold">Niski ślad środowiskowy</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- 10. REALIZACJE -->
-<section id="realizacje" class="relative py-24 sm:py-28 bg-ink2 border-y border-white/5">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
-      <div class="max-w-2xl">
-        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Realizacje</span>
-        <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Setki turbin. <span class="text-power-grad">Każda jak nowa.</span></h2>
-      </div>
-      <div class="flex flex-wrap gap-2" id="caseFilters">
-        <button class="case-filter active rounded-full border border-power/40 bg-power/10 px-4 py-2 text-sm font-medium text-white" data-cat="all">Wszystkie</button>
-        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="osobowe">Osobowe</button>
-        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="dostawcze">Dostawcze</button>
-        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="ciezarowe">Ciężarowe</button>
-        <button class="case-filter rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel hover:text-white" data-cat="rolnicze">Rolnicze</button>
-      </div>
-    </div>
-    <div id="caseGrid" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-  </div>
-</section>
-
-<!-- 11. OPINIE -->
-<section id="opinie" class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute -left-40 bottom-0 w-[500px] h-[500px] rounded-full bg-power/10 blur-[150px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex flex-wrap items-end justify-between gap-6 reveal">
-      <div class="max-w-2xl">
-        <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Opinie</span>
-        <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Mówią za nas <span class="text-power-grad">kierowcy</span>.</h2>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-1 text-power"><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i><i data-lucide="star" class="w-5 h-5 fill-current"></i></div>
-        <p class="text-sm text-steel"><span class="text-white font-semibold">4,9/5</span> · 98% opinii 5★</p>
-      </div>
-    </div>
-    <div class="mt-12 relative reveal">
-      <div id="reviewTrack" class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
-      <div class="mt-6 flex items-center justify-between">
-        <p class="text-sm text-steel">Przeciągnij lub użyj strzałek →</p>
-        <div class="flex gap-2">
-          <button id="revPrev" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-          <button id="revNext" class="grid place-items-center w-11 h-11 rounded-full border border-white/15 text-silver hover:bg-white/5 transition-colors"><i data-lucide="arrow-right" class="w-5 h-5"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 12. KALKULATOR -->
-<section id="kalkulator" class="relative py-24 sm:py-28 overflow-hidden bg-ink2 border-y border-white/5">
-  <div class="absolute left-1/2 -translate-x-1/2 top-10 w-[800px] h-[500px] rounded-full bg-power/15 blur-[170px] opacity-70"></div>
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="max-w-2xl reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">Kalkulator</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Sprawdź, ile <span class="text-power-grad">zaoszczędzisz</span>.</h2>
-      <p class="mt-5 text-steel text-lg">Orientacyjna kalkulacja w kilka sekund. Finalną wycenę przygotujemy po diagnozie Twojej turbiny.</p>
-    </div>
-    <div class="mt-12 grid lg:grid-cols-2 gap-6 reveal">
-      <div class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card">
-        <label class="block text-sm font-semibold text-silver mb-3">1. Kategoria pojazdu</label>
-        <div id="calcCats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-7">
-          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="osobowe"><i data-lucide="car" class="w-5 h-5 mx-auto mb-1"></i> Osobowe</button>
-          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="dostawcze"><i data-lucide="truck" class="w-5 h-5 mx-auto mb-1"></i> Dostawcze</button>
-          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="ciezarowe"><i data-lucide="container" class="w-5 h-5 mx-auto mb-1"></i> Ciężarowe</button>
-          <button class="calc-cat rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-steel transition-all" data-cat="rolnicze"><i data-lucide="tractor" class="w-5 h-5 mx-auto mb-1"></i> Rolnicze</button>
-        </div>
-        <label for="calcModel" class="block text-sm font-semibold text-silver mb-3">2. Popularny model / silnik</label>
-        <select id="calcModel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors mb-7"></select>
-        <label class="block text-sm font-semibold text-silver mb-3">3. Moc silnika: <span id="calcPowerVal" class="text-power font-display font-[800]">150 KM</span></label>
-        <input id="calcPower" type="range" min="75" max="600" step="5" value="150" class="w-full accent-power" />
-        <div class="flex justify-between text-xs text-steel mt-2"><span>75 KM</span><span>600 KM</span></div>
-      </div>
-      <div class="relative rounded-2xl border border-power/25 bg-gradient-to-br from-ink3 to-ink p-7 sm:p-8 shadow-glow overflow-hidden">
-        <div class="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-power/20 blur-3xl"></div>
-        <p class="text-sm text-steel mb-6">Twoja szacunkowa kalkulacja</p>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div class="rounded-xl bg-white/5 border border-white/10 p-5"><p class="text-xs text-steel mb-1">Nowa turbina</p><p class="font-display font-[800] text-2xl text-silver"><span id="resNew">0</span> zł</p></div>
-          <div class="rounded-xl bg-white/5 border border-white/10 p-5"><p class="text-xs text-steel mb-1">Regeneracja</p><p class="font-display font-[800] text-2xl text-white"><span id="resRegen">0</span> zł</p></div>
-        </div>
-        <div class="rounded-2xl bg-power/10 border border-power/25 p-6 mb-5">
-          <p class="text-sm text-silver mb-1">Oszczędzasz</p>
-          <div class="flex items-end gap-3 flex-wrap"><p class="font-display font-[900] text-4xl sm:text-5xl text-white"><span id="resSave">0</span> zł</p><p class="font-display font-[800] text-2xl text-power mb-1"><span id="resPct">0</span>%</p></div>
-        </div>
-        <div class="flex items-center gap-3 text-sm text-steel mb-6"><i data-lucide="clock" class="w-4 h-4 text-power"></i> Czas realizacji: <span class="text-silver font-semibold" id="resTime">2–4 dni robocze</span></div>
-        <a href="#kontakt" class="group flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all">Zamów dokładną wycenę <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i></a>
-        <p class="mt-3 text-xs text-steel text-center">Wartości orientacyjne. Nie stanowią oferty handlowej w rozumieniu art. 66 KC.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 13. FAQ -->
-<section id="faq" class="relative py-24 sm:py-28">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6">
-    <div class="text-center reveal">
-      <span class="text-xs font-semibold uppercase tracking-[.25em] text-power">FAQ</span>
-      <h2 class="mt-4 font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Najczęstsze <span class="text-power-grad">pytania</span></h2>
-    </div>
-    <div id="faqList" class="mt-12 space-y-3 reveal"></div>
-  </div>
-</section>
-
-<!-- 14. KONTAKT -->
-<section id="kontakt" class="relative py-24 sm:py-28 overflow-hidden">
-  <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-[900px] h-[500px] rounded-full bg-power/15 blur-[170px]"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="grid lg:grid-cols-2 gap-10 items-stretch">
-      <div class="reveal">
-        <h2 class="font-display font-[900] text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">Gotowy na turbo, które działa <span class="text-power-grad">jak nowe</span>?</h2>
-        <p class="mt-5 text-steel text-lg max-w-md">Wyślij zgłoszenie albo dzwoń. Doradzimy, zdiagnozujemy i przygotujemy wycenę bez zobowiązań. Odbiór kurierem z całej Polski.</p>
-        <div class="mt-8 grid sm:grid-cols-2 gap-3">
-          <a href="tel:+48694706140" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="phone" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Zadzwoń</span><span class="block font-semibold text-white">694 706 140</span></span></a>
-          <a href="https://wa.me/48694706140" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="message-circle" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Napisz</span><span class="block font-semibold text-white">WhatsApp</span></span></a>
-          <a href="mailto:biuro@turbo-git.com" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="mail" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">E-mail</span><span class="block font-semibold text-white">biuro@turbo-git.com</span></span></a>
-          <a href="https://maps.google.com/?q=TURBO-GIT+Wrocławska+7+Januszkowice" target="_blank" rel="noopener" class="lift flex items-center gap-3 rounded-xl border border-white/10 bg-ink3 p-4 hover:border-power/40"><span class="w-11 h-11 rounded-lg bg-power/10 grid place-items-center"><i data-lucide="map-pin" class="w-5 h-5 text-power"></i></span><span><span class="block text-xs text-steel">Siedziba</span><span class="block font-semibold text-white">ul. Wrocławska 7, Januszkowice</span></span></a>
-        </div>
-        <div class="mt-6 grid grid-cols-3 gap-4 items-center">
-          <div class="relative col-span-1 rounded-xl border border-white/10 overflow-hidden">
-            <img src="assets/img/packaging.jpg" alt="Zregenerowane turbiny zapakowane i gotowe do wysyłki — TURBO-GIT" class="w-full h-full object-cover aspect-[3/4]" loading="lazy" />
-          </div>
-          <div class="col-span-2">
-            <p class="flex items-center gap-2 text-sm font-semibold text-power"><i data-lucide="package-check" class="w-4 h-4"></i> Gotowe do wysyłki w 24h</p>
-            <p class="mt-1 text-sm text-steel leading-relaxed">Każda turbina pakowana bezpiecznie, z numerem i dokumentacją. Wysyłka kurierem w całej Polsce — albo umów bezpłatny odbiór.</p>
-          </div>
-        </div>
-        <div class="mt-6 rounded-xl border border-white/10 overflow-hidden">
-          <iframe title="Mapa dojazdu TURBO-GIT Januszkowice" src="https://www.google.com/maps?q=Wroc%C5%82awska%207%2C%2055-095%20Januszkowice&output=embed" class="w-full aspect-[16/6] grayscale contrast-125 opacity-90" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-      <div class="reveal">
-        <form id="contactForm" class="rounded-2xl border border-white/10 bg-ink3 p-7 sm:p-8 shadow-card" novalidate>
-          <h3 class="font-display font-[800] text-2xl text-white mb-6">Zamów regenerację</h3>
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div><label class="block text-sm text-steel mb-1.5" for="fName">Imię i nazwisko *</label><input id="fName" name="name" required class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="Jan Kowalski" /></div>
-            <div><label class="block text-sm text-steel mb-1.5" for="fPhone">Telefon *</label><input id="fPhone" name="phone" required inputmode="tel" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="600 000 000" /></div>
-            <div class="sm:col-span-2"><label class="block text-sm text-steel mb-1.5" for="fCar">Pojazd / kod silnika</label><input id="fCar" name="car" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors" placeholder="np. VW Passat B7 2.0 TDI 140 KM / CFFB" /></div>
-            <div class="sm:col-span-2"><label class="block text-sm text-steel mb-1.5" for="fMsg">Opis problemu</label><textarea id="fMsg" name="message" rows="3" class="w-full rounded-xl border border-white/15 bg-ink2 px-4 py-3 text-silver outline-none focus:border-power transition-colors resize-none" placeholder="np. dymi, brak mocy, gwizd przy przyspieszaniu..."></textarea></div>
-          </div>
-          <label class="mt-4 flex items-start gap-3 text-xs text-steel"><input type="checkbox" required class="mt-0.5 accent-power w-4 h-4" /><span>Akceptuję przetwarzanie danych w celu kontaktu zgodnie z polityką prywatności. *</span></label>
-          <button type="submit" class="group mt-6 flex items-center justify-center gap-2 w-full rounded-full bg-power px-6 py-4 font-semibold text-white hover:bg-power-600 transition-all shadow-[0_14px_40px_-12px_rgba(200,16,46,.8)]">Wyślij zgłoszenie <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i></button>
-          <p class="mt-3 text-center text-xs text-steel">Odpowiadamy zwykle w ciągu kilku godzin w dni robocze.</p>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+  <section id="kontakt" style="padding-top:40px"><div class="container grid contact"><div class="card contact-copy"><div class="eyebrow">Dobór i wycena</div><h2>Wyślij VIN lub numer turbo. <span class="accent">Oddzwonimy z konkretem.</span></h2><p class="muted">Najlepsza wiadomość zawiera: markę i model auta, kod silnika, VIN, numer turbosprężarki / OE oraz krótki opis objawów.</p><div class="contact-actions"><a class="action" href="tel:+48694706140"><span class="icon">☎</span><span><small>Zadzwoń</small><strong>694 706 140</strong></span></a><a class="action" href="https://wa.me/48694706140" target="_blank" rel="noopener"><span class="icon">WA</span><span><small>Wyślij zdjęcie tabliczki</small><strong>WhatsApp TURBO-GIT</strong></span></a><a class="action" href="mailto:biuro@turbo-git.com"><span class="icon">@</span><span><small>Napisz e-mail</small><strong>biuro@turbo-git.com</strong></span></a><a class="action" href="https://maps.google.com/?q=TURBO-GIT+Wroc%C5%82awska+7+Januszkowice" target="_blank" rel="noopener"><span class="icon">⌖</span><span><small>Odwiedź nas</small><strong>ul. Wrocławska 7, Januszkowice</strong></span></a></div></div>
+      <form id="leadForm" class="card form" novalidate><h3>Wyślij zgłoszenie techniczne</h3><div class="fields"><label>Imię i nazwisko<input class="input" name="name" required autocomplete="name" placeholder="Jan Kowalski"></label><label>Telefon<input class="input" name="phone" required inputmode="tel" autocomplete="tel" placeholder="600 000 000"></label><label class="full">VIN / numer turbo / numer OE<input class="input" name="reference" placeholder="np. VIN, 765261-0007, 03G253014F"></label><label class="full">Pojazd i kod silnika<input class="input" name="vehicle" placeholder="np. VW Passat B7 2.0 TDI / CFFB"></label><label class="full">Opis problemu<textarea class="input" name="message" placeholder="np. brak mocy, gwizd, dymienie, błąd doładowania..."></textarea></label></div><label class="consent"><input type="checkbox" required> <span>Akceptuję przetwarzanie danych w celu kontaktu i zapoznałem(am) się z <a href="/polityka-prywatnosci/" style="text-decoration:underline;color:#fff">polityką prywatności</a>. *</span></label><button class="btn btn-primary" style="width:100%" type="submit">Przygotuj wiadomość do TURBO-GIT</button><p id="leadStatus" class="status" aria-live="polite"></p><p class="muted" style="font-size:.78rem;margin:14px 0 0">W tej wersji statycznej formularz otwiera WhatsApp z uzupełnioną treścią. Po wdrożeniu na turbo-git.com podłącz go do formularza WordPress / CRM i skonfiguruj konwersję Google Ads.</p></form>
+  </div></section>
 </main>
-
-<!-- 15. FOOTER -->
-<footer class="border-t border-white/10 bg-ink2">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
-    <div class="grid md:grid-cols-4 gap-10">
-      <div>
-        <div class="flex items-center gap-3 mb-4">
-          <span class="relative grid place-items-center w-9 h-9"><span class="absolute inset-0 rounded-full turbo-ring opacity-70"></span><span class="absolute inset-[3px] rounded-full bg-ink2 border border-white/10"></span><i data-lucide="fan" class="relative w-4 h-4 text-power"></i></span>
-          <span class="font-display font-[900] text-lg text-white">TURBO<span class="text-power">-</span>GIT</span>
-        </div>
-        <p class="text-sm text-steel leading-relaxed">Regeneracja turbosprężarek na poziomie premium. Od 2012 roku.</p>
-        <p class="mt-4 text-xs text-steel leading-relaxed">TURBO-GIT Paulina Hołda<br>ul. Wrocławska 7, 55-095 Januszkowice<br>NIP: 8961447143</p>
-      </div>
-      <div>
-        <p class="font-semibold text-white mb-4">Nawigacja</p>
-        <ul class="space-y-2 text-sm text-steel">
-          <li><a href="#uslugi" class="hover:text-white transition-colors">Usługi</a></li>
-          <li><a href="#proces" class="hover:text-white transition-colors">Proces</a></li>
-          <li><a href="#technologia" class="hover:text-white transition-colors">Technologia</a></li>
-          <li><a href="#realizacje" class="hover:text-white transition-colors">Realizacje</a></li>
-          <li><a href="#kalkulator" class="hover:text-white transition-colors">Kalkulator</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-semibold text-white mb-4">Kontakt</p>
-        <ul class="space-y-2 text-sm text-steel">
-          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-power"></i> +48 694 706 140</li>
-          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-power"></i> biuro@turbo-git.com</li>
-          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-power"></i> ul. Wrocławska 7, Januszkowice</li>
-          <li class="flex items-start gap-2"><i data-lucide="clock" class="w-4 h-4 text-power mt-0.5"></i> <span>Pon–Pt 7:00–16:00<br>Sob 8:00–13:00</span></li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-semibold text-white mb-4">Gwarancja jakości</p>
-        <ul class="space-y-2 text-sm text-steel">
-          <li class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-power"></i> 24 mies. bez limitu km</li>
-          <li class="flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-power"></i> Oryginalne części OEM</li>
-          <li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-power"></i> Wysyłka 24h w całej PL</li>
-        </ul>
-      </div>
-    </div>
-    <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-steel">
-      <p>© <span id="year"></span> TURBO-GIT Paulina Hołda. Wszelkie prawa zastrzeżone.</p>
-      <div class="flex gap-5">
-        <a href="#" class="hover:text-white transition-colors">Polityka prywatności</a>
-        <a href="#" class="hover:text-white transition-colors">Regulamin</a>
-        <a href="#hero" class="hover:text-white transition-colors flex items-center gap-1">Do góry <i data-lucide="arrow-up" class="w-3 h-3"></i></a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<div id="modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
-  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-close></div>
-  <div class="relative w-full max-w-md rounded-2xl border border-white/10 bg-ink3 p-8 text-center shadow-card">
-    <div class="mx-auto w-16 h-16 rounded-full bg-power/15 border border-power/30 grid place-items-center mb-5"><i data-lucide="check-check" class="w-8 h-8 text-power"></i></div>
-    <h3 class="font-display font-[800] text-2xl text-white">Zgłoszenie wysłane!</h3>
-    <p class="mt-3 text-steel">Dziękujemy. Skontaktujemy się z Tobą najszybciej jak to możliwe, żeby ustalić szczegóły regeneracji.</p>
-    <button data-close class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-power px-6 py-3 font-semibold text-white hover:bg-power-600 transition-colors">Świetnie <i data-lucide="thumbs-up" class="w-4 h-4"></i></button>
-    <p class="mt-4 text-[11px] text-steel">To wersja demo — formularz nie wysyła jeszcze realnych danych. Instrukcja podpięcia na końcu pliku HTML.</p>
-  </div>
-</div>
-
+<footer><div class="container foot"><div><div class="brand"><span class="brand-mark"><span>TG</span></span><span>TURBO<span style="color:var(--red2)">-</span>GIT</span></div><p>TURBO-GIT Paulina Hołda<br>ul. Wrocławska 7, 55-095 Januszkowice<br>NIP: 8961447143</p></div><div><p>Pon–Pt 7:00–16:00<br>Sob 8:00–13:00</p><div class="foot-links"><a href="/polityka-prywatnosci/">Polityka prywatności</a><a href="/regulamin/">Regulamin</a><a href="#start">Do góry ↑</a></div></div></div></footer>
 <script>
-(() => {
-  'use strict';
-  const renderIcons = () => window.lucide && window.lucide.createIcons();
-  renderIcons();
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => navbar.classList.toggle('shadow-[0_10px_40px_-20px_rgba(0,0,0,.9)]', window.scrollY > 20), { passive:true });
-  const menuBtn = document.getElementById('menuBtn'), mobileMenu = document.getElementById('mobileMenu');
-  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-  document.querySelectorAll('[data-mlink]').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-  const navLinks = [...document.querySelectorAll('[data-nav]')];
-  const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
-  const navObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { const id='#'+e.target.id; navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href')===id)); } }), { rootMargin:'-45% 0px -50% 0px' });
-  sections.forEach(s => navObs.observe(s));
-
-  const revObs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } }), { threshold:0.12 });
-  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
-
-  const animateCounter = (el) => {
-    const target=+el.dataset.target, suffix=el.dataset.suffix||'', dur=1600, start=performance.now();
-    const step=(now)=>{ const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3); el.textContent=Math.floor(eased*target).toLocaleString('pl-PL')+(p===1?suffix:''); if(p<1) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
-  };
-  const cObs=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ animateCounter(e.target); cObs.unobserve(e.target);} }),{threshold:0.6});
-  document.querySelectorAll('[data-counter]').forEach(el=>cObs.observe(el));
-  const bObs=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ e.target.style.width=e.target.dataset.width; bObs.unobserve(e.target);} }),{threshold:0.5});
-  document.querySelectorAll('[data-bar]').forEach(el=>bObs.observe(el));
-
-  const finder=document.getElementById('finder'), finderInput=document.getElementById('finderInput');
-  finder.addEventListener('submit',(e)=>{ e.preventDefault(); const q=finderInput.value.trim(); document.getElementById('kontakt').scrollIntoView({behavior:'smooth'}); const fCar=document.getElementById('fCar'); if(q&&fCar) fCar.value=q; });
-  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{ finderInput.value=c.textContent.trim(); finderInput.focus(); }));
-
-  const benefits=[
-    ['search-check','Precyzyjna diagnostyka','Każdą turbinę rozkładamy do ostatniej śruby i mierzymy luzy z dokładnością do setnych milimetra. Wiemy dokładnie, co zawiodło — i dlaczego.'],
-    ['badge-check','Oryginalne części OEM','Zero zamienników z niewiadomego źródła. Zestawy naprawcze i geometrie od oryginalnych dostawców — jak na linii produkcyjnej.'],
-    ['gauge','Balansowanie VSR 301','Rdzeń balansujemy z dokładnością 0,001 g/cm² przy realnych obrotach roboczych. Efekt: zero wibracji, cicha praca i żywotność jak w nowej turbinie.'],
-    ['activity','Testy pod obciążeniem','Geometrię, przepływ (G3-MIN-FLOW) i pracę aktuatora sprawdzamy na stanowisku. Turbina wraca sprawdzona, nie „na czuja”.'],
-    ['eye','Pełna transparentność','Dokumentujemy stan turbiny przed i po. Wiesz dokładnie, za co płacisz — bez ukrytych kosztów i bez ściemy.'],
-    ['leaf','Ekologia + ekonomia','Regeneracja to mniej odpadu i mniej wydobycia surowców niż produkcja nowej części. Dobrze dla portfela i dla planety.'],
-  ];
-  document.getElementById('benefits').innerHTML=benefits.map(([i,t,d])=>`
-    <article class="reveal in lift group rounded-2xl border border-white/10 bg-ink3 p-7 hover:border-power/40 hover:shadow-glow">
-      <div class="w-12 h-12 rounded-xl bg-power/10 border border-power/20 grid place-items-center mb-5 group-hover:scale-110 transition-transform"><i data-lucide="${i}" class="w-6 h-6 text-power"></i></div>
-      <h3 class="font-display font-[800] text-xl text-white">${t}</h3>
-      <p class="mt-3 text-steel leading-relaxed">${d}</p>
-    </article>`).join('');
-
-  const steps=[
-    ['Przyjęcie i diagnostyka wstępna','assets/img/workbench.jpg','Turbinę przyjmujemy osobiście lub kurierem, oględziny i wywiad o objawach (dymienie, brak mocy, gwizd, wycieki oleju). Robimy dokumentację zdjęciową stanu „as is”.','Trafna diagnoza na starcie pozwala odróżnić usterkę turbiny od problemu w silniku — żebyś nie płacił za naprawę, która nie rozwiąże przyczyny.'],
-    ['Demontaż i ocena turbiny','assets/img/turbine-wheel.jpg','Rozkładamy turbinę i oddzielamy zużyty rdzeń (CHRA) od obudów. Stary rdzeń idzie do wymiany na nowy — obudowy, geometria i aktuator trafiają do kontroli.','Tu zapada decyzja: rdzeń wymieniamy zawsze na nowy, a obudowy sprawdzamy pod kątem ukrytych uszkodzeń. Żadnego „odświeżania” zużytych części.'],
-    ['Czyszczenie obudów','assets/img/workbench.jpg','Obudowy (korpus kompresora i turbiny) oraz geometrię myjemy do czysta, usuwając nagar i osady olejowe. To w nie zamontujemy nowy rdzeń.','Czyste, sprawne obudowy to warunek poprawnego montażu i szczelności. To dzięki ich ponownemu wykorzystaniu regeneracja jest tańsza od nowej turbiny.'],
-    ['Kontrola obudów i geometrii','assets/img/compressor-macro.jpg','Sprawdzamy stan obudów, gniazd i mechanizmu zmiennej geometrii (VNT). Jeśli któryś element jest zużyty — wymieniamy lub regenerujemy geometrię.','Nowy rdzeń jest tylko tak dobry, jak to, w czym pracuje. Dlatego obudowy i geometria muszą być w pełni sprawne.'],
-    ['Montaż NOWEGO rdzenia','assets/img/shelf-redblue-2.jpg','Montujemy fabrycznie nowy rdzeń (CHRA) wraz z nowymi uszczelnieniami. Nigdy nie używamy starego, zużytego rdzenia ani „regenerowanych” wnętrzności.','To jest serce naszej regeneracji: nowy rdzeń = nowe łożyska, nowy wał i wirniki. Stąd niezawodność jak w nowej turbinie.'],
-    ['Balansowanie VSR 301 + REA-MASTER','assets/img/vsr-301-running.jpg','Zmontowany nowy rdzeń balansujemy dynamicznie na VSR 301 (0,001 g/cm²), a geometrię i aktuator kalibrujemy na stanowisku REA-MASTER.','Przy 150–250 tys. obr./min nawet mikrogram niewyważenia niszczy łożyska. To różnica między turbiną cichą i trwałą a taką, która padnie po sezonie.'],
-    ['Test G3-MIN-FLOW i wysyłka 24h','assets/img/g3-tester.jpg','Sprawdzamy przepływ, szczelność i pracę aktuatora, pakujemy bezpiecznie i wysyłamy — ekspresowo, z 24-miesięczną gwarancją bez limitu km.','Turbina opuszcza warsztat sprawdzona, nie „na nadzieję”. Dostajesz gotowy do montażu produkt i pełne wsparcie gwarancyjne.'],
-  ];
-  const stepList=document.getElementById('stepList');
-  steps.forEach((s,i)=>{ const b=document.createElement('button');
-    b.className='step-btn group relative flex items-center gap-4 rounded-xl border border-transparent px-3 py-3 text-left transition-all';
-    b.innerHTML=`<span class="step-dot relative z-10 grid place-items-center w-11 h-11 rounded-full border border-white/15 bg-ink3 text-sm font-display font-[800] text-steel shrink-0">${String(i+1).padStart(2,'0')}</span><span class="step-title font-semibold text-steel">${s[0]}</span>`;
-    b.addEventListener('click',()=>setStep(i)); stepList.appendChild(b); });
-  const stepBtns=[...document.querySelectorAll('.step-btn')];
-  const stepHeading=document.getElementById('stepHeading'),stepDesc=document.getElementById('stepDesc'),stepWhy=document.getElementById('stepWhy'),stepBadge=document.getElementById('stepBadge'),stepPhoto=document.getElementById('stepPhoto');
-  let curStep=0;
-  const setStep=(i)=>{ curStep=(i+steps.length)%steps.length; const s=steps[curStep];
-    stepBtns.forEach((b,idx)=>b.classList.toggle('active',idx===curStep));
-    stepHeading.textContent=s[0]; stepDesc.textContent=s[2]; stepWhy.textContent=s[3];
-    stepBadge.textContent=`ETAP ${String(curStep+1).padStart(2,'0')} / 07`;
-    if(stepPhoto){ stepPhoto.style.opacity='0'; setTimeout(()=>{ stepPhoto.src=s[1]; stepPhoto.alt=s[0]; stepPhoto.style.opacity='1'; },200); } };
-  document.getElementById('prevStep').addEventListener('click',()=>setStep(curStep-1));
-  document.getElementById('nextStep').addEventListener('click',()=>setStep(curStep+1));
-  setStep(0);
-
-  const parts=[
-    ['Wirnik kompresora','fan','Aluminiowy wirnik po stronie zimnej, który spręża powietrze trafiające do silnika. Wrażliwy na uderzenia ciał obcych i zużycie krawędzi łopatek.','Element nowego rdzenia — fabrycznie nowy wirnik, wyważony na VSR 301.','Uszkodzone łopatki = spadek doładowania i utrata mocy.'],
-    ['Łożyskowanie','circle-dot','Łożyska ślizgowe lub kulkowe, na których wiruje wał. Pracują w ekstremalnej temperaturze i prędkości, smarowane olejem silnikowym.','Nowe łożyska — w komplecie nowego rdzenia. Zero zużytych elementów.','Zużyte łożyska to luzy, hałas i kasacja całej turbiny.'],
-    ['Wał i wirnik turbiny','git-commit-horizontal','Stalowy wał z wirnikiem turbinowym po stronie gorącej, napędzany spalinami. Pracuje w temperaturach przekraczających 800°C.','Nowy wał i wirnik turbiny — montowane w ramach nowego rdzenia.','Bicie wału rujnuje balans i niszczy uszczelnienia oraz łożyska.'],
-    ['Geometria VNT','settings-2','Zmienna geometria (ruchome łopatki kierujące) reguluje ciśnienie doładowania w zależności od obrotów silnika.','Czyszczenie z nagaru, regeneracja mechanizmu, kalibracja REA-MASTER.','Zatarta geometria = tryb awaryjny, dymienie i brak mocy w dole.'],
-    ['Uszczelnienia','shield','Pierścienie uszczelniające po stronie gorącej i zimnej, które nie dopuszczają oleju do układu dolotowego i wydechowego.','Nowe uszczelnienia — montowane razem z nowym rdzeniem.','Nieszczelność to wyrzucanie oleju, niebieski dym i ryzyko rozbiegu.'],
-  ];
-  const partTabsEl=document.getElementById('partTabs');
-  partTabsEl.innerHTML=parts.map((p,i)=>`<button class="part-tab rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-steel transition-all" data-part="${i}">${p[0]}</button>`).join('');
-  const partTabs=[...document.querySelectorAll('.part-tab')], hots=[...document.querySelectorAll('.hot')];
-  const setPart=(i)=>{ const p=parts[i];
-    partTabs.forEach((t,idx)=>t.classList.toggle('active',idx===i));
-    hots.forEach((h,idx)=>h.classList.toggle('active',idx===i));
-    document.getElementById('partName').textContent=p[0];
-    document.getElementById('partDesc').textContent=p[2];
-    document.getElementById('partFix').textContent=p[3];
-    document.getElementById('partWhy').textContent=p[4];
-    document.getElementById('partIcon').setAttribute('data-lucide',p[1]); renderIcons(); };
-  partTabs.forEach((t,i)=>t.addEventListener('click',()=>setPart(i)));
-  hots.forEach((h,i)=>h.addEventListener('click',()=>setPart(i)));
-  setPart(0);
-
-  const brands=['Audi','BMW','Ford','Mercedes','Volkswagen','Volvo','Renault','Opel','Toyota','Škoda'];
-  document.getElementById('brands').innerHTML=brands.map(b=>`<span class="font-display font-[700] text-lg sm:text-xl text-silver/60 hover:text-white transition-colors">${b}</span>`).join('');
-
-  const cases=[
-    ['osobowe','assets/img/compressor-macro.jpg','VW Passat B7 2.0 TDI','140 KM • geometria VNT','2 600 zł','Wymiana geometrii i łożyskowania, balans VSR 301.'],
-    ['osobowe','assets/img/turbine-wheel.jpg','BMW 320d E90','177 KM • dymienie','2 900 zł','Nowy rdzeń + komplet uszczelnień.'],
-    ['osobowe','assets/img/workbench.jpg','Audi A4 B8 2.0 TDI','143 KM • brak mocy','2 400 zł','Regeneracja aktuatora i kalibracja REA-MASTER.'],
-    ['dostawcze','assets/img/shelf-blue.jpg','Ford Transit 2.2 TDCi','125 KM • gwizd','3 100 zł','Wymiana wału i łożysk, test G3-MIN-FLOW.'],
-    ['dostawcze','assets/img/shelf-redblue-1.jpg','Mercedes Sprinter 2.1 CDI','150 KM • wyciek oleju','3 400 zł','Komplet uszczelnień + balans VSR 301.'],
-    ['ciezarowe','assets/img/shelf-red.jpg','Scania R450','450 KM • spadek doładowania','5 800 zł','Nowy rdzeń dużej mocy + balans VSR 301.'],
-    ['ciezarowe','assets/img/shelf-redblue-2.jpg','MAN TGX D26','480 KM • serwis floty','6 200 zł','Pełna regeneracja z testem obciążeniowym.'],
-    ['rolnicze','assets/img/workbench.jpg','John Deere 6R','ciągnik • przegrzanie','4 100 zł','Czyszczenie geometrii + nowy rdzeń.'],
-    ['rolnicze','assets/img/compressor-macro.jpg','New Holland T7','ciągnik • brak mocy','3 900 zł','Balans VSR 301, wymiana wirnika.'],
-  ];
-  const caseGrid=document.getElementById('caseGrid');
-  const renderCases=(cat='all')=>{ caseGrid.innerHTML=cases.filter(c=>cat==='all'||c[0]===cat).map(c=>`
-    <article class="reveal in lift rounded-2xl border border-white/10 bg-ink3 overflow-hidden hover:border-power/40 group">
-      <div class="relative aspect-[4/3] overflow-hidden">
-        <img src="${c[1]}" alt="Regeneracja turbiny — ${c[2]}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-        <div class="absolute inset-0 bg-gradient-to-t from-ink3 via-ink3/10 to-transparent"></div>
-        <span class="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-wide text-silver">${c[0]}</span>
-        <span class="absolute top-3 right-3 rounded-full bg-power/90 px-3 py-1 text-[11px] font-semibold text-white">zregenerowana</span>
-      </div>
-      <div class="p-6">
-        <h3 class="font-display font-[800] text-lg text-white">${c[2]}</h3>
-        <p class="mt-1 text-sm text-steel">${c[3]}</p>
-        <p class="mt-3 text-sm text-silver leading-relaxed">${c[5]}</p>
-        <div class="mt-4 flex items-center justify-between"><span class="text-xs text-steel">Oszczędność klienta</span><span class="font-display font-[800] text-power">${c[4]}</span></div>
-      </div>
-    </article>`).join(''); renderIcons(); };
-  renderCases();
-  document.querySelectorAll('.case-filter').forEach(btn=>btn.addEventListener('click',()=>{
-    document.querySelectorAll('.case-filter').forEach(b=>{ b.classList.remove('active','border-power/40','bg-power/10','text-white'); b.classList.add('border-white/15','text-steel'); });
-    btn.classList.add('active','border-power/40','bg-power/10','text-white'); btn.classList.remove('border-white/15','text-steel');
-    renderCases(btn.dataset.cat);
-  }));
-
-  const reviews=[
-    ['Marek W.','VW Passat 2.0 TDI','Turbina jak nowa, zero gwizdu, auto ciągnie od dołu. Wysłali ekspresowo, dostałem następnego dnia. Polecam w 100%.',true],
-    ['Anna K.','BMW 320d','Bałam się regeneracji, a okazało się taniej i lepiej niż nowa. Dostałam zdjęcia przed i po — pełen profesjonalizm.',false],
-    ['Tomasz R.','Ford Transit (firma)','Mam flotę dostawczaków, regenerują mi turbiny od lat. Zawsze terminowo i bez reklamacji. Konkret, nie ściema.',true],
-    ['Grzegorz P.','Scania R450','Ciężarówka wróciła na trasę w dwa dni. Moc wróciła, spalanie wróciło do normy. Robota na poziomie.',false],
-    ['Daniel S.','Audi A4 B8','Geometria zatarta, inni chcieli sprzedać nową za 5 tys. Tu zrobili za połowę i działa idealnie. Dzięki!',false],
-    ['Krzysztof M.','John Deere 6R','Ciągnik to narzędzie pracy, nie mogłem czekać tydzień. Zrobili ekspres, gwarancja 2 lata. Super kontakt.',true],
-  ];
-  document.getElementById('reviewTrack').innerHTML=reviews.map(r=>`
-    <article class="snap-start shrink-0 w-[300px] sm:w-[360px] rounded-2xl border border-white/10 bg-ink3 p-7 flex flex-col">
-      ${r[3]?`<div class="relative aspect-video rounded-xl border border-white/10 mb-5 overflow-hidden grid place-items-center group cursor-pointer">
-        <img src="assets/img/shelf-redblue-2.jpg" alt="Wideo-opinia klienta TURBO-GIT" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" loading="lazy" />
-        <div class="absolute inset-0 bg-ink/40"></div>
-        <span class="relative grid place-items-center w-12 h-12 rounded-full bg-power/90 text-white shadow-lg group-hover:scale-110 transition-transform"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>`:``}
-      <div class="text-power text-lg mb-3">★★★★★</div>
-      <p class="text-silver leading-relaxed flex-1">„${r[2]}”</p>
-      <div class="mt-5 flex items-center gap-3 pt-5 border-t border-white/10">
-        <span class="grid place-items-center w-10 h-10 rounded-full bg-power/15 text-power font-display font-[800]">${r[0].charAt(0)}</span>
-        <span><span class="block text-sm font-semibold text-white">${r[0]}</span><span class="block text-xs text-steel">${r[1]}</span></span>
-      </div>
-    </article>`).join('');
-  const rt=document.getElementById('reviewTrack');
-  document.getElementById('revNext').addEventListener('click',()=>rt.scrollBy({left:380,behavior:'smooth'}));
-  document.getElementById('revPrev').addEventListener('click',()=>rt.scrollBy({left:-380,behavior:'smooth'}));
-
-  const calcData={
-    osobowe:{time:'2–4 dni robocze',models:[['1.6 / 2.0 TDI (VW, Audi, Škoda)',4800,1900],['2.0d (BMW, np. N47D20)',5200,2100],['1.5 / 1.6 dCi (Renault, Nissan)',3600,1500],['1.3 / 1.6 CDTI (Opel, Fiat)',3400,1450],['2.2 / 2.0 CDI (Mercedes, OM651)',5400,2200]]},
-    dostawcze:{time:'2–5 dni roboczych',models:[['2.2 TDCi (Ford Transit)',5600,2300],['2.1 / 2.2 CDI (Mercedes Sprinter)',6200,2500],['2.3 / 2.8 JTD (Iveco Daily)',6400,2600],['2.5 / 3.0 dCi (Renault Master)',5900,2400]]},
-    ciezarowe:{time:'3–6 dni roboczych',models:[['Scania DC13 / R-series',12500,5400],['MAN D26 / TGX',13200,5700],['Volvo D13 / FH',12800,5500],['Mercedes OM471 / Actros',13500,5800]]},
-    rolnicze:{time:'3–6 dni roboczych',models:[['John Deere PowerTech',8800,3600],['New Holland / CASE FPT',8400,3400],['Massey Ferguson / AGCO',8200,3300],['Deutz-Fahr TCD',7900,3200]]},
-  };
-  let cstate={cat:'osobowe',modelIdx:0,power:150};
-  const calcCats=[...document.querySelectorAll('.calc-cat')], calcModel=document.getElementById('calcModel'), calcPower=document.getElementById('calcPower'), calcPowerVal=document.getElementById('calcPowerVal');
-  const fmt=(n)=>Math.round(n).toLocaleString('pl-PL');
-  const animNum=(el,to)=>{ const from=parseInt((el.textContent||'0').replace(/\D/g,''))||0, dur=600, start=performance.now();
-    const step=(now)=>{ const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3); el.textContent=fmt(from+(to-from)*eased); if(p<1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
-  const popModels=()=>{ calcModel.innerHTML=calcData[cstate.cat].models.map((m,i)=>`<option value="${i}">${m[0]}</option>`).join(''); cstate.modelIdx=0; };
-  const recalc=()=>{ const d=calcData[cstate.cat], m=d.models[cstate.modelIdx];
-    const baseRef=cstate.cat==='ciezarowe'?450:cstate.cat==='rolnicze'?180:150;
-    const factor=0.7+0.3*(cstate.power/baseRef), newP=m[1]*factor, regen=m[2]*factor, save=newP-regen, pct=Math.round(save/newP*100);
-    animNum(document.getElementById('resNew'),newP); animNum(document.getElementById('resRegen'),regen);
-    animNum(document.getElementById('resSave'),save); animNum(document.getElementById('resPct'),pct);
-    document.getElementById('resTime').textContent=d.time; };
-  calcCats.forEach(btn=>btn.addEventListener('click',()=>{ calcCats.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); cstate.cat=btn.dataset.cat; popModels(); recalc(); }));
-  calcModel.addEventListener('change',()=>{ cstate.modelIdx=+calcModel.value; recalc(); });
-  calcPower.addEventListener('input',()=>{ cstate.power=+calcPower.value; calcPowerVal.textContent=cstate.power+' KM'; recalc(); });
-  calcCats[0].classList.add('active'); popModels(); recalc();
-
-  const faqs=[
-    ['Ile trwa regeneracja turbosprężarki?','Standardowo 2–4 dni robocze dla aut osobowych i dostawczych. Realizujemy też tryb ekspresowy, a gotową turbinę wysyłamy w 24h kurierem w całej Polsce.'],
-    ['Jaką gwarancję dostaję?','Na każdą regenerację udzielamy 24 miesięcy gwarancji bez limitu kilometrów. Gwarancja obejmuje wykonaną pracę i zastosowane części.'],
-    ['Czy montujecie nowe rdzenie?','Tak. W każdej regeneracji montujemy wyłącznie nowy rdzeń (CHRA) — nigdy nie czyścimy ani nie „regenerujemy” starego, zużytego rdzenia. Nowy rdzeń to nowe łożyska, nowy wał i wirniki, czyli niezawodność jak w nowej turbinie.'],
-    ['Czy używacie dobrych części?','Tak. Poza nowym rdzeniem stosujemy sprawdzone zestawy naprawcze i uszczelnienia — bez przypadkowych, najtańszych zamienników. Wszystko balansujemy na VSR 301 i testujemy przed wysyłką.'],
-    ['Czym jest balansowanie VSR 301?','To balansowanie zmontowanego rdzenia przy obrotach roboczych z dokładnością 0,001 g/cm². Wykonujemy je przy każdej regeneracji — gwarantuje cichą pracę i trwałość.'],
-    ['Jak wysłać do Was turbinę?','Możesz przywieźć ją osobiście do Januszkowic (ul. Wrocławska 7) albo zamówić odbiór kurierem. Wystarczy zgłoszenie przez formularz lub telefon.'],
-    ['Czy regeneracja jest tak trwała jak nowa turbina?','Dzięki nowemu rdzeniowi, balansowi VSR 301 i testowi G3-MIN-FLOW turbina pracuje w tolerancjach fabrycznych. Trwałość jest porównywalna z nową — za ułamek ceny.'],
-    ['Ile mogę zaoszczędzić?','Zwykle 45–65% względem ceny nowej turbiny. Dokładną kwotę zobaczysz w kalkulatorze, a wiążącą wycenę otrzymasz po bezpłatnej diagnostyce.'],
-    ['Co jeśli mojej turbiny nie da się zregenerować?','Zdarza się rzadko. Rdzeń montujemy zawsze nowy, więc czynnikiem decydującym jest stan obudów i geometrii — jeśli są zbyt uszkodzone, poinformujemy Cię przed rozpoczęciem prac i zaproponujemy najlepsze rozwiązanie. Bez ukrytych kosztów.'],
-    ['Regenerujecie turbiny do ciężarówek i maszyn rolniczych?','Tak — obsługujemy auta osobowe, dostawcze, ciężarowe oraz maszyny rolnicze i budowlane. Mamy sprzęt i części do dużych jednostek.'],
-    ['Czy macie program dla warsztatów (B2B)?','Tak. W programie B2B (ponad 500 warsztatów) oferujemy rabat 10%, odroczenie płatności do 30 dni i priorytetową realizację. Wystawiamy faktury VAT.'],
-  ];
-  document.getElementById('faqList').innerHTML=faqs.map(f=>`
-    <details class="group rounded-2xl border border-white/10 bg-ink3 overflow-hidden">
-      <summary class="flex items-center justify-between gap-4 p-5 sm:p-6">
-        <span class="font-semibold text-silver group-hover:text-white transition-colors">${f[0]}</span>
-        <span class="faq-icon shrink-0 grid place-items-center w-8 h-8 rounded-full border border-white/15 text-power transition-transform"><i data-lucide="plus" class="w-4 h-4"></i></span>
-      </summary>
-      <div class="px-5 sm:px-6 pb-6 -mt-1 text-steel leading-relaxed">${f[1]}</div>
-    </details>`).join('');
-  renderIcons();
-
-  const form=document.getElementById('contactForm'), modal=document.getElementById('modal');
-  const openModal=()=>{ modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow='hidden'; };
-  const closeModal=()=>{ modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow=''; };
-  form.addEventListener('submit',(e)=>{ e.preventDefault(); if(!form.checkValidity()){ form.reportValidity(); return; } openModal(); form.reset(); });
-  modal.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeModal));
-  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+(()=>{
+  const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const menu=$('#menu'), mobile=$('#mobileNav');
+  menu?.addEventListener('click',()=>{const open=mobile.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
+  $$('#mobileNav a').forEach(a=>a.addEventListener('click',()=>{mobile.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
+  const quick=$('#quickFinder'), quickInput=$('#quickInput');
+  $$('.chip').forEach(btn=>btn.addEventListener('click',()=>{quickInput.value=btn.textContent.trim();quickInput.focus();}));
+  quick?.addEventListener('submit',e=>{e.preventDefault();const ref=quickInput.value.trim();$('#leadForm').scrollIntoView({behavior:'smooth',block:'start'});const field=$('[name="reference"]');if(ref)field.value=ref;field.focus();});
+  const lead=$('#leadForm'),status=$('#leadStatus');
+  const clean=v=>String(v||'').trim();
+  const toMessage=fd=>{const qs=new URLSearchParams(location.search);const source=[qs.get('utm_source'),qs.get('utm_campaign'),qs.get('gclid')?'gclid':''].filter(Boolean).join(' / ');return ['Dzień dobry, proszę o dobór / wycenę turbosprężarki.','',`Imię: ${clean(fd.get('name'))}`,`Telefon: ${clean(fd.get('phone'))}`,`VIN / turbo / OE: ${clean(fd.get('reference'))||'-'}`,`Pojazd / silnik: ${clean(fd.get('vehicle'))||'-'}`,`Problem: ${clean(fd.get('message'))||'-'}`,source?`Źródło kampanii: ${source}`:''].filter(Boolean).join('\n');};
+  const track=(name,params={})=>{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:name,...params});};
+  lead?.addEventListener('submit',e=>{e.preventDefault();if(!lead.checkValidity()){lead.reportValidity();return;}const fd=new FormData(lead);const message=toMessage(fd);const url='https://wa.me/48694706140?text='+encodeURIComponent(message);track('turbo_git_lead',{lead_channel:'whatsapp',lead_type:'turbo_dobor'});status.className='status success';status.textContent='Otwieramy WhatsApp z gotową wiadomością. Dołącz zdjęcie tabliczki znamionowej, gdy je masz.';window.open(url,'_blank','noopener');});
 })();
 </script>
-
-<!-- =================================================================
-     NAJLEPSZA WERSJA — prawdziwe zdjęcia + pełne dane (TURBO-GIT)
-     Samowystarczalny plik (CDN: Tailwind, Lucide, fonty) + folder assets/img/.
-     Dane: TURBO-GIT Paulina Hołda · +48 694 706 140 · ul. Wrocławska 7,
-     55-095 Januszkowice · NIP 8961447143 · Pon–Pt 7–16, Sob 8–13.
-     E-mail biuro@turbo-git.com — potwierdź (na stronie był maskowany).
-     Formularz: w handlerze submit podmień openModal() na fetch do Formspree/backendu.
-================================================================= -->
 </body>
 </html>
