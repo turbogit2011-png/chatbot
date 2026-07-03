@@ -15,6 +15,7 @@ import {
   WifiOff,
 } from "lucide-react";
 import { CHECKOUT_URL, PRICE, PRO_FEATURES } from "@/lib/pro";
+import { Aurora } from "@/components/ui/Aurora";
 
 const FEATURES = [
   {
@@ -58,19 +59,7 @@ const STEPS = [
 export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="fixed inset-0 -z-10" style={{ background: "var(--glow)" }} aria-hidden />
-      <div className="fixed inset-0 -z-10 bg-grid opacity-40" aria-hidden />
-      <div
-        className="fixed -z-10 rounded-full blur-3xl animate-float"
-        style={{
-          width: 520,
-          height: 520,
-          top: -180,
-          right: -140,
-          background: "radial-gradient(circle, rgba(139,92,246,0.2), transparent 70%)",
-        }}
-        aria-hidden
-      />
+      <Aurora />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Nav */}
@@ -126,6 +115,85 @@ export default function Landing() {
               Wymaga przeglądarki z WebGPU (Chrome / Edge). Bez instalacji.
             </p>
           </motion.div>
+
+          {/* Floating product preview */}
+          <motion.div
+            initial={{ opacity: 0, y: 40, rotateX: 8 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            className="relative mx-auto max-w-2xl mt-16"
+            style={{ perspective: 1200 }}
+          >
+            <div
+              className="absolute -inset-6 -z-10 blur-3xl opacity-60"
+              style={{ background: "radial-gradient(60% 50% at 50% 0%, rgba(139,92,246,0.5), transparent 70%)" }}
+              aria-hidden
+            />
+            <div className="card card-glow overflow-hidden text-left">
+              <div
+                className="flex items-center gap-2 px-4 py-2.5"
+                style={{ borderBottom: "1px solid var(--border)" }}
+              >
+                <span className="w-3 h-3 rounded-full" style={{ background: "#fb7185" }} />
+                <span className="w-3 h-3 rounded-full" style={{ background: "#fbbf24" }} />
+                <span className="w-3 h-3 rounded-full" style={{ background: "#34d399" }} />
+                <span className="ml-2 text-xs text-[var(--text-subtle)] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)]" /> Aura · lokalnie
+                </span>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="flex justify-end">
+                  <div
+                    className="rounded-2xl px-4 py-2 text-sm"
+                    style={{ background: "var(--grad-brand)", color: "#fff" }}
+                  >
+                    Napisz funkcję odwracającą tekst w JS
+                  </div>
+                </div>
+                <div className="flex justify-start">
+                  <div
+                    className="rounded-2xl px-4 py-3 text-sm max-w-[85%]"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)" }}
+                  >
+                    <p className="mb-2 text-[var(--text-muted)]">Proszę bardzo 👇</p>
+                    <div className="codeblock !my-0">
+                      <div className="codeblock-bar">
+                        <span className="codeblock-lang">js</span>
+                        <span className="codeblock-copy">kopiuj</span>
+                      </div>
+                      <pre className="!py-2.5">
+                        <code>
+                          <span className="hljs-keyword">const</span>{" "}
+                          <span className="hljs-title">rev</span> = (s) =&gt;{"\n"}
+                          {"  "}s.<span className="hljs-title">split</span>(
+                          <span className="hljs-string">&quot;&quot;</span>).
+                          <span className="hljs-title">reverse</span>().
+                          <span className="hljs-title">join</span>(
+                          <span className="hljs-string">&quot;&quot;</span>);
+                        </code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 pb-4">
+                <div
+                  className="flex items-center gap-2 rounded-xl px-3 py-2.5"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)" }}
+                >
+                  <span className="text-sm text-[var(--text-subtle)] flex-1">
+                    Zapytaj o cokolwiek — prywatnie…
+                  </span>
+                  <span
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "var(--grad-brand)" }}
+                  >
+                    <Sparkles size={15} className="text-white" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </section>
 
         {/* Features */}
@@ -135,9 +203,8 @@ export default function Landing() {
               <motion.div
                 key={f.title}
                 initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.15 + i * 0.06 }}
                 className="card card-glow p-5"
               >
                 <span

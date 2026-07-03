@@ -14,6 +14,7 @@ import {
   usePersistentState,
 } from "@/lib/store";
 import { fireConfetti } from "@/lib/confetti";
+import { Aurora } from "@/components/ui/Aurora";
 import FocusTimer from "./FocusTimer";
 import Tasks from "./Tasks";
 import Habits from "./Habits";
@@ -154,24 +155,7 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Ambient background */}
-      <div
-        className="fixed inset-0 -z-10"
-        style={{ background: "var(--glow)" }}
-        aria-hidden
-      />
-      <div className="fixed inset-0 -z-10 bg-grid opacity-40" aria-hidden />
-      <div
-        className="fixed -z-10 rounded-full blur-3xl animate-float"
-        style={{
-          width: 480,
-          height: 480,
-          top: -160,
-          right: -120,
-          background: "radial-gradient(circle, rgba(99,102,241,0.18), transparent 70%)",
-        }}
-        aria-hidden
-      />
+      <Aurora />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}
