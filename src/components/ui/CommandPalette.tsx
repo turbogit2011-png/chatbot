@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Coins,
@@ -22,7 +22,7 @@ interface Cmd {
   group: string;
   icon: React.ReactNode;
   keywords?: string;
-  run: (router: ReturnType<typeof useRouter>) => void;
+  run: (router: ReturnType<typeof useTransitionRouter>) => void;
 }
 
 const COMMANDS: Cmd[] = [
@@ -62,7 +62,7 @@ const COMMANDS: Cmd[] = [
 
 export function CommandPalette() {
   const mounted = useMounted();
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);

@@ -3,6 +3,8 @@ export interface AuraMessage {
   content: string;
   /** Tokens-per-second for assistant messages (display only). */
   tps?: number;
+  /** Agent actions Aura executed for this message. */
+  actions?: { ok: boolean; label: string }[];
 }
 
 export interface Conversation {
@@ -47,8 +49,8 @@ export const DEFAULT_SETTINGS: AuraSettings = {
 };
 
 export const STARTER_PROMPTS = [
-  "Wyjaśnij procent składany jak dla 10-latka.",
+  "Dodaj zadanie: przygotować prezentację (wysoki priorytet)",
+  "Ustaw timer skupienia na 50 minut",
   "Napisz funkcję w JS, która odwraca słowa w zdaniu.",
-  "Zaproponuj 5 nazw dla aplikacji o produktywności.",
-  "Ułóż plan nauki na weekend.",
+  "Wyjaśnij procent składany jak dla 10-latka.",
 ];

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import { ViewTransitions } from "next-view-transitions";
 import { ServiceWorkerRegister } from "@/components/momentum/Pwa";
 import { Aurora } from "@/components/ui/Aurora";
 import { CommandPalette } from "@/components/ui/CommandPalette";
@@ -62,13 +63,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased">
-        <Aurora />
-        {children}
-        <CommandPalette />
-        <ServiceWorkerRegister />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
+        <body className="antialiased">
+          <Aurora />
+          {children}
+          <CommandPalette />
+          <ServiceWorkerRegister />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

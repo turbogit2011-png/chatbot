@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import {
   ArrowLeft,
+  CheckCircle2,
   Cpu,
   Crown,
   Download,
@@ -11,16 +12,19 @@ import {
   Gauge,
   Loader2,
   Lock,
+  Mic,
   MessageSquarePlus,
   Pencil,
   Plus,
   RefreshCw,
   Send,
   Settings2,
-  ShieldCheck,
   Sparkles,
   Square,
   Trash2,
+  Volume2,
+  VolumeX,
+  Wrench,
   X,
   Zap,
 } from "lucide-react";
@@ -31,6 +35,8 @@ import {
   FREE_MODEL_ID,
   usePro,
 } from "@/lib/pro";
+import { AGENT_SYSTEM, executeAction, parseActions, stripActions } from "@/lib/agent";
+import { useSpeech } from "@/lib/speech";
 import { useEngine } from "./useEngine";
 import { Markdown } from "./Markdown";
 import ProModal from "./ProModal";
@@ -56,10 +62,13 @@ export default function LocalAI() {
     DEFAULT_SETTINGS
   );
   const [pro, setPro] = usePro();
+  const [voiceOut, setVoiceOut] = usePersistentState<boolean>("aura.voiceOut", false);
   const [input, setInput] = useState("");
   const [generating, setGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showPro, setShowPro] = useState(false);
+  const router = useTransitionRouter();
+  const speech = useSpeech();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const engine = useEngine();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -99,8 +108,10 @@ export default function LocalAI() {
 
   async function runGeneration(convId: string, history: AuraMessage[]) {
     setGenerating(true);
+    let full = "";
     try {
       const tps = await engine.generate(history, settings.temperature, (delta) => {
+        full += delta;
         setConversations((prev) =>
           prev.map((c) => {
             if (c.id !== convId) return c;
@@ -112,15 +123,31 @@ export default function LocalAI() {
           })
         );
       });
+
+      // Agentic step: run any tool calls the model emitted.
+      const results = parseActions(full).map((action) =>
+        executeAction(action, (p) => router.push(p))
+      );
+      const cleaned = stripActions(full);
+      const finalContent = cleaned.length ? cleaned : results.length ? "" : full;
+
       setConversations((prev) =>
         prev.map((c) => {
           if (c.id !== convId) return c;
           const m = [...c.messages];
           const last = m[m.length - 1];
-          if (last?.role === "assistant") m[m.length - 1] = { ...last, tps };
+          if (last?.role === "assistant")
+            m[m.length - 1] = {
+              ...last,
+              content: finalContent,
+              tps,
+              actions: results.length ? results : undefined,
+            };
           return { ...c, messages: m };
         })
       );
+
+      if (voiceOut && finalContent) speech.speak(finalContent);
     } catch (e) {
       setConversations((prev) =>
         prev.map((c) => {
@@ -181,7 +208,7 @@ export default function LocalAI() {
     setInput("");
 
     const history: AuraMessage[] = [
-      { role: "system", content: settings.systemPrompt || DEFAULT_SYSTEM_PROMPT },
+      { role: "system", content: `${settings.systemPrompt || DEFAULT_SYSTEM_PROMPT}\n\n${AGENT_SYSTEM}` },
       ...prior,
       userMsg,
     ];
@@ -202,7 +229,7 @@ export default function LocalAI() {
       )
     );
     const history: AuraMessage[] = [
-      { role: "system", content: settings.systemPrompt || DEFAULT_SYSTEM_PROMPT },
+      { role: "system", content: `${settings.systemPrompt || DEFAULT_SYSTEM_PROMPT}\n\n${AGENT_SYSTEM}` },
       ...msgs,
     ];
     runGeneration(convId, history);
@@ -369,6 +396,20 @@ export default function LocalAI() {
                   )}
                 </span>
                 <div className="flex items-center gap-1">
+                  {speech.ttsSupported && (
+                    <button
+                      onClick={() => {
+                        if (voiceOut) speech.stopSpeaking();
+                        setVoiceOut(!voiceOut);
+                      }}
+                      className="btn btn-ghost !p-2"
+                      aria-label="Czytanie odpowiedzi na głos"
+                      title={voiceOut ? "Wyłącz głos" : "Czytaj odpowiedzi na głos"}
+                      style={voiceOut ? { color: "var(--violet)" } : undefined}
+                    >
+                      {voiceOut ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                    </button>
+                  )}
                   <button
                     onClick={regenerate}
                     disabled={!active || generating}
@@ -422,6 +463,13 @@ export default function LocalAI() {
                 onSend={() => send()}
                 onStop={engine.stop}
                 generating={generating}
+                sttSupported={speech.sttSupported}
+                listening={speech.listening}
+                onMic={() =>
+                  speech.listening
+                    ? speech.stopListening()
+                    : speech.listen((t) => setInput(t))
+                }
               />
             </section>
           </div>
@@ -481,8 +529,11 @@ function Header() {
         <span className="chip" style={{ color: "var(--emerald)" }}>
           <Lock size={12} /> Zero serwerów
         </span>
+        <span className="chip" style={{ color: "var(--violet)" }}>
+          <Wrench size={12} /> Wykonuje akcje
+        </span>
         <span className="chip" style={{ color: "var(--cyan)" }}>
-          <ShieldCheck size={12} /> Rozmowy zostają u Ciebie
+          <Mic size={12} /> Głos
         </span>
         <span className="chip" style={{ color: "var(--amber)" }}>
           <Zap size={12} /> Bez API i opłat
@@ -655,6 +706,25 @@ function MessageBubble({
           <span className="inline-flex gap-1 text-[var(--text-subtle)]">
             <span className="animate-pulse">●</span> myślę…
           </span>
+        ) : message.actions?.length ? null : null}
+
+        {message.actions?.length ? (
+          <div className={cn("flex flex-wrap gap-2", message.content && "mt-3")}>
+            {message.actions.map((a, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1.5 text-xs rounded-lg px-2.5 py-1.5"
+                style={{
+                  background: a.ok ? "rgba(52,211,153,0.1)" : "rgba(251,113,133,0.1)",
+                  border: `1px solid ${a.ok ? "rgba(52,211,153,0.3)" : "rgba(251,113,133,0.3)"}`,
+                  color: a.ok ? "var(--emerald)" : "var(--rose)",
+                }}
+              >
+                {a.ok ? <CheckCircle2 size={13} /> : <Wrench size={13} />}
+                {a.label}
+              </span>
+            ))}
+          </div>
         ) : null}
       </div>
       <div className="flex items-center gap-3 mt-1.5 px-1 h-4">
@@ -687,15 +757,36 @@ function Composer({
   onSend,
   onStop,
   generating,
+  sttSupported,
+  listening,
+  onMic,
 }: {
   input: string;
   setInput: (v: string) => void;
   onSend: () => void;
   onStop: () => void;
   generating: boolean;
+  sttSupported: boolean;
+  listening: boolean;
+  onMic: () => void;
 }) {
   return (
     <div className="p-3 flex gap-2" style={{ borderTop: "1px solid var(--border)" }}>
+      {sttSupported && (
+        <button
+          onClick={onMic}
+          className="btn btn-ghost !px-3"
+          aria-label="Dyktowanie głosowe"
+          title="Mów — Aura zapisze to w polu"
+          style={
+            listening
+              ? { color: "var(--rose)", borderColor: "var(--rose)" }
+              : undefined
+          }
+        >
+          <Mic size={18} className={listening ? "animate-pulse" : undefined} />
+        </button>
+      )}
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -706,7 +797,7 @@ function Composer({
           }
         }}
         rows={1}
-        placeholder="Napisz wiadomość…  (Enter wysyła, Shift+Enter = nowa linia)"
+        placeholder="Napisz lub powiedz…  (Enter wysyła, Shift+Enter = nowa linia)"
         className="input-field resize-none max-h-32"
       />
       {generating ? (
