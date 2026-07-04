@@ -52,11 +52,24 @@ export function useEngine() {
     setError("");
     setProgress(0);
     try {
+      // Devices without the WebGPU `shader-f16` feature (some mobile GPUs,
+      // software adapters) can't run q4f16 models — fall back to q4f32.
+      let target = model;
+      try {
+        const gpu = (navigator as unknown as { gpu?: { requestAdapter: () => Promise<{ features: { has: (f: string) => boolean } } | null> } }).gpu;
+        const adapter = gpu ? await gpu.requestAdapter() : null;
+        if (adapter && !adapter.features.has("shader-f16")) {
+          target = model.replace("q4f16_1", "q4f32_1");
+        }
+      } catch {
+        /* adapter probe failed — try the requested model as-is */
+      }
+
       const dynImport = new Function("u", "return import(u)") as (
         u: string
       ) => Promise<WebLLMModule>;
       const webllm = await dynImport("https://esm.run/@mlc-ai/web-llm");
-      const engine = await webllm.CreateMLCEngine(model, {
+      const engine = await webllm.CreateMLCEngine(target, {
         initProgressCallback: (p) => {
           setProgress(p.progress);
           setProgressText(p.text);
