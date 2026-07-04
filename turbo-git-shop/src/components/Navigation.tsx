@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -11,6 +12,7 @@ import {
   Zap,
   ChevronRight,
 } from "lucide-react";
+import { useCart } from "@/lib/shop/cart";
 
 const navLinks = [
   { label: "Sklep", href: "#sklep" },
@@ -23,7 +25,7 @@ const navLinks = [
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [cartCount] = useState(0);
+  const cart = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -34,7 +36,8 @@ export default function Navigation() {
   const scrollTo = (href: string) => {
     setMobileOpen(false);
     const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    else window.location.assign(`/${href}`); // from other pages, jump home to the anchor
   };
 
   return (
@@ -51,7 +54,7 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 h-16">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF7A00] to-[#FF3D00] flex items-center justify-center shadow-[0_0_20px_rgba(255,122,0,0.4)]">
               <Zap className="w-5 h-5 text-white" fill="currentColor" />
             </div>
@@ -59,7 +62,7 @@ export default function Navigation() {
               <span className="text-white">TURBO</span>
               <span className="text-gradient">GIT</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-6 ml-6">
@@ -105,11 +108,15 @@ export default function Navigation() {
               B2B
             </a>
 
-            <button className="relative p-2 text-[#94A3B8] hover:text-white transition-colors">
+            <button
+              onClick={() => cart.setOpen(true)}
+              className="relative p-2 text-[#94A3B8] hover:text-white transition-colors"
+              aria-label="Otwórz koszyk"
+            >
               <ShoppingCart className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF7A00] rounded-full text-[10px] font-bold text-white flex items-center justify-center">
-                  {cartCount}
+              {cart.hydrated && cart.count > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 bg-[#FF7A00] rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+                  {cart.count}
                 </span>
               )}
             </button>
