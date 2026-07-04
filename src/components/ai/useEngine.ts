@@ -79,6 +79,16 @@ export function useEngine() {
     engineRef.current?.interruptGenerate?.();
   }, []);
 
+  /** Drop the current engine so the next load rebuilds it (recovers from a
+   *  lost WebGPU device / bad buffer state, common on mobile). */
+  const reset = useCallback(() => {
+    engineRef.current = null;
+    loadedModelRef.current = null;
+    setError("");
+    setProgress(0);
+    setStatus("idle");
+  }, []);
+
   /** Streams a completion, calling `onDelta` for each token. Returns tokens/sec. */
   const generate = useCallback(
     async (
@@ -119,6 +129,7 @@ export function useEngine() {
     error,
     load,
     stop,
+    reset,
     generate,
     loadedModelRef,
   };

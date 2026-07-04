@@ -149,13 +149,16 @@ export default function LocalAI() {
 
       if (voiceOut && finalContent) speech.speak(finalContent);
     } catch (e) {
+      const raw = e instanceof Error ? e.message : "nieznany błąd";
+      const isGpu = /mapAsync|GPUBuffer|unmapped|device lost|out of memory|createBuffer|webgpu/i.test(raw);
+      const msg = isGpu
+        ? "⚠️ Twoje urządzenie napotkało problem z WebGPU podczas generowania. Na telefonie bywa to niestabilne. Spróbuj ponownie lub przeładuj model — a dla pełnej stabilności otwórz Aurę w Chrome/Edge na komputerze."
+        : "⚠️ Błąd generowania: " + raw;
       setConversations((prev) =>
         prev.map((c) => {
           if (c.id !== convId) return c;
           const m = [...c.messages];
           const last = m[m.length - 1];
-          const msg =
-            "⚠️ Błąd generowania: " + (e instanceof Error ? e.message : "nieznany");
           if (last?.role === "assistant")
             m[m.length - 1] = { ...last, content: last.content || msg };
           return { ...c, messages: m };
@@ -453,6 +456,22 @@ export default function LocalAI() {
                         streaming={generating && i === active.messages.length - 1}
                       />
                     ))}
+                    {!generating &&
+                      active.messages[active.messages.length - 1]?.role === "assistant" &&
+                      active.messages[active.messages.length - 1]?.content.startsWith("⚠️") && (
+                        <div className="flex flex-wrap gap-2 justify-center pt-1">
+                          <button onClick={regenerate} className="btn btn-primary text-sm !py-2">
+                            <RefreshCw size={15} /> Spróbuj ponownie
+                          </button>
+                          <button
+                            onClick={engine.reset}
+                            className="btn btn-ghost text-sm !py-2"
+                            title="Odtwórz silnik WebGPU"
+                          >
+                            <Cpu size={15} /> Przeładuj model
+                          </button>
+                        </div>
+                      )}
                   </div>
                 )}
               </div>
