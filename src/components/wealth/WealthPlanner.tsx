@@ -13,7 +13,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { usePersistentState, useMounted } from "@/lib/store";
-import { Aurora } from "@/components/ui/Aurora";
 import {
   Currency,
   PlanInput,
@@ -135,7 +134,6 @@ export default function WealthPlanner() {
   if (!mounted) {
     return (
       <div className="relative min-h-screen">
-        <Aurora />
         <main className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-5" aria-hidden>
           <div className="card h-24 shimmer" />
           <div className="card h-16 shimmer" />
@@ -150,8 +148,6 @@ export default function WealthPlanner() {
 
   return (
     <div className="relative min-h-screen">
-      <Aurora />
-
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <motion.header
           initial={{ opacity: 0, y: -12 }}

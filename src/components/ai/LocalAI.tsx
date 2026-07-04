@@ -26,7 +26,6 @@ import {
 } from "lucide-react";
 import { usePersistentState, useMounted, uid } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { Aurora } from "@/components/ui/Aurora";
 import {
   FREE_CONVERSATION_LIMIT,
   FREE_MODEL_ID,
@@ -231,8 +230,6 @@ export default function LocalAI() {
 
   return (
     <div className="relative min-h-screen">
-      <Aurora />
-
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <Header />
 

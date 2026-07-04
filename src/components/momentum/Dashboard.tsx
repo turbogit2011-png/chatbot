@@ -14,7 +14,6 @@ import {
   usePersistentState,
 } from "@/lib/store";
 import { fireConfetti } from "@/lib/confetti";
-import { Aurora } from "@/components/ui/Aurora";
 import FocusTimer from "./FocusTimer";
 import Tasks from "./Tasks";
 import Habits from "./Habits";
@@ -155,8 +154,6 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen">
-      <Aurora />
-
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}
         <motion.header

@@ -15,7 +15,6 @@ import {
   WifiOff,
 } from "lucide-react";
 import { CHECKOUT_URL, PRICE, PRO_FEATURES } from "@/lib/pro";
-import { Aurora } from "@/components/ui/Aurora";
 
 const FEATURES = [
   {
@@ -59,8 +58,6 @@ const STEPS = [
 export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <Aurora />
-
       <main className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Nav */}
         <nav className="flex items-center justify-between py-6">

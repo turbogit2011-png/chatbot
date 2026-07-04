@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/momentum/Pwa";
+import { Aurora } from "@/components/ui/Aurora";
+import { CommandPalette } from "@/components/ui/CommandPalette";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -62,7 +64,9 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
       <body className="antialiased">
+        <Aurora />
         {children}
+        <CommandPalette />
         <ServiceWorkerRegister />
       </body>
     </html>
