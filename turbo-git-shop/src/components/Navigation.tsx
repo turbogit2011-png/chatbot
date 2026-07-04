@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
   ShoppingCart,
   PhoneCall,
   Menu,
@@ -13,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useCart } from "@/lib/shop/cart";
+import SearchBox from "@/components/shop/SearchBox";
 
 const navLinks = [
   { label: "Sklep", href: "#sklep" },
@@ -80,14 +80,7 @@ export default function Navigation() {
 
           {/* Desktop Search */}
           <div className="flex-1 hidden md:block mx-4 max-w-sm xl:max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8] pointer-events-none" />
-              <input
-                type="text"
-                placeholder="OEM, marka, model..."
-                className="input-field w-full pl-10 pr-4 py-2 text-sm"
-              />
-            </div>
+            <SearchBox placeholder="OEM, marka, model..." />
           </div>
 
           {/* Right Actions */}
@@ -154,12 +147,10 @@ export default function Navigation() {
           >
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {/* Mobile search */}
-              <div className="relative mb-3">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8] pointer-events-none" />
-                <input
-                  type="text"
+              <div className="mb-3">
+                <SearchBox
                   placeholder="Wyszukaj po OEM, marce, modelu..."
-                  className="input-field w-full pl-10 pr-4 py-2.5 text-sm"
+                  onNavigate={() => setMobileOpen(false)}
                 />
               </div>
 
