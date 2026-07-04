@@ -113,7 +113,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col bg-[#06080D] overflow-hidden"
+      className="relative min-h-screen flex flex-col bg-[#050609] overflow-hidden luxe-vignette luxe-grain"
     >
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }} />
       <div className="absolute inset-0 bg-grid-fine" />
@@ -131,7 +131,7 @@ export default function Hero() {
       />
 
       {/* Rotating rings */}
-      <div className="absolute right-[-80px] top-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none opacity-20 lg:opacity-30">
+      <div className="absolute right-[-80px] top-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none opacity-[0.12] lg:opacity-[0.16]">
         <div className="animate-spin-slow absolute inset-0 rounded-full border border-dashed border-[#FF7A00]/30" />
         <div className="animate-spin-slow-rev absolute inset-[60px] rounded-full border border-[#FFB800]/20" />
         <div className="animate-spin-slow absolute inset-[120px] rounded-full border border-dashed border-[#FF7A00]/40" />
@@ -147,9 +147,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Scan beam */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-        <div className="animate-scan absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FF7A00]/60 to-transparent" />
+      {/* Scan beam (subtle) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.12]">
+        <div className="animate-scan absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E8C889]/60 to-transparent" />
       </div>
 
       {/* Content */}
@@ -161,9 +161,9 @@ export default function Hero() {
           {/* Left 3/5 */}
           <div className="lg:col-span-3 flex flex-col gap-5">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FF7A00]/10 border border-[#FF7A00]/25 text-[#FF9A30] text-xs font-bold uppercase tracking-widest animate-neon">
+              <div className="pill-lux">
                 <Zap className="w-3 h-3" fill="currentColor" />
-                Profesjonalny sklep turbosprężarek
+                Regeneracja Premium · Standard VSR 301
               </div>
             </motion.div>
 
@@ -176,8 +176,10 @@ export default function Hero() {
             >
               <span className="text-white block">REGENEROWANE</span>
               <span className="text-white block">TURBOSPRĘŻARKI</span>
-              <span className="text-gradient-animated block">Z GWARANCJĄ</span>
+              <span className="text-champagne champagne-glow block">Z GWARANCJĄ</span>
             </motion.h1>
+
+            <div className="divider-lux" />
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -253,20 +255,20 @@ export default function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="glass-warm rounded-xl p-4 max-w-sm"
+              className="card-lux p-5 max-w-sm"
             >
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="font-display text-2xl text-gradient">8K+</div>
-                  <div className="text-[10px] text-[#94A3B8] mt-0.5">turbosprężarek</div>
+                  <div className="font-display text-2xl text-champagne">8K+</div>
+                  <div className="text-[10px] text-[#94A3B8] mt-0.5 tracking-wide">turbosprężarek</div>
                 </div>
                 <div className="border-x border-white/10">
-                  <div className="font-display text-2xl text-gradient">24M</div>
-                  <div className="text-[10px] text-[#94A3B8] mt-0.5">gwarancja</div>
+                  <div className="font-display text-2xl text-champagne">24M</div>
+                  <div className="text-[10px] text-[#94A3B8] mt-0.5 tracking-wide">gwarancja</div>
                 </div>
                 <div>
-                  <div className="font-display text-2xl text-gradient">98%</div>
-                  <div className="text-[10px] text-[#94A3B8] mt-0.5">opinii 5★</div>
+                  <div className="font-display text-2xl text-champagne">98%</div>
+                  <div className="text-[10px] text-[#94A3B8] mt-0.5 tracking-wide">opinii 5★</div>
                 </div>
               </div>
             </motion.div>
@@ -318,12 +320,12 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              className="glass-warm rounded-xl p-4 border border-[#FF7A00]/15"
+              className="card-lux p-4"
             >
               <div className="flex items-center gap-3">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#FFB800] text-[#FFB800]" />
+                    <Star key={i} className="w-4 h-4 fill-[#E8C889] text-[#E8C889]" />
                   ))}
                 </div>
                 <div>
