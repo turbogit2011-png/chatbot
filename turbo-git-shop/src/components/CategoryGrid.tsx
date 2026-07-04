@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { motion, useInView } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { categories } from "@/lib/data";

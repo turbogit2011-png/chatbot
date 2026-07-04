@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { useTransitionRouter } from "next-view-transitions";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Zap, ArrowRight, ChevronRight, Star } from "lucide-react";
 
@@ -27,6 +28,11 @@ export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useTransitionRouter();
+  const goSearch = (term: string) => {
+    const t = term.trim();
+    if (t) router.push(`/szukaj/?q=${encodeURIComponent(t)}`);
+  };
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -196,11 +202,15 @@ export default function Hero() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && goSearch(searchQuery)}
                   placeholder="Wpisz numer OEM, kod silnika lub model..."
                   className="w-full pl-12 pr-4 py-4 bg-white/[0.05] border border-white/10 border-r-0 rounded-l-xl text-white text-sm placeholder-[#4A6080] focus:outline-none focus:border-[#FF7A00] focus:bg-[#FF7A00]/5 transition-all"
                 />
               </div>
-              <button className="btn-primary rounded-l-none rounded-r-xl whitespace-nowrap font-display tracking-wider px-5 text-sm">
+              <button
+                onClick={() => goSearch(searchQuery)}
+                className="btn-primary rounded-l-none rounded-r-xl whitespace-nowrap font-display tracking-wider px-5 text-sm"
+              >
                 SZUKAJ
               </button>
             </motion.div>
@@ -215,6 +225,7 @@ export default function Hero() {
               {popularSearches.map((term) => (
                 <button
                   key={term}
+                  onClick={() => goSearch(term)}
                   className="px-3 py-1 text-xs rounded-full border border-white/10 text-[#94A3B8] hover:border-[#FF7A00]/50 hover:text-[#FF7A00] hover:bg-[#FF7A00]/5 transition-all"
                 >
                   {term}

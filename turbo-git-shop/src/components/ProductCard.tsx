@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { motion } from "framer-motion";
 import { Shield, Star, ShoppingCart, Heart, Eye, Check } from "lucide-react";
 import type { Product } from "@/lib/data";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { Search } from "lucide-react";
 import { searchProducts, formatPLN } from "@/lib/shop/catalog";
 
@@ -14,7 +14,7 @@ export default function SearchBox({
   onNavigate?: () => void;
   autoFocus?: boolean;
 }) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
