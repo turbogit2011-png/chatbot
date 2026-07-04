@@ -568,7 +568,15 @@ kbd {
   font-size: 0.95rem;
 }
 .cmdk-input::placeholder { color: var(--text-subtle); }
-.cmdk-list { padding: 0.4rem; max-height: 320px; overflow-y: auto; }
+.cmdk-list { padding: 0.4rem; max-height: 340px; overflow-y: auto; }
+.cmdk-group {
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
 .cmdk-item {
   width: 100%;
   display: flex;

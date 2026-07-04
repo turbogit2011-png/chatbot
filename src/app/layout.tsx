@@ -5,6 +5,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { ServiceWorkerRegister } from "@/components/momentum/Pwa";
 import { Aurora } from "@/components/ui/Aurora";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import { SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -20,6 +21,7 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Momentum – Twoje centrum produktywności",
   description:
     "Momentum to działające offline centrum produktywności: timer skupienia (Pomodoro), zadania z priorytetami, nawyki z passami, notatnik i statystyki dnia. Bez kont, bez śledzenia — wszystkie dane zostają na Twoim urządzeniu.",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTransitionRouter } from "next-view-transitions";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,11 +10,14 @@ import {
   Crown,
   CornerDownLeft,
   LayoutDashboard,
+  Plus,
   Search,
   Sparkles,
+  Timer,
 } from "lucide-react";
 import { useMounted } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { executeAction } from "@/lib/agent";
 
 interface Cmd {
   id: string;
@@ -57,6 +60,34 @@ const COMMANDS: Cmd[] = [
     icon: <Coins size={16} />,
     keywords: "finanse kalkulator procent składany inwestycje",
     run: (r) => r.push("/wealth"),
+  },
+  {
+    id: "quick-task",
+    label: "Szybkie zadanie…",
+    group: "Akcje",
+    icon: <Plus size={16} />,
+    keywords: "dodaj zadanie todo task",
+    run: (r) => {
+      const title = window.prompt("Treść zadania:");
+      if (title && title.trim()) {
+        executeAction(
+          { tool: "add_task", args: { title: title.trim(), priority: "medium" } },
+          () => {}
+        );
+        r.push("/");
+      }
+    },
+  },
+  {
+    id: "quick-focus",
+    label: "Sesja skupienia 25 min",
+    group: "Akcje",
+    icon: <Timer size={16} />,
+    keywords: "pomodoro timer skupienie focus start",
+    run: (r) => {
+      executeAction({ tool: "set_timer", args: { minutes: 25 } }, () => {});
+      r.push("/");
+    },
   },
 ];
 
@@ -165,18 +196,22 @@ export function CommandPalette() {
                   <div className="cmdk-empty">Brak wyników</div>
                 ) : (
                   results.map((c, idx) => (
-                    <button
-                      key={c.id}
-                      onClick={() => run(c)}
-                      onMouseMove={() => setActive(idx)}
-                      className={cn("cmdk-item", idx === active && "cmdk-item--active")}
-                    >
-                      <span className="cmdk-ico">{c.icon}</span>
-                      <span className="flex-1 text-left">{c.label}</span>
-                      {idx === active && (
-                        <CornerDownLeft size={13} className="text-[var(--text-subtle)]" />
+                    <Fragment key={c.id}>
+                      {(idx === 0 || results[idx - 1].group !== c.group) && (
+                        <div className="cmdk-group">{c.group}</div>
                       )}
-                    </button>
+                      <button
+                        onClick={() => run(c)}
+                        onMouseMove={() => setActive(idx)}
+                        className={cn("cmdk-item", idx === active && "cmdk-item--active")}
+                      >
+                        <span className="cmdk-ico">{c.icon}</span>
+                        <span className="flex-1 text-left">{c.label}</span>
+                        {idx === active && (
+                          <CornerDownLeft size={13} className="text-[var(--text-subtle)]" />
+                        )}
+                      </button>
+                    </Fragment>
                   ))
                 )}
               </div>
