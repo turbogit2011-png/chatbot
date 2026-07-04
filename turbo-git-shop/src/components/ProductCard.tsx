@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import { Link } from "next-view-transitions";
 import { motion } from "framer-motion";
 import { Shield, Star, ShoppingCart, Heart, Eye, Check } from "lucide-react";
 import type { Product } from "@/lib/data";
+import { useCart } from "@/lib/shop/cart";
 
 function TurboSVG() {
   return (
@@ -24,8 +26,10 @@ function TurboSVG() {
 export default function ProductCard({ product }: { product: Product }) {
   const [wished, setWished] = useState(false);
   const [added, setAdded] = useState(false);
+  const cart = useCart();
 
   const handleAdd = () => {
+    cart.add(product.id);
     setAdded(true);
     setTimeout(() => setAdded(false), 2200);
   };
@@ -64,10 +68,13 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
 
         <div className="absolute inset-0 bg-[#FF7A00]/10 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-          <button className="flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all translate-y-2 group-hover:translate-y-0 duration-300">
+          <Link
+            href={`/produkt/${product.id}`}
+            className="flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all translate-y-2 group-hover:translate-y-0 duration-300"
+          >
             <Eye className="w-3.5 h-3.5" />
-            Szybki podgląd
-          </button>
+            Zobacz szczegóły
+          </Link>
         </div>
       </div>
 
@@ -75,9 +82,11 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-col flex-1 p-5">
         <p className="text-[10px] font-mono text-[#4A6080] mb-1 tracking-widest">{product.oemNumber}</p>
 
-        <h3 className="font-semibold text-white text-sm leading-snug mb-1 group-hover:text-[#FF9A30] transition-colors">
-          {product.name}
-        </h3>
+        <Link href={`/produkt/${product.id}`}>
+          <h3 className="font-semibold text-white text-sm leading-snug mb-1 group-hover:text-[#FF9A30] transition-colors line-clamp-2">
+            {product.name}
+          </h3>
+        </Link>
         <p className="text-xs text-[#94A3B8] mb-3">
           {product.brand} · {product.model}
         </p>

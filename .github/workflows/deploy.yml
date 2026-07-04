@@ -1,4 +1,4 @@
-name: Deploy Momentum to GitHub Pages
+name: Deploy Momentum + TURBO-GIT shop preview to GitHub Pages
 
 on:
   push:
@@ -40,6 +40,21 @@ jobs:
           # enable real payments. Empty = safe demo mode (Pro preview key).
           NEXT_PUBLIC_CHECKOUT_URL: ${{ secrets.NEXT_PUBLIC_CHECKOUT_URL }}
           NEXT_PUBLIC_GUMROAD_PRODUCT_ID: ${{ secrets.NEXT_PUBLIC_GUMROAD_PRODUCT_ID }}
+
+      # ---- TURBO-GIT headless shop preview, nested under /shop ----
+      - name: Install shop dependencies
+        run: npm ci
+        working-directory: turbo-git-shop
+
+      - name: Build shop (preview)
+        run: npm run build
+        working-directory: turbo-git-shop
+        env:
+          NODE_ENV: production
+          SHOP_BASE_PATH: /chatbot/shop
+
+      - name: Nest shop under /shop
+        run: cp -r turbo-git-shop/out out/shop
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

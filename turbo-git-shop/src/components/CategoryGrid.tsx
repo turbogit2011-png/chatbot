@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Link } from "next-view-transitions";
 import { motion, useInView } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { categories } from "@/lib/data";
@@ -100,11 +101,10 @@ export default function CategoryGrid() {
             const firstLetter = cat.name.charAt(0);
 
             return (
-              <motion.a
-                key={cat.slug}
-                href={`#sklep`}
-                variants={itemVariants}
-                className="cat-card group"
+              <motion.div key={cat.slug} variants={itemVariants}>
+              <Link
+                href={`/marka/${cat.slug}`}
+                className="cat-card group block"
               >
                 {/* Brand letter/logo area */}
                 <div className="mb-3 mx-auto w-14 h-14 rounded-xl relative flex items-center justify-center overflow-hidden">
@@ -128,7 +128,8 @@ export default function CategoryGrid() {
                 <div className="text-[11px] text-[#4A6080] mt-1">
                   ({cat.count} modeli)
                 </div>
-              </motion.a>
+              </Link>
+              </motion.div>
             );
           })}
         </motion.div>
