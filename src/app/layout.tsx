@@ -1,6 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import { ViewTransitions } from "next-view-transitions";
+import { ServiceWorkerRegister } from "@/components/momentum/Pwa";
+import { Aurora } from "@/components/ui/Aurora";
+import { CommandPalette } from "@/components/ui/CommandPalette";
+import { SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -16,31 +21,42 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "TurboDiesel – Regeneracja Turbosprężarek | Profesjonalny Serwis",
+  metadataBase: new URL(SITE_URL),
+  title: "Momentum – Twoje centrum produktywności",
   description:
-    "Profesjonalna regeneracja turbosprężarek, wtryskiwaczy i filtrów DPF. Ponad 10 lat doświadczenia. Gwarancja 12 miesięcy. Diagnostyka CNC. Sprawdź ofertę!",
+    "Momentum to działające offline centrum produktywności: timer skupienia (Pomodoro), zadania z priorytetami, nawyki z passami, notatnik i statystyki dnia. Bez kont, bez śledzenia — wszystkie dane zostają na Twoim urządzeniu.",
   keywords: [
-    "regeneracja turbosprężarek",
-    "serwis turbo",
-    "naprawa turbosprężarki",
-    "turbodiesel",
-    "wtryskiwacze",
-    "DPF",
-    "diesel",
-    "turbosprężarka",
+    "produktywność",
+    "pomodoro",
+    "timer skupienia",
+    "lista zadań",
+    "nawyki",
+    "streak",
+    "notatnik",
+    "offline",
   ],
-  authors: [{ name: "TurboDiesel" }],
+  authors: [{ name: "Momentum" }],
+  applicationName: "Momentum",
+  appleWebApp: {
+    capable: true,
+    title: "Momentum",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
   openGraph: {
-    title: "TurboDiesel – Regeneracja Turbosprężarek",
+    title: "Momentum – Twoje centrum produktywności",
     description:
-      "Profesjonalna regeneracja turbosprężarek z gwarancją 12 miesięcy",
+      "Timer skupienia, zadania, nawyki i statystyki w jednej aplikacji działającej offline.",
     type: "website",
     locale: "pl_PL",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF6B1A",
+  themeColor: "#8B5CF6",
 };
 
 export default function RootLayout({
@@ -49,8 +65,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased">{children}</body>
-    </html>
+    <ViewTransitions>
+      <html lang="pl" className={`${inter.variable} ${bebasNeue.variable}`}>
+        <body className="antialiased">
+          <Aurora />
+          {children}
+          <CommandPalette />
+          <ServiceWorkerRegister />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

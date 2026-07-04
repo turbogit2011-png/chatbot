@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Momentum — Twoje centrum produktywności
 
-## Getting Started
+Momentum to działająca **w pełni offline** aplikacja do produktywności, zbudowana
+na Next.js 16 (App Router, statyczny eksport). Wszystkie dane są przechowywane
+**wyłącznie w przeglądarce** (`localStorage`) — bez kont, bez serwera, bez śledzenia.
 
-First, run the development server:
+## Funkcje
+
+- **⏱️ Timer skupienia (Pomodoro)** — konfigurowalne sesje pracy i przerw, pierścień
+  postępu, dźwiękowy sygnał końca sesji oraz automatyczne zliczanie minut skupienia.
+- **✅ Zadania** — szybkie dodawanie, priorytety (wysoki/średni/niski), filtrowanie
+  (wszystkie/aktywne/zrobione) i licznik ukończeń z dziś.
+- **🔁 Nawyki z passami** — odhaczanie nawyków na dziś, licznik dni „z rzędu”
+  (streak) i mini-podgląd ostatnich 7 dni.
+- **📝 Notatnik** — automatycznie zapisywany brudnopis z licznikiem słów.
+- **📊 Statystyki dnia** — minuty skupienia, ukończone zadania, najlepsza passa
+  oraz wykres skupienia z ostatnich 7 dni.
+- **💾 Eksport / import / reset** — pełna kontrola nad własnymi danymi (plik JSON).
+- **💰 Droga do Miliarda** (`/wealth`) — kalkulator procentu składanego: ile to
+  potrwa, ile odkładać i jakiego zwrotu potrzeba, by trafić w cel finansowy —
+  z wykresem wzrostu (skala log), kamieniami milowymi i szczerym „reality check".
+- **✨ Aura — prywatna AI** (`/ai`) — pełnoprawny asystent AI działający w 100% w
+  przeglądarce przez WebGPU (otwarte modele Qwen / Llama uruchamiane lokalnie):
+  wiele rozmów z auto-tytułami, streaming odpowiedzi, **Markdown + podświetlanie
+  składni** z kopiowaniem kodu, **Stop/Regeneruj**, licznik tok/s, eksport rozmowy
+  do `.md`, ustawienia (model, temperatura, własny prompt systemowy). Bez serwerów,
+  bez API, bez opłat — rozmowy nigdy nie opuszczają urządzenia. Wymaga przeglądarki
+  z WebGPU (Chrome/Edge) i jednorazowego pobrania modelu (~0,5–2,3 GB).
+
+## Uruchomienie
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Otwórz [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Budowanie (statyczny eksport)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # generuje statyczną stronę do katalogu out/
+```
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 16** (App Router, `output: "export"`)
+- **React 19**
+- **Tailwind CSS v4**
+- **framer-motion** (animacje), **lucide-react** (ikony)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Dane nigdy nie opuszczają urządzenia — to świadoma decyzja projektowa
+> stawiająca prywatność na pierwszym miejscu.
