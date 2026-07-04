@@ -1,28 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #06080D;
-  --bg-2: #0E1420;
-  --bg-3: #131B2A;
-  --bg-4: #1A2438;
+  --bg: #050609;
+  --bg-2: #0B0F17;
+  --bg-3: #111825;
+  --bg-4: #182234;
   --border: rgba(255,255,255,0.06);
   --border-active: rgba(255,122,0,0.45);
+  --hairline: rgba(232,200,137,0.22);
 
   --orange: #FF7A00;
   --orange-2: #FF9A30;
   --orange-3: #FFB860;
   --gold: #FFB800;
+  --champagne: #E8C889;
+  --champagne-2: #C99A3B;
   --red: #FF3D00;
 
   --text: #F1F5F9;
   --text-2: #94A3B8;
   --text-3: #4A6080;
 
-  --gradient-primary: linear-gradient(135deg, #FF7A00, #FF3D00);
+  --gradient-primary: linear-gradient(135deg, #FF8A1A, #FF3D00);
   --gradient-gold: linear-gradient(135deg, #FFB800, #FF7A00);
-  --gradient-card: linear-gradient(160deg, #131B2A 0%, #0E1420 100%);
+  --gradient-champagne: linear-gradient(135deg, #F6E4B8 0%, #E8C889 40%, #C99A3B 100%);
+  --gradient-card: linear-gradient(160deg, #0E1522 0%, #080B12 100%);
   --shadow-orange: 0 0 40px rgba(255,122,0,0.25);
-  --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-card: 0 20px 50px -20px rgba(0,0,0,0.75);
 }
 
 @theme inline {
@@ -67,8 +71,8 @@ body {
 .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); }
 .section-label::before { content: ''; display: block; width: 20px; height: 2px; background: var(--orange); }
 
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--gradient-primary); color: #fff; font-weight: 700; padding: 0.875rem 2rem; border-radius: 0.625rem; box-shadow: 0 0 24px rgba(255,122,0,0.35); transition: all 0.3s ease; position: relative; overflow: hidden; font-size: 0.9rem; letter-spacing: 0.02em; cursor: pointer; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(255,122,0,0.55); filter: brightness(1.1); }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background-image: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 45%), var(--gradient-primary); color: #fff; font-weight: 700; padding: 0.875rem 2rem; border-radius: 0.7rem; box-shadow: 0 10px 30px -10px rgba(255,122,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); transition: all 0.3s ease; position: relative; overflow: hidden; font-size: 0.9rem; letter-spacing: 0.02em; cursor: pointer; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px -12px rgba(255,122,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3); filter: brightness(1.05); }
 .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-weight: 600; padding: 0.875rem 2rem; border-radius: 0.625rem; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; font-size: 0.9rem; cursor: pointer; }
 .btn-ghost:hover { border-color: var(--orange); color: var(--orange); background: rgba(255,122,0,0.06); transform: translateY(-2px); }
 .btn-gold { display: inline-flex; align-items: center; gap: 8px; background: var(--gradient-gold); color: #0a0500; font-weight: 800; padding: 0.875rem 2rem; border-radius: 0.625rem; box-shadow: 0 0 24px rgba(255,184,0,0.3); transition: all 0.3s; font-size: 0.9rem; letter-spacing: 0.02em; cursor: pointer; }
@@ -138,3 +142,50 @@ body {
 /* Neon border pulse */
 @keyframes neon-pulse { 0%,100% { box-shadow: 0 0 10px rgba(255,122,0,0.3), 0 0 20px rgba(255,122,0,0.1) } 50% { box-shadow: 0 0 20px rgba(255,122,0,0.6), 0 0 40px rgba(255,122,0,0.2), 0 0 80px rgba(255,122,0,0.1) } }
 .animate-neon { animation: neon-pulse 2.5s ease-in-out infinite; }
+
+/* ------------------------- Luxury / premium layer ------------------------ */
+.text-champagne {
+  background: var(--gradient-champagne);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.champagne-glow { text-shadow: 0 0 34px rgba(232,200,137,0.35); }
+
+/* Refined pill with a champagne hairline */
+.pill-lux {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px; border-radius: 9999px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--champagne);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+
+/* Thin champagne divider */
+.divider-lux { height: 1px; width: 120px; background: linear-gradient(90deg, var(--champagne-2), transparent); }
+
+/* Premium card: deep glass + top hairline + inner sheen */
+.card-lux {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008));
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+.card-lux::before {
+  content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hairline), transparent);
+}
+
+/* Cinematic vignette + subtle grain for the hero */
+.luxe-vignette {
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(255,122,0,0.10), transparent 55%),
+    radial-gradient(80% 60% at 85% 20%, rgba(232,200,137,0.05), transparent 60%),
+    radial-gradient(100% 100% at 50% 120%, rgba(0,0,0,0.6), transparent 60%);
+}
+.luxe-grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
