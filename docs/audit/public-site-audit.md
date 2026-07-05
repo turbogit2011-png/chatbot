@@ -35,7 +35,9 @@ Analiza `/produkt/...audi-a4-b8...`:
 - **`Offer` InStock, price 999 PLN** ✅. `MerchantReturnPolicy` + `OfferShippingDetails` ✅
   (dodane przez Google for WooCommerce).
 - 🟠 **Brak breadcrumb JSON-LD** (`itemListElement` = 0 na stronie produktu) — P1 SEO.
-- 🟠 **Brak tabeli atrybutów** (`<th>` techniczne puste) — dane techniczne nie są sfrukturyzowane — P1.
+- 🟠 **Atrybuty techniczne** nie renderują się jako tabela `<th>` na froncie — ale **istnieją** w danych
+  (potwierdzone eksportem, patrz `generated/catalog-quality-report.md`); problem to ich **fragmentacja**
+  i brak spójnej prezentacji, nie brak danych — P1.
 - 🟠 **Waga strony ~330 KB HTML** (Elementor + liczne wtyczki) — realne ryzyko dla Core Web Vitals — P1.
 
 ## 3. SEO techniczne

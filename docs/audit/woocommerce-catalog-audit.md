@@ -2,11 +2,16 @@
 
 **Zakres:** ~109 produktów. · **Data:** 2026-07-05 · **Zmiany produkcyjne:** brak.
 
-> ⚠️ **Ograniczenie dostępu (świadome i zgodne z zasadami).** Pełny audyt pól WooCommerce (SKU,
-> atrybuty, kategorie, Google Merchant, metadane) wymaga **read-only** dostępu do danych. Nie proszę
-> o sekrety w czacie. Dwie bezpieczne ścieżki uzyskania danych do audytu — patrz sekcja „Jak
-> odblokować pełny audyt". Poniżej: co udało się ustalić **z danych publicznych** + checklista, którą
-> wtyczka `turbo-git-forge` (moduł Catalog, tryb PREVIEW) wygeneruje automatycznie jako raport.
+> ✅ **PEŁNY AUDYT WYKONANY** na eksporcie CSV (ścieżka B, bez sekretów, read-only).
+> Wejście: `docs/audit/import/wc-product-export.csv` (109 produktów, 131 kolumn).
+> **Wyniki liczbowe:** `docs/audit/generated/catalog-quality-report.md` + `catalog-quality.csv`.
+> Poniższa tabela to skrót najważniejszych ustaleń; pełne liczby w raporcie generowanym.
+>
+> 🔧 **Korekta rzetelnościowa (ważne):** wstępne założenie „dane techniczne nie są w atrybutach"
+> okazało się **nietrafne** — atrybuty **istnieją**, ale są **pofragmentowane** (to samo znaczenie
+> rozbite na wiele atrybutów, m.in. OE na 4, marka pojazdu na 3, kod silnika na 4 z duplikatem
+> wielkości liter). Kondycję czytamy z autorytatywnego atrybutu **„Stan"** (93× „Regenerowany",
+> 0× „Nowy", 16× brak → NEEDS_REVIEW), a nie ze skanu prozy.
 
 ## Ustalone z danych publicznych (VERIFIED / OBSERVED)
 
@@ -15,7 +20,12 @@
 | C1 | **SKU = numer turbo** (`sku`=`mpn`=`18421966015`) | JSON-LD produktu | 🔴 P0 |
 | C2 | **`brand` = marki pojazdu** („Audi, Seat") zamiast producenta turbiny / Turbo-Git | JSON-LD `brand` | 🔴 P0 |
 | C3 | Stan poprawnie `RefurbishedCondition` (regenerowana) | JSON-LD `itemCondition` | ✅ / do potwierdzenia globalnie |
-| C4 | Dane techniczne **nie w atrybutach** (OE, kod silnika, moc, VIN-fitment) — tylko w tytule/slug | brak `<th>`/attributes | 🟠 P1 |
+| C4 | ~~Dane techniczne nie w atrybutach~~ **SKORYGOWANE:** atrybuty są, ale **pofragmentowane/niespójne** (OE ×4, marka pojazdu ×3, kod silnika ×4). Moc (KM) na 109/109 ✅ | eksport CSV | 🟠 P1 (konsolidacja) |
+| C7 | **Kaucja `_tg_kaucja_price` pusta na 109/109** — pole istnieje, nieużywane | eksport CSV | 🟠 P1 core deposit |
+| C8 | **Pola marki (product_brand/brand_name) puste na 101/109**; marka w schema pochodzi z atrybutu pojazdu | eksport CSV | 🔴 P0 Merchant |
+| C9 | **16/109 bez atrybutu „Stan"** (kondycja) → NEEDS_REVIEW; 0 oznaczonych „Nowy" (dobrze) | eksport CSV | 🟠 P1 |
+| C10 | **91/109 bez krótkiego opisu**; 10 zduplikowanych focus keyword (kanibalizacja) | eksport CSV | 🟠 P1 |
+| C11 | **Google Merchant: 109/109 `approved`** (mimo problemu z marką — do poprawy jakości/relevancji) | eksport CSV | ℹ️ |
 | C5 | Slugi łączące wiele modeli → ryzyko duplikatów/kanibalizacji | sitemap + slug | 🟠 P1 |
 | C6 | Brak ustrukturyzowanych pól: kaucja/zwrot starej turbiny, lead_time, ceny B2B | brak w schema/treści | 🟠 P1/P2 |
 
