@@ -1,0 +1,234 @@
+{
+  "version": "1.0.0",
+  "generated_from": "docs/audit/import/wc-product-export.csv",
+  "products_total": 109,
+  "principles": {
+    "sku": "internal only, format TG-<CAT>-<NNNN>; numbers never in SKU",
+    "condition": "refurbished (Stan=Regenerowany); 'new' forbidden for refurb",
+    "brand_fields": "google_brand = pa_turbo-manufacturer OR 'Turbo-Git'; NEVER vehicle make"
+  },
+  "canonical_attributes": [
+    "pa_turbo-number",
+    "pa_turbo-crossref",
+    "pa_oe",
+    "pa_mpn",
+    "pa_turbo-manufacturer",
+    "pa_make",
+    "pa_model",
+    "pa_engine-code",
+    "pa_engine",
+    "pa_power",
+    "pa_fuel",
+    "pa_vehicle-segment",
+    "pa_gvo-quality",
+    "pa_market"
+  ],
+  "canonical_meta": [
+    "condition",
+    "packaging_condition",
+    "gtin"
+  ],
+  "normalization": {
+    "numbers": "UPPER, strip [space,-,.,/,\\], split on [space,comma], dedup",
+    "manufacturer_typo": {
+      "Garett": "Garrett"
+    },
+    "garbage_values": [
+      "marka"
+    ]
+  },
+  "mappings": [
+    {
+      "source_attribute": "Numer katalogowy części",
+      "products": 93,
+      "canonical": "pa_turbo-number",
+      "action": "RENAME",
+      "confidence": "NEEDS_OK"
+    },
+    {
+      "source_attribute": "Numery katalogowe zamienników",
+      "products": 60,
+      "canonical": "pa_turbo-crossref",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Numer katalogowy oryginału",
+      "products": 79,
+      "canonical": "pa_oe",
+      "action": "MERGE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "NUMER OEM",
+      "products": 38,
+      "canonical": "pa_oe",
+      "action": "MERGE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Numer Garrett",
+      "products": 1,
+      "canonical": "pa_mpn",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Producent części",
+      "products": 93,
+      "canonical": "pa_turbo-manufacturer",
+      "action": "RENAME_FIX",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "PRODUCENT (MARKA)",
+      "products": 6,
+      "canonical": "pa_turbo-manufacturer",
+      "action": "MERGE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Marka",
+      "products": 79,
+      "canonical": "pa_make",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "MARKA POJAZDU",
+      "products": 6,
+      "canonical": "pa_make",
+      "action": "MERGE_FIX",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Model",
+      "products": 78,
+      "canonical": "pa_model",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Kod silnika",
+      "products": 21,
+      "canonical": "pa_engine-code",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "kod silnika",
+      "products": 1,
+      "canonical": "pa_engine-code",
+      "action": "MERGE_CASE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Pojemnosc",
+      "products": 102,
+      "canonical": "pa_engine",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Moc (KM)",
+      "products": 109,
+      "canonical": "pa_power",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Moc",
+      "products": 1,
+      "canonical": "pa_power",
+      "action": "MERGE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Rodzaj-paliwa",
+      "products": 82,
+      "canonical": "pa_fuel",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Typ silnika",
+      "products": 27,
+      "canonical": "pa_fuel",
+      "action": "MERGE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Typ samochodu",
+      "products": 88,
+      "canonical": "pa_vehicle-segment",
+      "action": "RENAME",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Jakość części (zgodnie z GVO)",
+      "products": 27,
+      "canonical": "pa_gvo-quality",
+      "action": "KEEP",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Wersja",
+      "products": 32,
+      "canonical": "pa_market",
+      "action": "KEEP",
+      "confidence": "NEEDS_OK"
+    },
+    {
+      "source_attribute": "Stan",
+      "products": 93,
+      "canonical": "meta:condition",
+      "action": "MAP_CONDITION",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Stan opakowania",
+      "products": 93,
+      "canonical": "meta:packaging_condition",
+      "action": "KEEP_META",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "EAN",
+      "products": 13,
+      "canonical": "meta:gtin",
+      "action": "MAP_GTIN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "Waga produktu z opakowaniem jednostkowym",
+      "products": 25,
+      "canonical": "native:weight",
+      "action": "MOVE_NATIVE",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "długość",
+      "products": 6,
+      "canonical": "native:length",
+      "action": "DROP_ATTR",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "szerokość",
+      "products": 6,
+      "canonical": "native:width",
+      "action": "DROP_ATTR",
+      "confidence": "VERIFIED"
+    },
+    {
+      "source_attribute": "wysokość",
+      "products": 6,
+      "canonical": "native:height",
+      "action": "DROP_ATTR",
+      "confidence": "VERIFIED"
+    }
+  ],
+  "unmapped_attributes": [
+    "Silnik"
+  ]
+}
