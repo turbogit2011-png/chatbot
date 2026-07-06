@@ -1,0 +1,635 @@
+// SpecQuote AI — data model
+//
+// Uses SQLite for zero-config local/demo runs. To move to production,
+// change `provider` below to "postgresql" and point DATABASE_URL at a
+// managed Postgres instance — every field type used here (String, Int,
+// Float, Boolean, DateTime, Json) is supported identically by both
+// providers, so no model changes are required.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Tenancy, identity, RBAC
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id                   String   @id @default(cuid())
+  name                 String
+  slug                 String   @unique
+  currency             String   @default("EUR")
+  language             String   @default("en")
+  defaultMarginPercent Float    @default(25)
+  minMarginPercent     Float    @default(15)
+  maxDiscountPercent   Float    @default(10)
+  highValueThreshold   Float    @default(20000)
+  brandingLogoUrl      String?
+  brandingPrimaryColor String   @default("#1D2939")
+  brandingFooterText   String?
+  plan                 Plan     @default(TEAM)
+  planStatus           String   @default("trial")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  users           User[]
+  invitations     Invitation[]
+  accounts        Account[]
+  contacts        Contact[]
+  rfqs            Rfq[]
+  catalogProducts CatalogProduct[]
+  quotes          Quote[]
+  approvalRules   ApprovalRule[]
+  auditLogs       AuditLog[]
+  usageEvents     UsageEvent[]
+  integrations    Integration[]
+  activities      Activity[]
+}
+
+enum Plan {
+  TEAM
+  PRO
+  SCALE
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  SALES_MANAGER
+  SALES_REP
+  ESTIMATOR
+  VIEWER
+}
+
+model User {
+  id           String       @id @default(cuid())
+  orgId        String
+  org          Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  email        String
+  passwordHash String
+  name         String
+  role         UserRole     @default(SALES_REP)
+  isActive     Boolean      @default(true)
+  avatarColor  String       @default("#2563EB")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  assignedRfqs      Rfq[]              @relation("AssignedRfqs")
+  createdRfqs       Rfq[]              @relation("CreatedRfqs")
+  createdQuotes     Quote[]            @relation("CreatedQuotes")
+  approvedQuotes    Quote[]            @relation("ApprovedQuotes")
+  approvalDecisions ApprovalDecision[]
+  auditLogs         AuditLog[]
+  activities        Activity[]
+  reviewedFields    ExtractedField[]
+  invitationsSent   Invitation[]       @relation("InvitedBy")
+
+  @@unique([orgId, email])
+  @@index([orgId])
+}
+
+model Invitation {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  email       String
+  role        UserRole
+  token       String       @unique
+  invitedById String
+  invitedBy   User         @relation("InvitedBy", fields: [invitedById], references: [id])
+  acceptedAt  DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime     @default(now())
+
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// CRM
+// ---------------------------------------------------------------------------
+
+model Account {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  industry    String?
+  country     String?
+  website     String?
+  notes       String?
+  isNewClient Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  contacts   Contact[]
+  rfqs       Rfq[]
+  quotes     Quote[]
+  activities Activity[]
+
+  @@index([orgId])
+}
+
+model Contact {
+  id        String       @id @default(cuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  accountId String
+  account   Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  phone     String?
+  title     String?
+  createdAt DateTime     @default(now())
+
+  rfqs Rfq[]
+
+  @@index([orgId])
+  @@index([accountId])
+}
+
+enum ActivityType {
+  NOTE
+  EMAIL_SENT
+  EMAIL_RECEIVED
+  STATUS_CHANGE
+  CALL
+  APPROVAL
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  accountId   String?
+  account     Account?     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  rfqId       String?
+  rfq         Rfq?         @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  quoteId     String?
+  quote       Quote?       @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  type        ActivityType
+  body        String
+  createdById String?
+  createdBy   User?        @relation(fields: [createdById], references: [id])
+  createdAt   DateTime     @default(now())
+
+  @@index([orgId])
+  @@index([accountId])
+  @@index([rfqId])
+}
+
+// ---------------------------------------------------------------------------
+// RFQ intake & AI extraction
+// ---------------------------------------------------------------------------
+
+enum RfqStatus {
+  NEW
+  PARSING
+  NEEDS_REVIEW
+  MISSING_INFORMATION
+  READY_FOR_QUOTE
+  AWAITING_APPROVAL
+  SENT
+  WON
+  LOST
+  ARCHIVED
+}
+
+enum RfqChannel {
+  EMAIL
+  UPLOAD
+  MANUAL
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum SalesStage {
+  INTAKE
+  QUALIFICATION
+  TECHNICAL_REVIEW
+  QUOTING
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+model Rfq {
+  id                    String       @id @default(cuid())
+  orgId                 String
+  org                   Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  accountId             String
+  account               Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  contactId             String?
+  contact               Contact?     @relation(fields: [contactId], references: [id])
+  subject               String
+  channel               RfqChannel   @default(UPLOAD)
+  sourceEmailRaw        String?
+  receivedAt            DateTime     @default(now())
+  dueDate               DateTime?
+  status                RfqStatus    @default(NEW)
+  completeness          Int          @default(0)
+  riskLevel             RiskLevel    @default(MEDIUM)
+  assignedToId          String?
+  assignedTo            User?        @relation("AssignedRfqs", fields: [assignedToId], references: [id])
+  createdById           String?
+  createdBy             User?        @relation("CreatedRfqs", fields: [createdById], references: [id])
+  estimatedValue        Float?
+  stage                 SalesStage   @default(INTAKE)
+  destinationCountry    String?
+  requestedDeliveryDate DateTime?
+  lostReason            String?
+  aiSummary             String?
+  aiUncertaintiesJson   String?
+  aiConfidenceOverall   Float        @default(0)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  attachments      RfqAttachment[]
+  extractedFields  ExtractedField[]
+  lineItems        RfqLineItem[]
+  missingInfoItems MissingInfoItem[]
+  messageDrafts    ClientMessageDraft[]
+  quotes           Quote[]
+  activities       Activity[]
+
+  @@index([orgId])
+  @@index([status])
+  @@index([assignedToId])
+}
+
+enum AttachmentKind {
+  PDF
+  IMAGE
+  XLSX
+  CSV
+  DOCX
+  EMAIL
+  TEXT
+}
+
+model RfqAttachment {
+  id         String         @id @default(cuid())
+  rfqId      String
+  rfq        Rfq            @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  fileName   String
+  mimeType   String
+  sizeBytes  Int
+  storageKey String
+  kind       AttachmentKind
+  pageCount  Int?
+  createdAt  DateTime       @default(now())
+
+  extractedFields ExtractedField[]
+
+  @@index([rfqId])
+}
+
+enum FieldStatus {
+  SUGGESTED
+  REVIEWED
+  APPROVED
+  REJECTED
+}
+
+model ExtractedField {
+  id                 String         @id @default(cuid())
+  rfqId              String
+  rfq                Rfq            @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  fieldKey           String
+  value              String
+  confidence         Float
+  sourceAttachmentId String?
+  sourceAttachment   RfqAttachment? @relation(fields: [sourceAttachmentId], references: [id])
+  sourceRef          String?
+  status             FieldStatus    @default(SUGGESTED)
+  reviewedById       String?
+  reviewedBy         User?          @relation(fields: [reviewedById], references: [id])
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([rfqId])
+  @@index([fieldKey])
+}
+
+enum MatchStatus {
+  MATCHED
+  ALTERNATIVE
+  NEEDS_CONFIRMATION
+  UNMATCHED
+}
+
+model RfqLineItem {
+  id                        String          @id @default(cuid())
+  rfqId                     String
+  rfq                       Rfq             @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  rawDescription            String
+  productFamily             String?
+  partNumber                String?
+  quantity                  Float?
+  unit                      String?
+  dimensions                String?
+  material                  String?
+  finish                    String?
+  tolerance                 String?
+  voltage                   String?
+  pressure                  String?
+  temperature               String?
+  certificationRequirements String?
+  matchedProductId          String?
+  matchedProduct            CatalogProduct? @relation(fields: [matchedProductId], references: [id])
+  matchStatus               MatchStatus     @default(UNMATCHED)
+  matchConfidence           Float           @default(0)
+  alternativeSkusJson       String? // JSON string array of suggested alternative SKUs
+  extractionConfidence      Float           @default(0)
+  sourceRef                 String?
+  createdAt                 DateTime        @default(now())
+  updatedAt                 DateTime        @updatedAt
+
+  quoteLineItems QuoteLineItem[]
+
+  @@index([rfqId])
+}
+
+enum MissingInfoStatus {
+  OPEN
+  ASSIGNED
+  DISMISSED
+  RESOLVED
+}
+
+model MissingInfoItem {
+  id           String            @id @default(cuid())
+  rfqId        String
+  rfq          Rfq               @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  fieldKey     String
+  description  String
+  status       MissingInfoStatus @default(OPEN)
+  assignedToId String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([rfqId])
+}
+
+enum DraftStatus {
+  DRAFT
+  SENT
+}
+
+model ClientMessageDraft {
+  id          String      @id @default(cuid())
+  rfqId       String
+  rfq         Rfq         @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  subject     String
+  body        String
+  status      DraftStatus @default(DRAFT)
+  createdById String?
+  sentAt      DateTime?
+  createdAt   DateTime    @default(now())
+
+  @@index([rfqId])
+}
+
+// ---------------------------------------------------------------------------
+// Catalog
+// ---------------------------------------------------------------------------
+
+model CatalogProduct {
+  id              String       @id @default(cuid())
+  orgId           String
+  org             Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  sku             String
+  name            String
+  family          String
+  description     String?
+  unit            String       @default("pcs")
+  basePrice       Float
+  baseCost        Float
+  currency        String       @default("EUR")
+  material        String?
+  specJson        String? // JSON string of technical attributes (voltage, pressure, tolerance...)
+  leadTimeDays    Int          @default(14)
+  isService       Boolean      @default(false)
+  relatedSkusJson String? // JSON string array of related/alternative SKUs
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+
+  rfqLineItems   RfqLineItem[]
+  quoteLineItems QuoteLineItem[]
+
+  @@unique([orgId, sku])
+  @@index([orgId])
+  @@index([family])
+}
+
+// ---------------------------------------------------------------------------
+// Quotes, approvals
+// ---------------------------------------------------------------------------
+
+enum QuoteStatus {
+  DRAFT
+  NEEDS_APPROVAL
+  APPROVED
+  REJECTED
+  SENT
+  WON
+  LOST
+}
+
+model Quote {
+  id            String       @id @default(cuid())
+  orgId         String
+  org           Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  rfqId         String
+  rfq           Rfq          @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  accountId     String
+  account       Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  number        String
+  version       Int          @default(1)
+  status        QuoteStatus  @default(DRAFT)
+  currency      String       @default("EUR")
+  paymentTerms  String       @default("30 days net")
+  deliveryTerms String       @default("EXW")
+  validUntil    DateTime?
+  notes         String?
+  subtotal      Float        @default(0)
+  discountTotal Float        @default(0)
+  totalCost     Float        @default(0)
+  total         Float        @default(0)
+  marginPercent Float        @default(0)
+  createdById   String?
+  createdBy     User?        @relation("CreatedQuotes", fields: [createdById], references: [id])
+  approvedById  String?
+  approvedBy    User?        @relation("ApprovedQuotes", fields: [approvedById], references: [id])
+  approvedAt    DateTime?
+  sentAt        DateTime?
+  lostReason    String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  lineItems         QuoteLineItem[]
+  versions          QuoteVersion[]
+  approvalDecisions ApprovalDecision[]
+  activities        Activity[]
+
+  @@unique([orgId, number])
+  @@index([orgId])
+  @@index([rfqId])
+  @@index([status])
+}
+
+model QuoteLineItem {
+  id               String          @id @default(cuid())
+  quoteId          String
+  quote            Quote           @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  rfqLineItemId    String?
+  rfqLineItem      RfqLineItem?    @relation(fields: [rfqLineItemId], references: [id])
+  catalogProductId String?
+  catalogProduct   CatalogProduct? @relation(fields: [catalogProductId], references: [id])
+  description      String
+  sku              String?
+  quantity         Float           @default(1)
+  unit             String          @default("pcs")
+  unitCost         Float           @default(0)
+  unitPrice        Float           @default(0)
+  discountPercent  Float           @default(0)
+  leadTimeDays     Int             @default(14)
+  sortOrder        Int             @default(0)
+  lineTotal        Float           @default(0)
+
+  @@index([quoteId])
+}
+
+model QuoteVersion {
+  id            String   @id @default(cuid())
+  quoteId       String
+  quote         Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  versionNumber Int
+  snapshotJson  String
+  note          String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+
+  @@index([quoteId])
+}
+
+enum ApprovalRuleType {
+  MIN_MARGIN
+  MAX_DISCOUNT
+  HIGH_VALUE
+  NEW_CLIENT
+  UNCONFIRMED_TECHNICAL
+  UNUSUAL_LEAD_TIME
+}
+
+model ApprovalRule {
+  id             String           @id @default(cuid())
+  orgId          String
+  org            Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name           String
+  type           ApprovalRuleType
+  thresholdValue Float?
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+
+  decisions ApprovalDecision[]
+
+  @@index([orgId])
+}
+
+enum ApprovalDecisionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ApprovalDecision {
+  id              String                 @id @default(cuid())
+  quoteId         String
+  quote           Quote                  @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  ruleId          String?
+  rule            ApprovalRule?          @relation(fields: [ruleId], references: [id])
+  triggeredReason String
+  status          ApprovalDecisionStatus @default(PENDING)
+  decidedById     String?
+  decidedBy       User?                  @relation(fields: [decidedById], references: [id])
+  decidedAt       DateTime?
+  comment         String?
+  createdAt       DateTime               @default(now())
+
+  @@index([quoteId])
+}
+
+// ---------------------------------------------------------------------------
+// Security, usage & integrations
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id           String       @id @default(cuid())
+  orgId        String
+  org          Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  actorId      String?
+  actor        User?        @relation(fields: [actorId], references: [id])
+  action       String
+  entityType   String
+  entityId     String
+  metadataJson String?
+  ipAddress    String?
+  createdAt    DateTime     @default(now())
+
+  @@index([orgId])
+  @@index([entityType, entityId])
+}
+
+enum UsageEventType {
+  RFQ_ANALYZED
+  DOCUMENT_PROCESSED
+  QUOTE_GENERATED
+  INTEGRATION_SYNC
+}
+
+model UsageEvent {
+  id           String         @id @default(cuid())
+  orgId        String
+  org          Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type         UsageEventType
+  quantity     Int            @default(1)
+  metadataJson String?
+  occurredAt   DateTime       @default(now())
+
+  @@index([orgId])
+  @@index([type])
+}
+
+enum IntegrationType {
+  ERP
+  CRM
+  EMAIL
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  MOCK
+}
+
+model Integration {
+  id         String            @id @default(cuid())
+  orgId      String
+  org        Organization      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type       IntegrationType
+  name       String
+  status     IntegrationStatus @default(MOCK)
+  configJson String?
+  lastSyncAt DateTime?
+  createdAt  DateTime          @default(now())
+
+  @@index([orgId])
+}
