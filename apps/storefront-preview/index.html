@@ -64,11 +64,20 @@
     <select id="fMake" class="rounded-lg border border-white/15 bg-[#16161a] px-3 py-2 text-sm text-slate-200"></select>
     <select id="fFuel" class="rounded-lg border border-white/15 bg-[#16161a] px-3 py-2 text-sm text-slate-200"></select>
     <select id="fSeg" class="rounded-lg border border-white/15 bg-[#16161a] px-3 py-2 text-sm text-slate-200"></select>
+    <select id="sort" class="rounded-lg border border-white/15 bg-[#16161a] px-3 py-2 text-sm text-slate-200">
+      <option value="rel">Sortuj: trafność</option>
+      <option value="price_asc">Cena: rosnąco</option>
+      <option value="price_desc">Cena: malejąco</option>
+      <option value="power_desc">Moc: malejąco</option>
+    </select>
     <button id="reset" class="rounded-lg border border-white/15 px-3 py-2 text-sm text-slate-400 hover:text-white">Wyczyść</button>
     <span id="count" class="ml-auto text-sm text-slate-400"></span>
   </div>
   <div id="grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
-  <p id="empty" class="hidden text-center text-slate-500 py-16">Brak wyników. Spróbuj innego numeru lub wyczyść filtry.</p>
+  <div id="empty" class="hidden text-center py-16">
+    <p class="text-slate-400">Brak wyników dla tego zapytania.</p>
+    <a href="https://wa.me/48694706140?text=Dzie%C5%84%20dobry%2C%20nie%20znalaz%C5%82em%20swojej%20turbiny%20w%20wyszukiwarce.%20M%C3%B3j%20VIN%2Fnumer%3A%20" target="_blank" class="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-5 py-3 font-semibold"><i data-lucide="message-circle" class="w-5 h-5"></i> Nie znalazłeś? Dobierzemy po VIN — WhatsApp</a>
+  </div>
 </section>
 
 <footer class="border-t border-white/10 py-8 text-center text-xs text-slate-500">
@@ -133,7 +142,12 @@ function card({p,reason}){
     </div>
     <div class="p-3">
       <p class="text-[11px] text-slate-400">${(p.make||[]).slice(0,3).join(', ')||'—'}</p>
-      <h3 class="text-sm font-semibold text-white leading-tight line-clamp-2 mt-0.5" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.name.replace(' | Turbo-Git','')}</h3>
+      <h3 class="text-sm font-semibold text-white leading-tight mt-0.5" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.name.replace(' | Turbo-Git','')}</h3>
+      <div class="mt-1.5 flex flex-wrap gap-1">
+        ${p.hp?`<span class="rounded bg-white/5 border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-300">${p.hp} KM</span>`:''}
+        ${p.cap?`<span class="rounded bg-white/5 border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-300">${p.cap}</span>`:''}
+        ${p.fuel?`<span class="rounded bg-white/5 border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-300">${p.fuel}</span>`:''}
+      </div>
       <p class="mt-1 text-[11px] text-slate-500">${p.man||''} ${oe?'· OE '+oe:''}</p>
       <div class="mt-2 flex items-center justify-between">
         <span class="fd font-800 text-white">${fmtPrice(p.price)}</span>
@@ -211,24 +225,43 @@ fill('#fMake','Marka: wszystkie',uniq(p=>p.make));
 fill('#fFuel','Paliwo: wszystkie',uniq(p=>p.fuel));
 fill('#fSeg','Segment: wszystkie',uniq(p=>p.seg));
 
+const priceNum=p=>{const n=parseFloat((p.price||'').replace(',','.').replace(/[^0-9.]/g,''));return isFinite(n)?n:0;};
+const powerNum=p=>{const n=parseInt((p.hp||'').replace(/\D/g,''),10);return isFinite(n)?n:0;};
+function applySort(hits,mode){
+  const a=hits.slice();
+  if(mode==='price_asc') a.sort((x,y)=>priceNum(x.p)-priceNum(y.p));
+  else if(mode==='price_desc') a.sort((x,y)=>priceNum(y.p)-priceNum(x.p));
+  else if(mode==='power_desc') a.sort((x,y)=>powerNum(y.p)-powerNum(x.p));
+  return a; // 'rel' zostawia kolejnosc wg trafnosci
+}
+function syncUrl(q,f,sort){
+  const u=new URLSearchParams();
+  if(q) u.set('q',q); if(f.make) u.set('make',f.make); if(f.fuel) u.set('fuel',f.fuel); if(f.seg) u.set('seg',f.seg); if(sort&&sort!=='rel') u.set('sort',sort);
+  const qs=u.toString();
+  history.replaceState(null,'', qs? ('?'+qs):location.pathname);
+}
 function render(){
-  const q=el('#q').value;
+  const q=el('#q').value.trim();
   const filters={make:el('#fMake').value,fuel:el('#fFuel').value,seg:el('#fSeg').value};
-  const hits=search(q,filters);
+  const sort=el('#sort').value;
+  const hits=applySort(search(q,filters),sort);
   el('#grid').innerHTML=hits.map(card).join('');
-  el('#count').textContent=hits.length+' z '+PRODUCTS.length+' produktów';
+  el('#count').textContent=hits.length===PRODUCTS.length? `${hits.length} produktów` : `${hits.length} z ${PRODUCTS.length} produktów`;
   el('#empty').classList.toggle('hidden',hits.length>0);
+  syncUrl(q,filters,sort);
   lucide.createIcons();
 }
-el('#q').addEventListener('input',render);
-['#fMake','#fFuel','#fSeg'].forEach(s=>el(s).addEventListener('change',render));
-el('#reset').addEventListener('click',()=>{el('#q').value='';el('#fMake').value='';el('#fFuel').value='';el('#fSeg').value='';render();});
+let _t; el('#q').addEventListener('input',()=>{clearTimeout(_t);_t=setTimeout(render,180);});
+['#fMake','#fFuel','#fSeg','#sort'].forEach(s=>el(s).addEventListener('change',render));
+el('#reset').addEventListener('click',()=>{el('#q').value='';el('#fMake').value='';el('#fFuel').value='';el('#fSeg').value='';el('#sort').value='rel';render();});
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{el('#q').value=c.textContent.trim();render();}));
 // Deep-link dla Google Ads: ?q=... i ?make=... prefiltruja wyniki (np. szukaj.turbo-git.com/?q=1.9%20TDI)
 (function(){const u=new URLSearchParams(location.search);
   if(u.get('q')) el('#q').value=u.get('q');
   if(u.get('make')) el('#fMake').value=u.get('make');
   if(u.get('fuel')) el('#fFuel').value=u.get('fuel');
+  if(u.get('seg')) el('#fSeg').value=u.get('seg');
+  if(u.get('sort')) el('#sort').value=u.get('sort');
 })();
 render();
 </script>
