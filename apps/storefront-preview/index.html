@@ -29,7 +29,10 @@
   <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
     <a href="#" class="flex items-center gap-2.5"><span class="grid place-items-center w-10 h-10 rounded-xl bg-[#c8102e]"><i data-lucide="fan" class="w-5 h-5 text-white"></i></span><span class="fd font-900 text-lg text-white">TURBO<span class="text-[#c8102e]">-</span>GIT</span></a>
     <div class="hidden sm:flex items-center gap-2 text-sm text-slate-400"><i data-lucide="shield-check" class="w-4 h-4 text-[#c8102e]"></i> Gwarancja 24 mies. · Nowy CHRA · Wysyłka 24h</div>
-    <a href="https://turbo-git.com" target="_blank" class="text-sm text-slate-300 hover:text-white">turbo-git.com ↗</a>
+    <div class="flex items-center gap-2">
+      <a href="tel:+48694706140" class="hidden sm:flex items-center gap-1.5 text-sm text-slate-200 hover:text-white"><i data-lucide="phone" class="w-4 h-4 text-[#c8102e]"></i>694 706 140</a>
+      <a href="https://wa.me/48694706140?text=Dzie%C5%84%20dobry%2C%20potrzebuj%C4%99%20pomocy%20w%20doborze%20turbospr%C4%99%C5%BCarki" target="_blank" class="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] text-white px-3 py-2 text-sm font-semibold"><i data-lucide="message-circle" class="w-4 h-4"></i>WhatsApp</a>
+    </div>
   </div>
 </header>
 
@@ -146,6 +149,8 @@ function techRow(label,val,status){
 function openModal(id){
   const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
   const buyUrl=`https://turbo-git.com/?s=${encodeURIComponent((p.turbo&&p.turbo[0])||(p.oe&&p.oe[0])||p.name.slice(0,20))}`;
+  const waMsg=`Dzień dobry, pytanie o dobór do: ${p.name.replace(' | Turbo-Git','')}${(p.turbo&&p.turbo[0])?' (nr '+p.turbo[0]+')':''}. Mój VIN: `;
+  const waUrl=`https://wa.me/48694706140?text=${encodeURIComponent(waMsg)}`;
   el('#modalBox').innerHTML=`
     <button data-close class="absolute top-3 right-3 z-10 grid place-items-center w-9 h-9 rounded-full bg-black/60 text-white hover:bg-black/80"><i data-lucide="x" class="w-5 h-5"></i></button>
     <div class="grid sm:grid-cols-2">
@@ -166,8 +171,8 @@ function openModal(id){
         <div class="mt-5 grid gap-2">
           <a href="${buyUrl}" target="_blank" class="text-center rounded-full bg-[#c8102e] text-white py-3 font-semibold hover:bg-[#a50d26]">Kup na turbo-git.com</a>
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="alert('Formularz VIN — do wpięcia w produkcji')" class="rounded-full border border-white/15 py-2.5 text-sm text-slate-200 hover:bg-white/5">Wyślij VIN</button>
-            <button onclick="alert('Upload zdjęcia tabliczki — do wpięcia')" class="rounded-full border border-white/15 py-2.5 text-sm text-slate-200 hover:bg-white/5">Zdjęcie tabliczki</button>
+            <a href="${waUrl}" target="_blank" class="text-center rounded-full bg-[#25D366] text-white py-2.5 text-sm font-semibold">Potwierdź dobór (VIN)</a>
+            <a href="tel:+48694706140" class="text-center rounded-full border border-white/15 py-2.5 text-sm text-slate-200 hover:bg-white/5">Zadzwoń</a>
           </div>
         </div>
       </div>
@@ -216,7 +221,18 @@ el('#q').addEventListener('input',render);
 ['#fMake','#fFuel','#fSeg'].forEach(s=>el(s).addEventListener('change',render));
 el('#reset').addEventListener('click',()=>{el('#q').value='';el('#fMake').value='';el('#fFuel').value='';el('#fSeg').value='';render();});
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{el('#q').value=c.textContent.trim();render();}));
+// Deep-link dla Google Ads: ?q=... i ?make=... prefiltruja wyniki (np. szukaj.turbo-git.com/?q=1.9%20TDI)
+(function(){const u=new URLSearchParams(location.search);
+  if(u.get('q')) el('#q').value=u.get('q');
+  if(u.get('make')) el('#fMake').value=u.get('make');
+  if(u.get('fuel')) el('#fFuel').value=u.get('fuel');
+})();
 render();
 </script>
+<!-- Stały CTA WhatsApp — dobór/pomoc (konwersja) -->
+<a href="https://wa.me/48694706140?text=Dzie%C5%84%20dobry%2C%20potrzebuj%C4%99%20pomocy%20w%20doborze%20turbospr%C4%99%C5%BCarki%20%28podam%20VIN%20lub%20numer%29" target="_blank" class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-5 py-3.5 font-semibold shadow-2xl hover:scale-105 transition-transform">
+  <i data-lucide="message-circle" class="w-5 h-5"></i> Dobór na WhatsApp
+</a>
+<script>lucide.createIcons();</script>
 </body>
 </html>
