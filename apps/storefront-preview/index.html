@@ -86,6 +86,9 @@ const PRODUCTS = [{"id": 29104, "sku": "", "name": "Turbosprężarka regenerowan
 const norm = s => (s||'').toUpperCase().replace(/[\s\-.\/\\]+/g,'');
 const nmatch=(q,arr)=>{const x=norm(q); if(x.length<3)return false; return (arr||[]).some(c=>norm(c).includes(x));};
 const fmtPrice=p=>p? (p+' zł').replace('.',','):'—';
+// Lekkie zdjecia: proxy CDN (weserv) -> WebP ~15KB; fallback: pelne zdjecie -> ukrycie.
+const cdn=(u,w)=> u? 'https://images.weserv.nl/?url='+encodeURIComponent(u.replace(/^https?:\/\//,''))+'&w='+w+'&output=webp&q=72':'';
+const imgTag=(u,cls,w=400)=> u? `<img src="${cdn(u,w)}" data-full="${u}" loading="lazy" decoding="async" class="${cls}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.full}else{this.style.display='none'}">`:'';
 const el=s=>document.querySelector(s);
 lucide.createIcons();
 
@@ -124,7 +127,7 @@ function card({p,reason}){
   const cond = p.cond==='refurbished'?'Regenerowana':'—';
   return `<article onclick='openModal(${p.id})' class="cursor-pointer bg-[#16161a] rounded-2xl border border-white/10 overflow-hidden hover:border-[#c8102e]/40 hover:-translate-y-0.5 transition-all">
     <div class="relative card-img aspect-square grid place-items-center overflow-hidden">
-      ${p.img?`<img src="${p.img}" loading="lazy" class="w-full h-full object-contain p-2" onerror="this.style.display='none'">`:''}
+      ${imgTag(p.img,'w-full h-full object-contain p-2')}
       <span class="absolute top-2 left-2 rounded-full bg-[#c8102e] text-white text-[10px] font-bold px-2 py-0.5">${cond}</span>
       ${reason?`<span class="absolute top-2 right-2 rounded-full bg-black/70 text-white text-[10px] px-2 py-0.5">${reason}</span>`:''}
     </div>
@@ -154,7 +157,7 @@ function openModal(id){
   el('#modalBox').innerHTML=`
     <button data-close class="absolute top-3 right-3 z-10 grid place-items-center w-9 h-9 rounded-full bg-black/60 text-white hover:bg-black/80"><i data-lucide="x" class="w-5 h-5"></i></button>
     <div class="grid sm:grid-cols-2">
-      <div class="card-img aspect-square grid place-items-center p-4">${p.img?`<img src="${p.img}" class="max-h-full object-contain">`:''}</div>
+      <div class="card-img aspect-square grid place-items-center p-4">${p.img?`<img src="${cdn(p.img,800)}" data-full="${p.img}" decoding="async" class="max-h-full object-contain" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.full}else{this.style.display='none'}">`:''}</div>
       <div class="p-6">
         <div class="flex gap-2 mb-2"><span class="rounded-full bg-[#c8102e] text-white text-[11px] font-bold px-2 py-0.5">${p.cond==='refurbished'?'Regenerowana':'—'}</span><span class="rounded-full bg-emerald-500/15 text-emerald-400 text-[11px] px-2 py-0.5">${p.stock?'Dostępna':'Na zamówienie'}</span></div>
         <h2 class="fd font-800 text-xl text-white leading-tight">${p.name.replace(' | Turbo-Git','')}</h2>
