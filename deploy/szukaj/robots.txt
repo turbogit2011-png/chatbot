@@ -1,0 +1,7 @@
+# Subdomena szukaj.turbo-git.com — narzędzie doboru (nie treść do indeksu).
+# Pozwalamy zaindeksować crawlerowi, ale strona ma <meta robots=noindex>, więc nie trafi do wyników
+# i nie tworzy duplikatów względem turbo-git.com.
+User-agent: *
+Allow: /
+
+Sitemap: https://turbo-git.com/sitemap_index.xml
