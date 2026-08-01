@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.turbocare.example/schemas/turbo_passport.schema.json",
+  "title": "TurboCare Digital Turbo Passport",
+  "description": "Cyfrowy paszport regenerowanej turbosprężarki: tożsamość jednostki, powiązanie z pojazdem (VIN), stan checklisty montażowej, logi próby drogowej, migawki kodów DTC oraz status gwarancji.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "passportId",
+    "turboUnit",
+    "warranty",
+    "preFlightChecklist"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Wersja schematu (semver) — pozwala na migracje danych.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0"]
+    },
+    "passportId": {
+      "type": "string",
+      "description": "Unikalny identyfikator paszportu (UUID v7 — sortowalny czasowo).",
+      "format": "uuid"
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+
+    "turboUnit": {
+      "type": "object",
+      "description": "Tożsamość fizycznej jednostki turbosprężarki (dane z QR + API producenta).",
+      "required": ["serialNumber", "model", "engineCode", "referenceBoostMap"],
+      "additionalProperties": false,
+      "properties": {
+        "serialNumber": {
+          "type": "string",
+          "description": "Numer seryjny wygrawerowany/QR na obudowie — klucz anti-fraud.",
+          "pattern": "^TC-[A-Z0-9]{4}-[A-Z0-9]{8}$",
+          "examples": ["TC-GTB2-4F7A9C21"]
+        },
+        "model": {
+          "type": "string",
+          "description": "Model turbosprężarki (oznaczenie producenta kartridża).",
+          "examples": ["Garrett GTB2260VK", "BorgWarner BV43", "Mitsubishi TD04L"]
+        },
+        "oemPartNumbers": {
+          "type": "array",
+          "description": "Zamienniki / numery OEM, do których jednostka jest przypisana.",
+          "items": { "type": "string" },
+          "examples": [["059145874T", "059145873BX"]]
+        },
+        "engineCode": {
+          "type": "string",
+          "description": "Kod silnika, do którego turbina jest dedykowana (walidacja zgodności z VIN).",
+          "examples": ["CASA 3.0 TDI", "N57D30A", "OM651.924"]
+        },
+        "actuatorType": {
+          "type": "string",
+          "description": "Typ nastawnika — determinuje procedurę kalibracji w wizardzie.",
+          "enum": ["vgt_electronic", "vgt_vacuum", "wastegate_electronic", "wastegate_pneumatic_n75"]
+        },
+        "regeneration": {
+          "type": "object",
+          "description": "Metryka procesu regeneracji (traceability warsztatu regenerującego).",
+          "additionalProperties": false,
+          "properties": {
+            "regeneratedAt": { "type": "string", "format": "date" },
+            "workshopId": { "type": "string" },
+            "balancingReportId": {
+              "type": "string",
+              "description": "Id raportu wyważania rdzenia (VSR) w systemie producenta."
+            },
+            "coreExchange": { "type": "boolean" }
+          }
+        },
+        "referenceBoostMap": {
+          "type": "array",
+          "description": "Znamionowa mapa doładowania: punkty odniesienia (RPM → oczekiwane ciśnienie względne) używane przez Live Boost Analyzer do oceny osiągów.",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["rpm", "expectedBoostBar"],
+            "additionalProperties": false,
+            "properties": {
+              "rpm": { "type": "integer", "minimum": 0, "maximum": 12000 },
+              "expectedBoostBar": {
+                "type": "number",
+                "description": "Oczekiwane nadciśnienie [bar] przy pełnym obciążeniu.",
+                "minimum": 0,
+                "maximum": 4
+              },
+              "toleranceBar": { "type": "number", "minimum": 0, "default": 0.15 }
+            }
+          }
+        }
+      }
+    },
+
+    "vehicle": {
+      "type": "object",
+      "description": "Pojazd powiązany z turbiną — wypełniane po odczycie VIN przez OBD2 (Mode 09 PID 02).",
+      "required": ["vin", "boundAt"],
+      "additionalProperties": false,
+      "properties": {
+        "vin": {
+          "type": "string",
+          "description": "17-znakowy VIN (bez I, O, Q).",
+          "pattern": "^[A-HJ-NPR-Z0-9]{17}$"
+        },
+        "boundAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Moment jednokrotnego powiązania VIN ↔ numer seryjny (anti-fraud)."
+        },
+        "make": { "type": "string" },
+        "modelName": { "type": "string" },
+        "engineCodeConfirmed": {
+          "type": "boolean",
+          "description": "Czy kod silnika z VIN-dekodera zgadza się z engineCode turbiny."
+        },
+        "odometerKm": { "type": "integer", "minimum": 0 },
+        "obdProtocol": {
+          "type": "string",
+          "enum": ["ISO15765_11B_500K", "ISO15765_29B_500K", "ISO14230_KWP_FAST", "ISO9141_2"]
+        }
+      }
+    },
+
+    "preFlightChecklist": {
+      "type": "object",
+      "description": "Wymuszona checklista przedmontażowa — warunek blokujący aktywację gwarancji i (logicznie) pierwsze uruchomienie silnika.",
+      "required": ["items", "completed"],
+      "additionalProperties": false,
+      "properties": {
+        "completed": { "type": "boolean" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["stepId", "title", "mandatory", "confirmed"],
+            "additionalProperties": false,
+            "properties": {
+              "stepId": {
+                "type": "string",
+                "description": "Stabilny identyfikator kroku.",
+                "examples": [
+                  "oil_priming_syringe",
+                  "oil_feed_line_replaced",
+                  "intercooler_cleaned",
+                  "crankcase_pressure_measured",
+                  "air_filter_and_intake_checked",
+                  "dpf_backpressure_verified"
+                ]
+              },
+              "title": { "type": "string", "description": "Tytuł kroku widoczny dla mechanika (PL)." },
+              "mandatory": { "type": "boolean" },
+              "confirmed": { "type": "boolean" },
+              "confirmedAt": { "type": "string", "format": "date-time" },
+              "photoEvidenceUrls": {
+                "type": "array",
+                "description": "Zdjęcia dowodowe (np. strzykawka z olejem, nowy przewód).",
+                "items": { "type": "string", "format": "uri" }
+              },
+              "measurement": {
+                "type": "object",
+                "description": "Opcjonalny pomiar (np. ciśnienie w skrzyni korbowej).",
+                "additionalProperties": false,
+                "properties": {
+                  "value": { "type": "number" },
+                  "unit": { "type": "string", "examples": ["mbar", "bar", "mm"] },
+                  "withinSpec": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "actuatorCalibration": {
+      "type": "object",
+      "description": "Wyniki testów nastawnika (Test I: sweep, Test II: szczelność, Test III: kalibracja bazowa UDS).",
+      "additionalProperties": false,
+      "properties": {
+        "sweepTest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "passed": { "type": "boolean" },
+            "performedAt": { "type": "string", "format": "date-time" },
+            "minPositionPct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "maxPositionPct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "travelTimeMs": { "type": "integer", "minimum": 0 },
+            "maxPositionDeviationPct": {
+              "type": "number",
+              "description": "Największa odchyłka pozycji zadanej vs rzeczywistej podczas przejazdu geometrii — wykrywanie zacięć."
+            },
+            "stictionDetected": { "type": "boolean" }
+          }
+        },
+        "boostLeakTest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "passed": { "type": "boolean" },
+            "performedAt": { "type": "string", "format": "date-time" },
+            "testPressureBar": { "type": "number" },
+            "pressureDropBarPer30s": { "type": "number" },
+            "leakLocationNote": { "type": "string" }
+          }
+        },
+        "basicSettings": {
+          "type": "object",
+          "description": "Kalibracja bazowa / adaptacja nastawnika do ECU (procedura UDS RoutineControl per marka).",
+          "additionalProperties": false,
+          "properties": {
+            "passed": { "type": "boolean" },
+            "performedAt": { "type": "string", "format": "date-time" },
+            "brandProfile": {
+              "type": "string",
+              "enum": ["VAG", "BMW", "MERCEDES", "PSA_FORD", "RENAULT", "GENERIC"]
+            },
+            "routineId": {
+              "type": "string",
+              "description": "Identyfikator rutyny UDS (hex), np. 0x0203.",
+              "pattern": "^0x[0-9A-Fa-f]{2,4}$"
+            },
+            "ecuResponseCode": { "type": "string" },
+            "learnedStopsPct": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "lowerStop": { "type": "number" },
+                "upperStop": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "dtcSnapshots": {
+      "type": "array",
+      "description": "Migawki kodów błędów: przed montażem, po kasowaniu, po próbie drogowej.",
+      "items": {
+        "type": "object",
+        "required": ["takenAt", "phase", "codes"],
+        "additionalProperties": false,
+        "properties": {
+          "takenAt": { "type": "string", "format": "date-time" },
+          "phase": {
+            "type": "string",
+            "enum": ["pre_installation", "post_clear", "post_road_test"]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["code", "status", "priority"],
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Kod DTC w notacji SAE (P/C/B/U + 4 znaki).",
+                  "pattern": "^[PCBU][0-9A-F]{4}$"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["active", "pending", "stored", "permanent"]
+                },
+                "priority": {
+                  "type": "string",
+                  "description": "Priorytet nadany przez DTC Engine — kody doładowania mają zawsze priorytet critical.",
+                  "enum": ["critical", "high", "medium", "low", "info"]
+                },
+                "boostRelated": { "type": "boolean" },
+                "module": { "type": "string", "examples": ["ECM", "TCM", "DDE", "EDC17C46"] },
+                "freezeFrame": {
+                  "type": "object",
+                  "description": "Dowolne PID-y freeze frame w chwili wpisu.",
+                  "additionalProperties": { "type": "number" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "roadTestLogs": {
+      "type": "array",
+      "description": "Sesje prób drogowych z telemetrią i wynikiem analizatora.",
+      "items": {
+        "type": "object",
+        "required": ["sessionId", "startedAt", "result"],
+        "additionalProperties": false,
+        "properties": {
+          "sessionId": { "type": "string", "format": "uuid" },
+          "startedAt": { "type": "string", "format": "date-time" },
+          "endedAt": { "type": "string", "format": "date-time" },
+          "samplingRateHz": { "type": "number", "minimum": 1, "maximum": 50 },
+          "result": {
+            "type": "object",
+            "required": ["boostHealthScore", "passed"],
+            "additionalProperties": false,
+            "properties": {
+              "passed": { "type": "boolean" },
+              "boostHealthScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+              "meanAbsDeviationBar": { "type": "number" },
+              "underboostEvents": { "type": "integer", "minimum": 0 },
+              "overboostEvents": { "type": "integer", "minimum": 0 },
+              "suspectedRootCause": {
+                "type": "string",
+                "enum": ["none", "intake_leak", "actuator_calibration", "exhaust_backpressure", "sensor_implausible", "unknown"]
+              }
+            }
+          },
+          "anomalies": {
+            "type": "array",
+            "description": "Okna wykrytych anomalii (>0.2 bar przez >1.5 s).",
+            "items": {
+              "type": "object",
+              "required": ["type", "startOffsetMs", "durationMs", "peakDeviationBar"],
+              "additionalProperties": false,
+              "properties": {
+                "type": { "type": "string", "enum": ["underboost", "overboost"] },
+                "startOffsetMs": { "type": "integer", "minimum": 0 },
+                "durationMs": { "type": "integer", "minimum": 0 },
+                "peakDeviationBar": { "type": "number" },
+                "rpmAtPeak": { "type": "integer" },
+                "actuatorDutyAtPeakPct": { "type": "number" }
+              }
+            }
+          },
+          "rawLogUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Odnośnik do pełnego surowego logu CSV/Parquet w cloud storage."
+          }
+        }
+      }
+    },
+
+    "warranty": {
+      "type": "object",
+      "description": "Stan gwarancji — sterowany wyłącznie maszyną stanów wizarda (interlock).",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "type": "string",
+          "description": "Aktualny stan procesu — zwierciadło TurboAssemblyState w Dart.",
+          "enum": [
+            "notVerified",
+            "checklistCompleted",
+            "actuatorSweepPassed",
+            "dtcCleared",
+            "roadTestValidated",
+            "warrantyActivated",
+            "warrantyRejected"
+          ]
+        },
+        "activationId": { "type": "string", "format": "uuid" },
+        "activatedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date" },
+        "installerWorkshopId": { "type": "string" },
+        "certificatePdfUrl": { "type": "string", "format": "uri" },
+        "reportSha256": {
+          "type": "string",
+          "description": "Suma kontrolna raportu PDF — weryfikacja autentyczności certyfikatu.",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "payloadHmac": {
+          "type": "string",
+          "description": "HMAC-SHA256 payloadu aktywacyjnego podpisany kluczem urządzenia (anti-tamper)."
+        }
+      }
+    }
+  }
+}

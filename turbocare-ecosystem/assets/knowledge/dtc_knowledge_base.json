@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "1.0.0",
+  "publishedAt": "2026-07-29",
+  "description": "TurboCare DTC Knowledge Base — baza wiedzy diagnostycznej układu doładowania. Każdy wpis zawiera matrycę prawdopodobnych przyczyn (wagi %), hierarchię weryfikacji oraz rekomendowane PID-y Live Data. Wagi sumują się do 100 i wynikają ze statystyk reklamacyjnych sieci regeneracji.",
+  "entries": [
+    {
+      "code": "P0299",
+      "title": "Turbo/Supercharger Underboost — ciśnienie doładowania za niskie",
+      "priority": "critical",
+      "technicalDescription": "ECU wykryło, że rzeczywiste ciśnienie doładowania (MAP) jest trwale niższe od zadanego (Target Boost) mimo pełnego wysterowania nastawnika. Kod NIE oznacza automatycznie uszkodzenia turbosprężarki — w >80% przypadków przyczyna leży poza kartridżem.",
+      "recommendedLivePids": ["TARGET_BOOST", "ACTUAL_BOOST", "ACTUATOR_DUTY", "MAF", "RPM", "ENGINE_LOAD"],
+      "probableCauses": [
+        {
+          "id": "intake_leak",
+          "label": "Nieszczelność układu dolotowego / intercoolera",
+          "weightPct": 45,
+          "verificationSteps": [
+            "Wykonaj Boost Leak Test z modułu Wizard (Test II) przy ciśnieniu 1.0–1.5 bar.",
+            "Sprawdź wzrokowo złącza gumowe za intercoolerem — ślady oleju wskazują miejsce wycieku.",
+            "Sprawdź intercooler pod kątem pęknięć zbiorników bocznych (częste w PSA/Ford).",
+            "Posłuchaj syczenia przy 2000–2500 RPM pod obciążeniem (druga osoba w aucie)."
+          ],
+          "liveDataHint": "Actual Boost rośnie wolno i nie osiąga Target; MAF zawyżony względem modelu — powietrze ucieka ZA przepływomierzem."
+        },
+        {
+          "id": "n75_valve",
+          "label": "Uszkodzony/nieszczelny zawór sterujący N75 lub przewody podciśnienia",
+          "weightPct": 25,
+          "verificationSteps": [
+            "Zmierz podciśnienie na wyjściu N75 przy 100% wysterowaniu (oczekiwane ~-0.7 bar dla VGT podciśnieniowego).",
+            "Sprawdź przewody podciśnieniowe pod kątem pęknięć i zamiany portów po montażu.",
+            "Aktywuj N75 testem wymuszenia z aplikacji i obserwuj ruch sztangi nastawnika."
+          ],
+          "liveDataHint": "Actuator Duty ~90–100% przy braku reakcji Actual Boost = sygnał sterujący nie dochodzi mechanicznie."
+        },
+        {
+          "id": "dpf_backpressure",
+          "label": "Zapchany DPF / katalizator — nadmierne przeciwciśnienie wydechu",
+          "weightPct": 15,
+          "verificationSteps": [
+            "Odczytaj PID różnicy ciśnień DPF (jeśli dostępny) — >200 mbar na biegu jałowym = alarm.",
+            "Sprawdź historię regeneracji DPF i poziom napełnienia sadzą w ECU.",
+            "Wykonaj pomiar przeciwciśnienia przed turbiną manometrem w miejsce czujnika EGT."
+          ],
+          "liveDataHint": "Underboost narasta z obciążeniem; turbina 'dusi się' w górnym zakresie RPM mimo poprawnego sweep testu."
+        },
+        {
+          "id": "actuator_rod_misadjusted",
+          "label": "Niepoprawna regulacja sztangi nastawnika / brak kalibracji bazowej",
+          "weightPct": 15,
+          "verificationSteps": [
+            "Powtórz Test I (Sweep) — sprawdź, czy zakres min/max pokrywa się z zakresem referencyjnym paszportu.",
+            "Wykonaj kalibrację bazową UDS (Test III) dla profilu marki pojazdu.",
+            "Sprawdź, czy sztanga nie została przestawiona podczas transportu/montażu (plomba TurboCare)."
+          ],
+          "liveDataHint": "Stała ujemna dewiacja o podobną wartość w całym zakresie RPM = przesunięta charakterystyka pozycji."
+        }
+      ]
+    },
+    {
+      "code": "P0234",
+      "title": "Turbo/Supercharger Overboost — przekroczenie ciśnienia doładowania",
+      "priority": "critical",
+      "technicalDescription": "Rzeczywiste ciśnienie przekroczyło próg bezpieczeństwa ECU (zwykle Target + 0.25–0.35 bar). Stan niebezpieczny — ECU najczęściej wchodzi w tryb awaryjny (limp mode). Zignorowanie prowadzi do uszkodzenia silnika lub nowej turbiny (przekroczenie obrotów wału).",
+      "recommendedLivePids": ["TARGET_BOOST", "ACTUAL_BOOST", "ACTUATOR_DUTY", "RPM"],
+      "probableCauses": [
+        {
+          "id": "vgt_stiction",
+          "label": "Zacinająca się geometria VGT (zapieczenie / nagar w kierownicy spalin)",
+          "weightPct": 40,
+          "verificationSteps": [
+            "Wykonaj Sweep Test przy zimnym i gorącym silniku — porównaj czasy przejścia i odchyłkę pozycji.",
+            "Obserwuj histerezę: geometria zamyka się szybko, otwiera z opóźnieniem = nagar po stronie wydechu.",
+            "UWAGA: przy świeżo regenerowanej turbinie sprawdź najpierw przyczyny 2–4 — nowa geometria rzadko się zacina."
+          ],
+          "liveDataHint": "Skoki Actual Boost przy stabilnym Actuator Duty; overboost głównie przy gwałtownym wciśnięciu gazu."
+        },
+        {
+          "id": "n75_stuck",
+          "label": "Zawór N75 zablokowany w pozycji 'pełne doładowanie' / zamienione przewody",
+          "weightPct": 30,
+          "verificationSteps": [
+            "Sprawdź trasę przewodów podciśnienia względem naklejki serwisowej — częsty błąd montażowy po regeneracji.",
+            "Test wymuszenia N75 0% → 100%: sztanga musi przejść pełny zakres.",
+            "Odłącz przewód od puszki przy pracy na jałowym — geometria powinna wrócić na ogranicznik spoczynkowy."
+          ],
+          "liveDataHint": "Actual Boost wysoki nawet przy Actuator Duty bliskim 0% = sterowanie nie ma wpływu na geometrię."
+        },
+        {
+          "id": "actuator_rod_too_tight",
+          "label": "Sztanga nastawnika ustawiona za krótko (geometria domknięta agresywnie)",
+          "weightPct": 20,
+          "verificationSteps": [
+            "Porównaj learned stops z kalibracji bazowej z wartościami referencyjnymi paszportu turbiny.",
+            "Sprawdź plombę regulacji — jeśli zerwana, cofnij regulację do znaku fabrycznego i powtórz kalibrację."
+          ],
+          "liveDataHint": "Overboost narasta liniowo z RPM już od niskich obrotów; dewiacja dodatnia w całym zakresie."
+        },
+        {
+          "id": "map_sensor_fault",
+          "label": "Uszkodzony/zanieczyszczony czujnik MAP (fałszywy odczyt)",
+          "weightPct": 10,
+          "verificationSteps": [
+            "Porównaj MAP przy zapłonie ON / silnik OFF z ciśnieniem atmosferycznym (~1.0 bar abs ±30 mbar).",
+            "Sprawdź czujnik pod kątem zaolejenia/nagaru; wyczyść lub wymień.",
+            "Porównaj wskazanie MAP z niezależnym manometrem wpiętym w układ."
+          ],
+          "liveDataHint": "Nierealistyczne skoki Actual Boost (>0.5 bar w <100 ms) niemożliwe fizycznie = elektryka, nie mechanika."
+        }
+      ]
+    },
+    {
+      "code": "P2563",
+      "title": "Turbocharger Boost Control Position Sensor Circuit Range/Performance",
+      "priority": "high",
+      "technicalDescription": "Sygnał czujnika położenia nastawnika (wbudowany w nastawnik elektryczny lub czujnik sztangi) poza zakresem lub niespójny z modelem ECU. Typowy kod po montażu, gdy nastawnik nie przeszedł adaptacji do nowego ECU.",
+      "recommendedLivePids": ["ACTUATOR_POSITION", "ACTUATOR_DUTY", "TARGET_BOOST", "ACTUAL_BOOST"],
+      "probableCauses": [
+        {
+          "id": "missing_basic_settings",
+          "label": "Brak wykonanej kalibracji bazowej po wymianie turbiny/nastawnika",
+          "weightPct": 40,
+          "verificationSteps": [
+            "Wykonaj Test III (Basic Settings / UDS RoutineControl) dla marki pojazdu — to pierwszy krok, zanim cokolwiek rozbierzesz.",
+            "Po kalibracji skasuj DTC i wykonaj krótki test — kod nie powinien wrócić."
+          ],
+          "liveDataHint": "Actuator Position zamrożony na stałej wartości lub 0%/100% mimo zmian Duty."
+        },
+        {
+          "id": "wiring_connector",
+          "label": "Uszkodzona wtyczka/wiązka nastawnika (piny, korozja, naciągnięcie po montażu)",
+          "weightPct": 30,
+          "verificationSteps": [
+            "Sprawdź wzrokowo wtyk nastawnika — wyprostowane piny, zatrzask, ślady wilgoci.",
+            "Zmierz zasilanie i masę nastawnika przy zapłonie ON (typowo 12V + LIN/PWM).",
+            "Porusz wiązką przy podglądzie Live Data — przeskoki sygnału zdradzają przerwę."
+          ],
+          "liveDataHint": "Sygnał pozycji 'szarpie' (dropouts do 0) przy drganiach silnika."
+        },
+        {
+          "id": "actuator_internal",
+          "label": "Usterka wewnętrzna nastawnika elektrycznego (potencjometr/silniczek)",
+          "weightPct": 20,
+          "verificationSteps": [
+            "Wykonaj Sweep Test — nastawnik z uszkodzonym czujnikiem nie raportuje płynnego przebiegu pozycji.",
+            "Porównaj pobór prądu nastawnika w ruchu z kartą referencyjną (nadmierny prąd = opór mechaniczny)."
+          ],
+          "liveDataHint": "Pozycja skacze nieliniowo w środku zakresu (martwa strefa potencjometru)."
+        },
+        {
+          "id": "wrong_actuator_variant",
+          "label": "Niewłaściwy wariant nastawnika / niezgodność software'owa z ECU",
+          "weightPct": 10,
+          "verificationSteps": [
+            "Porównaj numer wariantu nastawnika z paszportem turbiny (aplikacja robi to automatycznie przy skanie QR).",
+            "Sprawdź, czy pojazd nie ma zmodyfikowanego oprogramowania ECU (chiptuning zmienia mapy sterowania)."
+          ],
+          "liveDataHint": "Kalibracja bazowa kończy się kodem odmowy ECU (NRC 0x22/0x31)."
+        }
+      ]
+    },
+    {
+      "code": "P0045",
+      "title": "Turbo/Supercharger Boost Control Solenoid Circuit — obwód sterowania (Open)",
+      "priority": "high",
+      "technicalDescription": "Przerwa lub zwarcie w obwodzie elektrycznym elementu wykonawczego doładowania (elektrozawór N75 lub nastawnik elektryczny). Kod czysto elektryczny — diagnoza zaczyna się od wiązki, nie od turbiny.",
+      "recommendedLivePids": ["ACTUATOR_DUTY", "ACTUATOR_POSITION", "BATTERY_VOLTAGE"],
+      "probableCauses": [
+        {
+          "id": "connector_not_seated",
+          "label": "Niedopięta/uszkodzona wtyczka po montażu turbiny",
+          "weightPct": 45,
+          "verificationSteps": [
+            "Sprawdź zatrzask wtyczki nastawnika/elektrozaworu — najczęstszy błąd bezpośrednio po montażu.",
+            "Sprawdź, czy wiązka nie została przycięta/przypalona o kolektor podczas montażu."
+          ],
+          "liveDataHint": "Kod pojawia się natychmiast po zapłonie ON, Actuator Duty = 0% na stałe."
+        },
+        {
+          "id": "harness_damage",
+          "label": "Przerwa w wiązce (przetarcie, korozja pinów, uszkodzenie gryzoni)",
+          "weightPct": 30,
+          "verificationSteps": [
+            "Pomiar rezystancji przewodów od wtyku ECU do wtyku nastawnika (oczekiwane <1 Ω).",
+            "Test podania masy/plusa bezpośrednio na element (kontrolowane, krótkie impulsy)."
+          ],
+          "liveDataHint": "Kod sporadyczny, koreluje z wibracjami/wilgocią."
+        },
+        {
+          "id": "solenoid_coil",
+          "label": "Uszkodzona cewka elektrozaworu / stopień mocy nastawnika",
+          "weightPct": 20,
+          "verificationSteps": [
+            "Zmierz rezystancję cewki N75 (typowo 25–35 Ω; 0 Ω = zwarcie, ∞ = przerwa).",
+            "Dla nastawnika elektrycznego: sweep test — brak jakiegokolwiek ruchu przy poprawnym zasilaniu."
+          ],
+          "liveDataHint": "ECU raportuje zwarcie do masy/plusa w statusie DTC (sprawdź bajt statusu UDS)."
+        },
+        {
+          "id": "ecu_driver",
+          "label": "Uszkodzony sterownik (driver) w ECU",
+          "weightPct": 5,
+          "verificationSteps": [
+            "Dopiero po wykluczeniu 1–3: sprawdź sygnał PWM na pinie ECU oscyloskopem.",
+            "Brak PWM przy komendzie wymuszenia = warsztat elektroniki ECU."
+          ],
+          "liveDataHint": "Wszystkie pomiary wiązki i elementu OK, a sygnału brak u źródła."
+        }
+      ]
+    },
+    {
+      "code": "P0237",
+      "title": "Turbocharger Boost Sensor A Circuit Low — niski sygnał czujnika doładowania",
+      "priority": "medium",
+      "technicalDescription": "Napięcie czujnika ciśnienia doładowania (MAP/boost) poniżej progu wiarygodności (zwykle <0.25 V). ECU przechodzi na wartość zastępczą i ogranicza doładowanie — objawowo mylone z uszkodzeniem turbiny (brak mocy).",
+      "recommendedLivePids": ["ACTUAL_BOOST", "MAF", "BAROMETRIC_PRESSURE", "BATTERY_VOLTAGE"],
+      "probableCauses": [
+        {
+          "id": "sensor_wiring_short",
+          "label": "Zwarcie sygnału czujnika do masy / przerwa zasilania 5V",
+          "weightPct": 40,
+          "verificationSteps": [
+            "Zmierz zasilanie referencyjne 5V na wtyku czujnika (zapłon ON).",
+            "Sprawdź ciągłość linii sygnałowej i szukaj przetarcia wiązki o elementy dolotu (częste po montażu intercoolera)."
+          ],
+          "liveDataHint": "Actual Boost = 0 lub wartość stała niezależnie od RPM."
+        },
+        {
+          "id": "sensor_contaminated",
+          "label": "Czujnik zaolejony/uszkodzony (np. po awarii poprzedniej turbiny)",
+          "weightPct": 35,
+          "verificationSteps": [
+            "Wykręć czujnik — membrana zalana olejem z poprzedniej awarii turbiny to klasyka; wyczyść lub wymień.",
+            "Porównaj odczyt przy zapłonie ON z ciśnieniem barometrycznym (muszą być zbieżne ±30 mbar)."
+          ],
+          "liveDataHint": "Odczyt statyczny odbiega od barometrycznego — czujnik kłamie od startu."
+        },
+        {
+          "id": "sensor_wrong_or_loose",
+          "label": "Czujnik niedokręcony / niewłaściwy zamiennik po montażu",
+          "weightPct": 20,
+          "verificationSteps": [
+            "Sprawdź osadzenie i o-ring czujnika w rurze dolotowej po montażu intercoolera.",
+            "Zweryfikuj numer części — tani zamiennik o innej charakterystyce to częsta przyczyna."
+          ],
+          "liveDataHint": "Sygnał wiarygodny na postoju, załamuje się pod ciśnieniem (wydmuchiwanie o-ringa)."
+        },
+        {
+          "id": "ecu_adc",
+          "label": "Usterka wejścia analogowego ECU",
+          "weightPct": 5,
+          "verificationSteps": [
+            "Po wykluczeniu 1–3: podaj napięcie testowe 2.5V na linię sygnałową i sprawdź odczyt PID.",
+            "Brak zmiany odczytu = diagnostyka ECU u elektronika."
+          ],
+          "liveDataHint": "Wartość PID zamrożona mimo fizycznej zmiany napięcia na pinie."
+        }
+      ]
+    },
+    {
+      "code": "P2263",
+      "title": "Turbo/Supercharger Boost System Performance — osiągi układu doładowania",
+      "priority": "critical",
+      "technicalDescription": "Zbiorczy kod niespełnienia modelu osiągów doładowania (BMW/Mercedes/Ford). ECU porównuje model przepływu z rzeczywistością — odchyłka może być mechaniczna, pneumatyczna lub czujnikowa. Wymaga pełnej hierarchii eliminacji przed decyzją o reklamacji.",
+      "recommendedLivePids": ["TARGET_BOOST", "ACTUAL_BOOST", "ACTUATOR_DUTY", "MAF", "RPM", "ENGINE_LOAD"],
+      "probableCauses": [
+        {
+          "id": "intake_leak",
+          "label": "Nieszczelność dolotu / intercoolera",
+          "weightPct": 35,
+          "verificationSteps": [
+            "Boost Leak Test (Test II) — identycznie jak dla P0299.",
+            "Sprawdź nowo montowane elementy: opaski, orurowanie intercoolera, uszczelki kolektora."
+          ],
+          "liveDataHint": "Dewiacja rośnie z ciśnieniem — im wyższy Target, tym większa strata."
+        },
+        {
+          "id": "vgt_control_chain",
+          "label": "Łańcuch sterowania VGT (podciśnienie/elektryka/nastawnik)",
+          "weightPct": 30,
+          "verificationSteps": [
+            "Sweep Test (Test I) + porównanie z referencją paszportu.",
+            "Weryfikacja podciśnienia: pompa vacuum, przewody, zawór sterujący."
+          ],
+          "liveDataHint": "Rozjazd Actuator Duty vs Actuator Position poza histerezą 5%."
+        },
+        {
+          "id": "exhaust_restriction",
+          "label": "Przeciwciśnienie wydechu (DPF/KAT) lub nieszczelność przed turbiną",
+          "weightPct": 20,
+          "verificationSteps": [
+            "Diagnoza DPF jak w P0299 (przyczyna 3).",
+            "Sprawdź nieszczelność kolektora wydechowego przed turbiną (sadza na łączeniach) — kradnie energię spalin."
+          ],
+          "liveDataHint": "Spool-up wyraźnie opóźniony; MAF niski względem modelu przy pełnym obciążeniu."
+        },
+        {
+          "id": "sensor_plausibility",
+          "label": "Nieprawidłowe odczyty MAF/MAP zaburzające model ECU",
+          "weightPct": 15,
+          "verificationSteps": [
+            "Porównaj MAF ze wzorcem: silnik 2.0d ~ 480–550 mg/suw przy pełnym obciążeniu.",
+            "Test wiarygodności MAP jak w P0237."
+          ],
+          "liveDataHint": "Wartości fizycznie niespójne: wysoki MAF przy niskim MAP lub odwrotnie."
+        }
+      ]
+    }
+  ]
+}

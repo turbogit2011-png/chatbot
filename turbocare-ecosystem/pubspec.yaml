@@ -1,0 +1,50 @@
+# TurboCare Ecosystem — aplikacja mobilna (Flutter, iOS & Android)
+name: turbocare_ecosystem
+description: >-
+  Cyfrowy asystent montażu, adaptacji nastawnika, inteligentnej diagnostyki
+  DTC i autoryzacji gwarancji regenerowanych turbosprężarek (BLE/OBD2).
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- Transport i sprzęt ---
+  flutter_blue_plus: ^1.32.0          # BLE (NUS) — łącze z interfejsem OBD2
+  mobile_scanner: ^5.1.0              # skaner QR z obudowy turbiny
+
+  # --- Stan i architektura ---
+  flutter_riverpod: ^2.5.0            # DI + zarządzanie stanem (warstwy luźno sprzężone)
+  freezed_annotation: ^2.4.0          # niemutowalne modele danych
+  json_annotation: ^4.9.0             # (de)serializacja paszportu i bazy wiedzy
+
+  # --- Prezentacja ---
+  fl_chart: ^0.68.0                   # wykres live Target vs Actual Boost
+  intl: ^0.19.0                       # formatowanie dat/liczb (PL)
+
+  # --- Cloud, raporty, bezpieczeństwo ---
+  dio: ^5.4.0                         # REST API (interceptory JWT, retry)
+  flutter_secure_storage: ^9.2.0      # klucz HMAC urządzenia, stan wizarda
+  crypto: ^3.0.3                      # HMAC-SHA256 payloadów gwarancyjnych
+  pdf: ^3.10.0                        # lokalny podgląd certyfikatu (render serwerowy w cloud)
+  uuid: ^4.4.0                        # UUID v7 dla passportId/activationId
+  connectivity_plus: ^6.0.0           # detekcja offline → kolejka outbox
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.0
+  freezed: ^2.5.0
+  json_serializable: ^6.8.0
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Baza wiedzy DTC (wersjonowana; nadpisywana paczkami OTA po walidacji podpisu)
+    - assets/knowledge/dtc_knowledge_base.json
