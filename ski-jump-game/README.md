@@ -9,34 +9,49 @@ Dwie części projektu:
 
 ---
 
-## 1. Gra do pobrania — `web/index.html`
+## 1. Gra do pobrania — `web/index.html` (SKI JUMP CUP)
 
 Pobierz plik `web/index.html` i otwórz w przeglądarce (komputer lub telefon).
 Nie wymaga serwera, internetu ani instalacji.
 
+**Zawartość gry**
+
+- **3 skocznie**: K-90 (HS-101), K-125 (HS-140) i mamut K-200 (HS-224) — każda z inną
+  prędkością najazdu, wartością metra i charakterystyką lotu (na mamucie liczy się
+  płaski, aerodynamiczny lot),
+- **Tryb konkursu**: 2 serie przeciwko 9 rywalom AI, tablica wyników między seriami,
+  podium na koniec,
+- **Trening** z rekordami skoczni zapisywanymi lokalnie (localStorage),
+- **Wybór belki startowej** (−3…+3) z kompensatą punktową FIS — niższa belka to mniejsza
+  prędkość, ale dodatnie punkty,
+- **Powtórki** skoku ze zwolnionym tempem przy lądowaniu,
+- oprawa: animowana sylwetka skoczka (dojazd, wyprost po wybiciu, styl V, telemark,
+  ragdoll przy upadku), stadion (wieża najazdowa, wieża sędziowska, tłum, banery),
+  parallax gór, padający śnieg znoszony wiatrem, śnieżny pył spod nart, dźwięk
+  proceduralny (szum wiatru zależny od prędkości, tłum, wybicie/lądowanie — WebAudio).
+
 **Sterowanie**
 
-| Faza | Klawiatura | Dotyk |
-|---|---|---|
-| Najazd | `←`/`→` — utrzymuj balans na środku paska | przeciąganie palcem w bok |
-| Wybicie | `SPACJA` tuż przed progiem (okno czasowe!) | tap |
-| Lot | `↑`/`↓` — kąt natarcia (za mało = nurkowanie, za dużo = przeciągnięcie) | przeciąganie góra/dół |
-| Lądowanie | `SPACJA` w krótkim oknie = **Telemark** (bonus stylowy, ale ryzyko przy twardym lądowaniu) | tap |
-| Restart | `R` | przycisk |
+| Faza | Mysz (styl DSJ) | Klawiatura | Dotyk |
+|---|---|---|---|
+| Start | klik | `SPACJA` | tap |
+| Najazd (balans) | pozycja pozioma | `←`/`→` | przeciąganie w bok |
+| Wybicie | klik przy progu | `SPACJA` | tap |
+| Lot | pozycja pionowa myszy | `↑`/`↓` | przeciąganie góra/dół |
+| Telemark | klik w oknie lądowania | `SPACJA` | tap |
 
-**Fizyka i punktacja w wersji web** — ta sama co w architekturze Unity:
-- siła nośna i opór: `F_L = 0.5·ρ·v²·S·C_L(AoA)`, `F_D = 0.5·ρ·v²·S·C_D(AoA)`,
-  krzywe C_L/C_D z przeciągnięciem powyżej ~40° kąta natarcia,
-- dynamiczny wiatr (szum wielooktawowy, podmuchy przednie/tylne, pomiar średniej do kompensaty),
-- skocznia K-125 / HS-140, wartość metra 1,8 pkt, kompensata wiatru 10,8 pkt/(m/s)
-  (wiatr tylny ×1,5 — jak w przepisach FIS),
-- 5 sędziów 0–20 pkt co 0,5; skrajne noty odrzucane; potrącenia za niestabilny lot
-  (odchylenie standardowe AoA, algorytm Welforda), brak telemarku (−2,0), twarde lądowanie,
-- fizyka liczona substeppingiem 240 Hz — trajektoria stabilna niezależnie od FPS.
+**Fizyka i punktacja** — te same równania co w architekturze Unity:
+- `F_L = 0.5·ρ·v²·S·C_L(AoA)`, `F_D = 0.5·ρ·v²·S·C_D(AoA)`, przeciągnięcie >~40° AoA,
+- dynamiczny wiatr wielooktawowy z pomiarem średniej od progu do lądowania,
+- pełny przelicznik FIS: 60 pkt za punkt K (120 na mamucie), wartość metra wg rozmiaru
+  skoczni (2,0 / 1,8 / 1,2), kompensata wiatru (tylny ×1,5) i belki, 5 sędziów 0–20 co
+  0,5 pkt ze skreśleniem not skrajnych; potrącenia za niestabilność lotu (odchylenie
+  standardowe AoA — Welford), brak telemarku, twarde lądowanie i skok za HS,
+- substepping fizyki 240 Hz — trajektoria niezależna od FPS.
 
-Parametry (profil zeskoku, powierzchnia nośna, prędkość najazdu) zostały **dostrojone
-symulacją numeryczną**: skok neutralny ≈ 122 m (punkt K), perfekcyjnie prowadzony ≈ 140 m (HS),
-błędy kąta natarcia i timingu wybicia karane dystansem.
+Parametry każdej skoczni **dostrojone symulacją numeryczną** (skrypt w repo commit
+history): np. na K-125 skok bez sterowania ≈ 122 m, perfekcyjnie prowadzony ≈ 140 m (HS),
+spóźnione wybicie kosztuje ~25 m, a na mamucie ~50 m.
 
 ---
 
