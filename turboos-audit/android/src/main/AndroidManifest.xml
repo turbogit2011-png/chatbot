@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ZMIANY WZGLĘDEM 0.2.0
+  ---------------------
+  1. USUNIĘTO android:debuggable="true" — atrybut nie należy do manifestu wcale.
+     W wydaniu produkcyjnym ustawia go wtyczka Gradle na podstawie buildType.
+     W 0.2.0 był wpisany na sztywno, więc każdy artefakt (także „READONLY")
+     pozwalał podpiąć debugger do procesu i odczytać VIN oraz kody usterek.
+  2. Dodano android:configChanges dla MainActivity — obrót ekranu, zmiana motywu
+     czy rozmiaru czcionki nie odtwarzają już aktywności, przez co nie zrywają
+     aktywnej sesji OBD w trakcie pomiaru drogowego.
+  3. Dodano android:screenOrientation="portrait" — zgodnie z deklaracją
+     "orientation": "portrait-primary" w manifeście PWA (0.2.0 deklarował
+     pionową orientację tylko po stronie webowej, natywnie pozwalał obracać).
+  4. Dodano android:enableOnBackInvokedCallback — wymagane dla przewidywalnego
+     gestu wstecz na Androidzie 13+ przy targetSdk 35.
+  5. Dodano android:localeConfig oraz jawny android:exported dla aktywności.
+  6. BLUETOOTH_SCAN ma neverForLocation (0x00010000) — pozostawione, bo aplikacja
+     nie wyprowadza lokalizacji z wyników skanowania. Dzięki temu
+     ACCESS_FINE_LOCATION jest ograniczone do maxSdkVersion 30.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:supportsRtl="true"
+        android:enableOnBackInvokedCallback="true"
+        android:usesCleartextTraffic="false"
+        android:theme="@style/Theme.TurboOs"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|fontScale|density"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

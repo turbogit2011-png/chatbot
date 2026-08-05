@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+  ZMIANY WZGLĘDEM 0.2.0
+  ---------------------
+  1. [BEZPIECZEŃSTWO] Dodana polityka CSP. 0.2.0 nie miała żadnej — a strona ma
+     dostęp do mostu `TurboOSAndroid` (VIN, DTC, kasowanie kodów). Wprawdzie
+     `blockNetworkLoads = true` w WebView blokuje wyjście na zewnątrz, ale CSP
+     jest drugą, niezależną warstwą i jedyną, która działa w wariancie PWA
+     uruchamianym w przeglądarce.
+     Uwaga: `'unsafe-inline'` w style-src jest wymagane przez `style` inline
+     generowany przez React/Framer Motion — docelowo do zastąpienia nonce.
+  2. [WYDAJNOŚĆ] `modulepreload` dla głównego bundla oraz `preload` dla arkusza
+     stylów — WebView nie musi czekać na sparsowanie HTML, żeby zacząć pobierać
+     zasób krytyczny.
+  3. [DOSTĘPNOŚĆ / UX] Dodany `<noscript>` oraz statyczny ekran ładowania,
+     żeby pierwszy render nie był pustą, czarną kartą.
+  4. [PWA] `viewport-fit=cover` zachowany, ale w połączeniu z `env(safe-area-inset-*)`
+     w CSS — 0.2.0 deklarował `cover`, nie stosując bezpiecznych marginesów, przez
+     co dolny pasek nawigacyjny nachodził na przyciski akcji.
+-->
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'none';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: blob:;
+        font-src 'self';
+        connect-src 'self';
+        manifest-src 'self';
+        worker-src 'self';
+        form-action 'none';
+        frame-ancestors 'none';
+        base-uri 'none';
+        object-src 'none'
+      "
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#080a0d" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="TurboOS — inteligentna diagnostyka OBD turbosprężarek dla warsztatów." />
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+
+    <title>TurboOS — OBD AI</title>
+
+    <link rel="modulepreload" href="./assets/index-siXgiMlk.js" />
+    <link rel="stylesheet" href="./assets/index-CFmNSwif.css" />
+    <script type="module" src="./assets/index-siXgiMlk.js"></script>
+
+    <style>
+      /* Ekran wstępny — usuwany przez React przy pierwszym renderze. */
+      :root { color-scheme: dark; }
+      html, body { margin: 0; background: #080a0d; color: #e6edf3; }
+      body {
+        padding:
+          env(safe-area-inset-top) env(safe-area-inset-right)
+          env(safe-area-inset-bottom) env(safe-area-inset-left);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      #boot {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        gap: 0.75rem;
+        text-align: center;
+      }
+      #root:not(:empty) + #boot { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <div id="boot" role="status" aria-live="polite">
+      <strong>TurboOS</strong>
+      <span>Uruchamianie diagnostyki…</span>
+    </div>
+
+    <noscript>
+      <p style="padding: 1.5rem">
+        TurboOS wymaga włączonej obsługi JavaScriptu. Włącz ją w ustawieniach przeglądarki
+        albo uruchom aplikację TurboOS OBD na Androidzie.
+      </p>
+    </noscript>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+// Fragment konfiguracji modułu :app przywracający poprawny build wydania.
+//
+// PROBLEM W 0.2.0
+// ---------------
+// Dostarczony artefakt TurboOSOBD0.2.0READONLY_3.apk miał:
+//   • BuildConfig.BUILD_TYPE = "debug", BuildConfig.DEBUG = true
+//   • android:debuggable="true" w scalonym manifeście
+//   • podpis certyfikatem CN=Android Debug, O=Android, C=US
+//   • brak jakiegokolwiek zaciemniania i minifikacji (klasy w pełni czytelne,
+//     dokładnie tak, jak w tym audycie)
+//
+// Skutki: dowolna aplikacja z uprawnieniem do debugowania może dołączyć się do
+// procesu, `WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)` włącza
+// zdalną inspekcję DevTools przez ADB (pełny dostęp do mostu `TurboOSAndroid`,
+// a więc do VIN, DTC i kasowania kodów), a klucz debug uniemożliwia publikację
+// i późniejsze aktualizacje w Google Play.
+
+android {
+    namespace = "com.turbogit.turboos"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.turbogit.turboos"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 3
+        versionName = "0.2.1"
+    }
+
+    signingConfigs {
+        create("release") {
+            // Wartości pochodzą z ~/.gradle/gradle.properties lub ze zmiennych
+            // środowiskowych CI — NIGDY z repozytorium.
+            storeFile = providers.gradleProperty("TURBOOS_KEYSTORE").orNull?.let(::file)
+            storePassword = providers.gradleProperty("TURBOOS_KEYSTORE_PASSWORD").orNull
+            keyAlias = providers.gradleProperty("TURBOOS_KEY_ALIAS").orNull
+            keyPassword = providers.gradleProperty("TURBOOS_KEY_PASSWORD").orNull
+
+            enableV1Signing = false // minSdk 26 — schemat v1 zbędny
+            enableV2Signing = true
+            enableV3Signing = true // rotacja klucza
+            enableV4Signing = true // szybka instalacja przyrostowa
+        }
+    }
+
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            // Odróżnia build deweloperski od wydania także po stronie użytkownika.
+            versionNameSuffix = "-debug"
+        }
+
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    packaging {
+        resources.excludes += setOf(
+            "META-INF/*.version",
+            "kotlin/**",
+            "DebugProbesKt.bin",
+        )
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.webkit:webkit:1.12.1")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303") // testy parserów bez emulatora
+}
