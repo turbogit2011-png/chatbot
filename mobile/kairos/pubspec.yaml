@@ -1,0 +1,107 @@
+name: kairos
+description: >-
+  Kairos — predykcyjny kopilot uwagi. Fuzja sensorów + lokalny model językowy,
+  100% przetwarzania na urządzeniu. Zero bajtów opuszcza telefon.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.35.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # ── Stan / DI / nawigacja ────────────────────────────────────────────────
+  flutter_riverpod: ^3.0.0
+  riverpod_annotation: ^3.0.0
+  go_router: ^16.0.0
+
+  # ── Modele domenowe / programowanie funkcyjne ────────────────────────────
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  fpdart: ^1.1.1
+  collection: ^1.19.1
+
+  # ── Trwałość danych (wyłącznie lokalna) ──────────────────────────────────
+  drift: ^2.28.0
+  sqlite3_flutter_libs: ^0.5.32
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  shared_preferences: ^2.5.3
+  flutter_secure_storage: ^9.2.4
+
+  # ── Sensory i telemetria urządzenia ──────────────────────────────────────
+  sensors_plus: ^6.1.1
+  battery_plus: ^6.2.1
+  pedometer: ^4.1.1
+  light: ^4.0.0
+  device_info_plus: ^11.3.0
+
+  # ── Praca w tle, uprawnienia, powiadomienia ──────────────────────────────
+  flutter_foreground_task: ^9.1.0
+  workmanager: ^0.7.0
+  permission_handler: ^12.0.0
+  flutter_local_notifications: ^19.0.0
+
+  # ── Lokalny model językowy (on-device SLM) ───────────────────────────────
+  flutter_gemma: ^0.9.0
+  dio: ^5.8.0
+  crypto: ^3.0.6
+
+  # ── UI / animacje / wykresy ──────────────────────────────────────────────
+  flutter_animate: ^4.5.2
+  fl_chart: ^1.0.0
+  flutter_svg: ^2.0.17
+  vibration: ^3.1.3
+
+  # ── Narzędzia ────────────────────────────────────────────────────────────
+  intl: ^0.20.2
+  uuid: ^4.5.1
+  logger: ^2.5.0
+  share_plus: ^11.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  build_runner: ^2.4.15
+  freezed: ^3.0.6
+  json_serializable: ^6.9.5
+  riverpod_generator: ^3.0.0
+  drift_dev: ^2.28.0
+
+  flutter_lints: ^6.0.0
+  custom_lint: ^0.7.5
+  riverpod_lint: ^3.0.0
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/prompts/
+    - assets/models/manifest.json
+
+  # Czcionki są dołączone lokalnie (a nie pobierane w runtime przez
+  # google_fonts) — aplikacja nie wykonuje ŻADNEGO ruchu sieciowego poza
+  # jednorazowym, jawnym pobraniem modelu LLM przez użytkownika.
+  # Używamy fontów zmiennych (jeden plik na rodzinę), a konkretne grubości
+  # ustawiamy przez `fontVariations` w AppTypography.
+  # Pliki pobiera skrypt: tool/fetch_fonts.sh
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora-Variable.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Variable.ttf

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "note": "Rejestr modeli lokalnych. Aplikacja nie zawiera wag — użytkownik pobiera wybrany model jawnie, jednorazowo. Pole sha256 musi zostać uzupełnione przed publikacją buildu; puste sha256 wymusza jawne potwierdzenie w UI.",
+  "models": [
+    {
+      "id": "gemma3-1b-it-int4",
+      "displayName": "Gemma 3 1B (int4)",
+      "vendor": "Google DeepMind",
+      "license": "Gemma Terms of Use",
+      "runtime": "mediapipe-llm",
+      "fileName": "gemma3-1b-it-int4.task",
+      "downloadUrl": "https://huggingface.co/litert-community/Gemma3-1B-IT/resolve/main/gemma3-1b-it-int4.task",
+      "requiresAuthToken": true,
+      "sizeBytes": 554661246,
+      "sha256": null,
+      "contextTokens": 2048,
+      "minRamMb": 3072,
+      "recommended": true
+    },
+    {
+      "id": "gemma3n-e2b-int4",
+      "displayName": "Gemma 3n E2B (int4)",
+      "vendor": "Google DeepMind",
+      "license": "Gemma Terms of Use",
+      "runtime": "mediapipe-llm",
+      "fileName": "gemma-3n-E2B-it-int4.task",
+      "downloadUrl": "https://huggingface.co/google/gemma-3n-E2B-it-litert-preview/resolve/main/gemma-3n-E2B-it-int4.task",
+      "requiresAuthToken": true,
+      "sizeBytes": 3136226711,
+      "sha256": null,
+      "contextTokens": 4096,
+      "minRamMb": 6144,
+      "recommended": false
+    }
+  ]
+}
