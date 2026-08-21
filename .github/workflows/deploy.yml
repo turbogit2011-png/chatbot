@@ -1,4 +1,4 @@
-name: Deploy Momentum + TURBO-GIT shop preview to GitHub Pages
+name: Deploy Momentum + TURBO-GIT shop + VOIDFRAME to GitHub Pages
 
 on:
   push:
@@ -55,6 +55,20 @@ jobs:
 
       - name: Nest shop under /shop
         run: cp -r turbo-git-shop/out out/shop
+
+      # ---- VOIDFRAME static 3D portfolio, nested under /voidframe ----
+      - name: Nest VOIDFRAME under /voidframe
+        run: |
+          mkdir -p out/voidframe
+          cat \
+            .voidframe-payload/part-00 \
+            .voidframe-payload/part-01 \
+            .voidframe-payload/part-02 \
+            .voidframe-payload/part-03 \
+            .voidframe-payload/part-04 \
+            | base64 --decode > /tmp/voidframe-site.tar.gz
+          tar -xzf /tmp/voidframe-site.tar.gz -C out/voidframe
+          test -f out/voidframe/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
