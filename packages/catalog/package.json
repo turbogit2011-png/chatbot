@@ -1,0 +1,19 @@
+{
+  "name": "@turbo-git/catalog",
+  "version": "1.0.0",
+  "description": "Kanoniczny model danych, normalizacja numerów i wyszukiwarka katalogu Turbo-Git (na realnych danych WooCommerce).",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./data": "./data/products.normalized.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

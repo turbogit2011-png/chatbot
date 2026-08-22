@@ -1,0 +1,879 @@
+{
+ "version": "1.0.0",
+ "field": "google_brand",
+ "note": "APPLY tylko przez wtyczke: PREVIEW->APPROVE->APPLY z backupem/rollbackiem",
+ "changes": [
+  {
+   "product_id": 29104,
+   "expected_title_prefix": "Turbosprężarka regenerowana Ga",
+   "field": "google_brand",
+   "before": "Audi, Seat, Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29341,
+   "expected_title_prefix": "Turbosprężarka GARRETT 850840 ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29344,
+   "expected_title_prefix": "Turbosprężarka GARRETT 874595 ",
+   "field": "google_brand",
+   "before": "Audi",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29350,
+   "expected_title_prefix": "Regenerowane turbo Garrett 04L",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29354,
+   "expected_title_prefix": "Turbosprężarka Garrett 838452 ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29361,
+   "expected_title_prefix": "Turbosprężarka Garrett 852072 ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29445,
+   "expected_title_prefix": "Turbosprężarka 49335 2.0D N47D",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29450,
+   "expected_title_prefix": "Regenerowana turbosprężarka BM",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29455,
+   "expected_title_prefix": "Regenerowane turbo BMW 120d / ",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29460,
+   "expected_title_prefix": "Turbosprężarka BMW 120D 220D 3",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29466,
+   "expected_title_prefix": "Turbosprężarka 53039700137 BV4",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29472,
+   "expected_title_prefix": "Turbosprężarka VW Golf Passat ",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29478,
+   "expected_title_prefix": "Turbosprężarka 2.0 TDI CEGA CB",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29484,
+   "expected_title_prefix": "Turbosprężarka 2.0 TDI CEGA CB",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29489,
+   "expected_title_prefix": "Turbosprężarka 54409 BorgWarne",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29494,
+   "expected_title_prefix": "Turbosprężarka VW Golf Passat ",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29499,
+   "expected_title_prefix": "Turbosprężarka 2.0 TDI CFHA CF",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29504,
+   "expected_title_prefix": "Turbosprężarka BorgWarner Audi",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29510,
+   "expected_title_prefix": "Turbosprężarka Opel Insignia Z",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29515,
+   "expected_title_prefix": "Regenerowane turbo Garrett 819",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29521,
+   "expected_title_prefix": "Turbosprężarka Garrett VW Golf",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29526,
+   "expected_title_prefix": "Turbosprężarka BiTurbo VW 2.0 ",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29531,
+   "expected_title_prefix": "Turbosprężarka regenerowana Bi",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29536,
+   "expected_title_prefix": "Turbosprężarka BiTurbo VW Tran",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29541,
+   "expected_title_prefix": "Turbosprężarka BiTurbo Mazda 3",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29547,
+   "expected_title_prefix": "Turbosprężarka 2.0 TDI 143KM A",
+   "field": "google_brand",
+   "before": "Audi, Seat",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29549,
+   "expected_title_prefix": "TURBOSPRĘŻARKA FORD KUGA PEUGE",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29551,
+   "expected_title_prefix": "REGENEROWANE TURBO PEUGEOT 508",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29556,
+   "expected_title_prefix": "TURBO FORD TRANSIT CONNECT 1.0",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Mahle",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29561,
+   "expected_title_prefix": "Regenerowana turbosprężarka Fo",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Mahle",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29566,
+   "expected_title_prefix": "REGENEROWANE TURBO FORD FOCUS ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Mahle",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29571,
+   "expected_title_prefix": "TURBO 1.5 BLUEHDI PEUGEOT RIFT",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29576,
+   "expected_title_prefix": "Regenerowane turbo Opel Vivaro",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29581,
+   "expected_title_prefix": "REGENEROWANE TURBO PEUGEOT 300",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29585,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 5438-970-0003 5",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29589,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 1.6CDTI OPEL AS",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29595,
+   "expected_title_prefix": "Regenerowane turbo IHI Mazda 6",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "TMI",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29597,
+   "expected_title_prefix": "TURBO HYUNDAI TUCSON KIA SPORT",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29599,
+   "expected_title_prefix": "Regenerowane turbo Kia Ceed / ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29601,
+   "expected_title_prefix": "REGENEROWANE TURBO KIA SPORTAG",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29605,
+   "expected_title_prefix": "Regenerowane turbo Renault Esp",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29609,
+   "expected_title_prefix": "REGENEROWANE TURBO RENAULT TRA",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29616,
+   "expected_title_prefix": "TURBO VOLKSWAGEN CRAFTER 2.0 T",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29623,
+   "expected_title_prefix": "TURBOSPRĘŻARKA VW CRAFTER 2.0 ",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29630,
+   "expected_title_prefix": "Regenerowane turbo VW Crafter ",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29636,
+   "expected_title_prefix": "TURBO MERCEDES V-KLASA W447 SP",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29642,
+   "expected_title_prefix": "TURBOSPRĘŻARKA MERCEDES SPRINT",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29648,
+   "expected_title_prefix": "REGENEROWANE TURBO MERCEDES V2",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29654,
+   "expected_title_prefix": "TURBOSPRĘŻARKA VW POLO GTI S1 ",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29660,
+   "expected_title_prefix": "Turbosprężarka 06K145701T IHI ",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29666,
+   "expected_title_prefix": "TURBO IHI VW GOLF VII GTI AUDI",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29672,
+   "expected_title_prefix": "TURBOSPRĘŻARKA AUDI A3 Q3 PASS",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "Melett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29679,
+   "expected_title_prefix": "TURBOSPRĘŻARKA AUDI Q3 SKODA O",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "nieznany producent",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29685,
+   "expected_title_prefix": "Turbosprężarka 776470 / 059145",
+   "field": "google_brand",
+   "before": "Audi, Volkswagen",
+   "after": "DTS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29691,
+   "expected_title_prefix": "TURBO RENAULT KADJAR NISSAN QA",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "DTS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29697,
+   "expected_title_prefix": "Regenerowane turbo VW T6 Multi",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "BR Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29703,
+   "expected_title_prefix": "Turbosprężarka MITSUBISHI L200",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29709,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 786880 FORD TRA",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29713,
+   "expected_title_prefix": "TURBOSPRĘŻARKA GARRETT 814698 ",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29718,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 1.5 BLUEHDI PEU",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29722,
+   "expected_title_prefix": "Turbosprężarka 54389700006 1.5",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "DTS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29726,
+   "expected_title_prefix": "TURBO FORD TOURNEO CUSTOM 2.0E",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "BR Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29731,
+   "expected_title_prefix": "Turbosprężarka JAGUAR /LAND RO",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Jaguar OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29735,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 1.6CDTI OPEL AS",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "KORAS",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29739,
+   "expected_title_prefix": "TURBOSPRĘŻARKA IHI VJ40 VJ41 M",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "IHI",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29744,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 54389700005 543",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "nieznany producent",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29748,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 756047 PEUGEOT ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "nieznany producent",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29752,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 873767 VW CRAFT",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29756,
+   "expected_title_prefix": "Regenerowane turbo Garrett 715",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Carwood Group",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29760,
+   "expected_title_prefix": "TURBOSPRĘŻARKA GARRETT 792290 ",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29764,
+   "expected_title_prefix": "Turbosprężarka Garrett 792290 ",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29769,
+   "expected_title_prefix": "Turbosprężarka BiTurbo Volvo 2",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Volvo OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29774,
+   "expected_title_prefix": "Turbosprężarka 06K145654K 2.0 ",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "Audi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29778,
+   "expected_title_prefix": "Turbosprężarka 834009 Subaru F",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29782,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 898906-0004 DUC",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29785,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 49335-01120 MIT",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29788,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 49373-02000 1.4",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Mitsubishi OE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29791,
+   "expected_title_prefix": "Turbosprężarka 04L253010B 2.0T",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "TMI",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29794,
+   "expected_title_prefix": "Turbosprężarka Garrett 831120 ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29796,
+   "expected_title_prefix": "Turbosprężarka Garrett 843814 ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29799,
+   "expected_title_prefix": "Turbosprężarka Garrett 856652 ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "BR Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29801,
+   "expected_title_prefix": "Turbosprężarka 2.0 BlueHDi TDC",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "KKK",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29803,
+   "expected_title_prefix": "Turbosprężarka Garrett 04L2530",
+   "field": "google_brand",
+   "before": "Volkswagen",
+   "after": "Bosch",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29806,
+   "expected_title_prefix": "Turbosprężarka 852072 Ford 2.0",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29812,
+   "expected_title_prefix": "Turbosprężarka Garrett 838452 ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29816,
+   "expected_title_prefix": "Turbosprężarka GARRETT 850840 ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29820,
+   "expected_title_prefix": "Turbosprężarka 49135-05895 BMW",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29824,
+   "expected_title_prefix": "Turbosprężarka 49135-05895 BMW",
+   "field": "google_brand",
+   "before": "BMW",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29830,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 53039700652 KIA",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "BorgWarner",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29836,
+   "expected_title_prefix": "Turbosprężarka 05L253019F VW A",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "TURBOS EUROPE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29839,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 2.0 TSI TFSI VW",
+   "field": "google_brand",
+   "before": "Audi, Seat, Volkswagen",
+   "after": "TURBOS EUROPE",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29841,
+   "expected_title_prefix": "TURBOSPRĘŻARKA FORD TRANSIT / ",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29845,
+   "expected_title_prefix": "TURBO OPEL VIVARO FIAT TALENTO",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29849,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 2.0 DCI 16V ADB",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29852,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 49172-03000 1.5",
+   "field": "google_brand",
+   "before": "Ford, Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29855,
+   "expected_title_prefix": "TURBOSPRĘŻARKA 781504 OPEL CHE",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Inter-Turbo",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29858,
+   "expected_title_prefix": "TURBOSPRĘŻARKA re 822088 FIAT ",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29861,
+   "expected_title_prefix": "Turbosprężarka Audi A4/A5 2.0 ",
+   "field": "google_brand",
+   "before": "Audi",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 29864,
+   "expected_title_prefix": "Regenerowana turbosprężarka Au",
+   "field": "google_brand",
+   "before": "Audi",
+   "after": "Garrett",
+   "confidence": "VERIFIED"
+  },
+  {
+   "product_id": 30172,
+   "expected_title_prefix": "Regenerowana turbosprężarka Hy",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30173,
+   "expected_title_prefix": "Regenerowana turbosprężarka Au",
+   "field": "google_brand",
+   "before": "Audi, Skoda, Volkswagen",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30174,
+   "expected_title_prefix": "Regenerowana turbosprężarka Ci",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30175,
+   "expected_title_prefix": "Regenerowana turbosprężarka Me",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30176,
+   "expected_title_prefix": "Regenerowana turbosprężarka Vo",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30177,
+   "expected_title_prefix": "Regenerowana turbosprężarka Bi",
+   "field": "google_brand",
+   "before": "Ford",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30178,
+   "expected_title_prefix": "Regenerowana turbosprężarka Bi",
+   "field": "google_brand",
+   "before": "Opel",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30180,
+   "expected_title_prefix": "Regenerowana turbosprężarka VW",
+   "field": "google_brand",
+   "before": "Audi, Seat, Skoda, Volkswagen",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30181,
+   "expected_title_prefix": "Regenerowana turbosprężarka Hy",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  },
+  {
+   "product_id": 30182,
+   "expected_title_prefix": "Regenerowana turbosprężarka Da",
+   "field": "google_brand",
+   "before": "(z atrybutu pojazdu)",
+   "after": "Turbo-Git",
+   "confidence": "NEEDS_REVIEW"
+  }
+ ]
+}
