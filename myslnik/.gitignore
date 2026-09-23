@@ -1,0 +1,11 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+# Klucz podpisu i hasła NIGDY nie trafiają do repozytorium
+keystore/
+keystore.properties
+*.jks
+*.keystore

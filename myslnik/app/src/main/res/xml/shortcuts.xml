@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_entry"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_note"
+        android:shortcutShortLabel="@string/shortcut_new_thought">
+        <intent
+            android:action="pl.myslnik.ACTION_QUICK_ADD"
+            android:targetPackage="pl.myslnik"
+            android:targetClass="pl.myslnik.ui.QuickAddActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="dictate"
+        android:enabled="true"
+        android:icon="@drawable/ic_mic"
+        android:shortcutShortLabel="@string/shortcut_dictate">
+        <intent
+            android:action="pl.myslnik.ACTION_DICTATE"
+            android:targetPackage="pl.myslnik"
+            android:targetClass="pl.myslnik.ui.QuickAddActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="review"
+        android:enabled="true"
+        android:icon="@drawable/ic_inbox"
+        android:shortcutShortLabel="@string/shortcut_review">
+        <intent
+            android:action="pl.myslnik.ACTION_REVIEW"
+            android:targetPackage="pl.myslnik"
+            android:targetClass="pl.myslnik.ui.MainActivity" />
+    </shortcut>
+</shortcuts>

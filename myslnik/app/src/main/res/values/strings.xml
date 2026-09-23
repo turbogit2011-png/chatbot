@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Myślnik</string>
+    <string name="tile_label">Myślnik — dodaj</string>
+    <string name="widget_quick_add_desc">Szybkie dodawanie myśli i zadań</string>
+    <string name="widget_today_desc">Lista na dziś z odhaczaniem</string>
+    <string name="shortcut_new_thought">Nowa myśl</string>
+    <string name="shortcut_dictate">Dyktuj</string>
+    <string name="shortcut_review">Przegląd</string>
+</resources>
