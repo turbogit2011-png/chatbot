@@ -108,7 +108,9 @@ class QuickAddActivity : ComponentActivity() {
                 QuickAddScreen(
                     initialText = sharedText,
                     startDictation = startDictation,
-                    onSave = { text, type -> saveEntry(text, type) },
+                    onSave = { text, type, dueOverride -> saveEntry(text, type, dueOverride) },
+                    nightStart = settings.nightStart,
+                    nightEnd = settings.nightEnd,
                     onClose = { finish() },
                     dayTimes = settings.dayTimes(),
                     startSpeech = ::startSpeechRecognition,
@@ -201,14 +203,15 @@ class QuickAddActivity : ComponentActivity() {
         }
     }
 
-    private fun saveEntry(rawText: String, forcedType: EntryType?) {
+    /** [dueOverride]: null = termin z parsera; DueOverride(null) = bez terminu; DueOverride(t) = ręcznie wybrany. */
+    private fun saveEntry(rawText: String, forcedType: EntryType?, dueOverride: DueOverride?) {
         val text = rawText.trim()
         if (text.isEmpty()) { finish(); return }
         val container = MyslnikApp.container(this)
         container.scope.launch {
             val s = container.settingsRepo.current()
             val parsed = PolishDateParser(s.dayTimes()).parse(text, ZonedDateTime.now())
-            val dueAt = parsed.dueAt?.toInstant()?.toEpochMilli()
+            val dueAt = if (dueOverride != null) dueOverride.millis else parsed.dueAt?.toInstant()?.toEpochMilli()
             val type = forcedType ?: if (dueAt != null) EntryType.TASK else EntryType.THOUGHT
             container.repository.add(
                 content = parsed.cleanedText.ifBlank { text },
@@ -245,7 +248,9 @@ class QuickAddActivity : ComponentActivity() {
 private fun QuickAddScreen(
     initialText: String,
     startDictation: Boolean,
-    onSave: (String, EntryType?) -> Unit,
+    onSave: (String, EntryType?, DueOverride?) -> Unit,
+    nightStart: Int,
+    nightEnd: Int,
     onClose: () -> Unit,
     dayTimes: pl.myslnik.domain.parser.DayTimes,
     startSpeech: (onPartial: (String) -> Unit, onFinal: (String) -> Unit, onError: () -> Unit) -> Unit,
@@ -260,14 +265,27 @@ private fun QuickAddScreen(
     val parser = remember { PolishDateParser(dayTimes) }
 
     val parsed = remember(text) { parser.parse(text, ZonedDateTime.now()) }
-    val chipLabel = parsed.dueAt?.let {
+    var dueOverride by remember { mutableStateOf<DueOverride?>(null) }
+    var showDuePicker by remember { mutableStateOf(false) }
+    val effectiveDue: Long? = dueOverride?.millis
+        ?: if (dueOverride == null) parsed.dueAt?.toInstant()?.toEpochMilli() else null
+    val chipLabel = effectiveDue?.let {
         val fmt = DateTimeFormatter.ofPattern("EEE d MMM HH:mm", Locale.forLanguageTag("pl"))
-        "⏰ " + fmt.format(it)
+        val moon = if (NightWindow.isNight(it, nightStart, nightEnd, ZoneId.systemDefault())) " 🌙" else ""
+        "⏰ " + fmt.format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) + moon
+    } ?: "⏰ bez terminu"
+
+    if (showDuePicker) {
+        QuickDuePicker(
+            dayTimes = dayTimes,
+            onPicked = { millis -> dueOverride = DueOverride(millis); showDuePicker = false; autosaveIn = -1 },
+            onDismiss = { showDuePicker = false },
+        )
     }
 
     fun save() {
         stopSpeech()
-        onSave(text, if (forced) (if (isTask) EntryType.TASK else EntryType.THOUGHT) else null)
+        onSave(text, if (forced) (if (isTask) EntryType.TASK else EntryType.THOUGHT) else null, dueOverride)
     }
 
     // AUTOZAPIS po dyktowaniu: 3 s, chyba że dotknięto „Edytuj".
@@ -330,9 +348,7 @@ private fun QuickAddScreen(
                     label = { Text("Myśl") }
                 )
                 Spacer(Modifier.weight(1f))
-                if (chipLabel != null) {
-                    AssistChip(onClick = { }, label = { Text(chipLabel) })
-                }
+                AssistChip(onClick = { showDuePicker = true }, label = { Text(chipLabel) })
             }
             if (autosaveIn > 0) {
                 Spacer(Modifier.height(12.dp))
@@ -365,5 +381,76 @@ private fun QuickAddScreen(
                 }
             }
         }
+    }
+}
+
+/** Termin wybrany ręcznie z chipa; millis == null oznacza „bez terminu". */
+data class DueOverride(val millis: Long?)
+
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@Composable
+private fun QuickDuePicker(
+    dayTimes: pl.myslnik.domain.parser.DayTimes,
+    onPicked: (Long?) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val zone = ZoneId.systemDefault()
+    var step by remember { mutableIntStateOf(0) } // 0 lista, 1 data, 2 godzina
+    val dateState = androidx.compose.material3.rememberDatePickerState()
+    val timeState = androidx.compose.material3.rememberTimePickerState(
+        initialHour = dayTimes.defaultTime / 60, initialMinute = dayTimes.defaultTime % 60, is24Hour = true
+    )
+    val now = ZonedDateTime.now(zone)
+    fun day(offset: Long, minutes: Int) = now.toLocalDate().plusDays(offset)
+        .atTime(minutes / 60, minutes % 60).atZone(zone).toInstant().toEpochMilli()
+
+    when (step) {
+        1 -> androidx.compose.material3.DatePickerDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = { androidx.compose.material3.TextButton(onClick = { step = 2 }) { Text("Dalej") } },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text("Anuluj") } },
+        ) { androidx.compose.material3.DatePicker(state = dateState) }
+        2 -> androidx.compose.material3.AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text("Godzina") },
+            text = { androidx.compose.material3.TimePicker(state = timeState) },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    val date = dateState.selectedDateMillis
+                        ?.let { Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate() }
+                        ?: now.toLocalDate()
+                    onPicked(date.atTime(timeState.hour, timeState.minute).atZone(zone).toInstant().toEpochMilli())
+                }) { Text("Ustaw") }
+            },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text("Anuluj") } },
+        )
+        else -> androidx.compose.material3.AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text("Kiedy przypomnieć?") },
+            text = {
+                Column {
+                    listOf(
+                        "Za 15 min" to now.plusMinutes(15).toInstant().toEpochMilli(),
+                        "Za 1 h" to now.plusHours(1).toInstant().toEpochMilli(),
+                        "Dziś wieczorem" to day(0, dayTimes.wieczorem),
+                        "Jutro rano" to day(1, dayTimes.rano),
+                        "Jutro" to day(1, dayTimes.defaultTime),
+                        "Za tydzień" to day(7, dayTimes.defaultTime),
+                    ).forEach { (label, millis) ->
+                        androidx.compose.material3.TextButton(
+                            onClick = { onPicked(millis) }, modifier = Modifier.fillMaxWidth()
+                        ) { Text(label, modifier = Modifier.fillMaxWidth()) }
+                    }
+                    androidx.compose.material3.TextButton(onClick = { step = 1 }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Własny termin…", modifier = Modifier.fillMaxWidth())
+                    }
+                    androidx.compose.material3.TextButton(onClick = { onPicked(null) }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Bez terminu", modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text("Anuluj") } },
+        )
     }
 }
