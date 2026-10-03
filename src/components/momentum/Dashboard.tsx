@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "next-view-transitions";
 import { motion } from "framer-motion";
-import { Coins, Download, Sparkles, Trash2, Upload, Zap } from "lucide-react";
+import { Coins, Download, Orbit, Sparkles, Trash2, Upload, Zap } from "lucide-react";
 import {
   FocusByDay,
   Habit,
@@ -192,6 +192,13 @@ export default function Dashboard() {
                 style={{ color: "var(--violet)" }}
               >
                 <Coins size={13} /> Droga do Miliarda
+              </Link>
+              <Link
+                href="/galaktyka"
+                className="chip hover:!border-[var(--violet)] transition-colors"
+                style={{ color: "var(--violet)" }}
+              >
+                <Orbit size={13} /> Galaktyka
               </Link>
             </div>
           </div>

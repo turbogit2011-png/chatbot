@@ -6,6 +6,7 @@ import { useTransitionRouter } from "next-view-transitions";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Coins,
+  Orbit,
   Command as CommandIcon,
   Crown,
   CornerDownLeft,
@@ -60,6 +61,14 @@ const COMMANDS: Cmd[] = [
     icon: <Coins size={16} />,
     keywords: "finanse kalkulator procent składany inwestycje",
     run: (r) => r.push("/wealth"),
+  },
+  {
+    id: "galaxy",
+    label: "Galaktyka Momentum",
+    group: "Nawigacja",
+    icon: <Orbit size={16} />,
+    keywords: "repozytorium kod gwiazdy pliki commity statystyki dźwięk",
+    run: (r) => r.push("/galaktyka"),
   },
   {
     id: "quick-task",

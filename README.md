@@ -26,6 +26,10 @@ na Next.js 16 (App Router, statyczny eksport). Wszystkie dane są przechowywane
   do `.md`, ustawienia (model, temperatura, własny prompt systemowy). Bez serwerów,
   bez API, bez opłat — rozmowy nigdy nie opuszczają urządzenia. Wymaga przeglądarki
   z WebGPU (Chrome/Edge) i jednorazowego pobrania modelu (~0,5–2,3 GB).
+- **🪐 Galaktyka Momentum** (`/galaktyka`) — repozytorium widziane z góry: każdy
+  plik z `src/` to gwiazda (jasność = liczba linii, kolor = moduł), którą można
+  kliknąć i usłyszeć jako nutę w skali pentatonicznej. Do tego osiem faktów
+  z historii gita i dzienny „puls” commitów.
 
 ## Uruchomienie
 
