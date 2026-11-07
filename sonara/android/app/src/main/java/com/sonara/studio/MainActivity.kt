@@ -38,7 +38,8 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            // Re-attach watchers for jobs that were still running when the app was killed.
+            // Re-attach watchers for server jobs that were still running when the app
+            // was killed. On-device renders are driven by their own worker.
             repo.activeJobIds().forEach { id ->
                 repo.pollJob(id).onSuccess { response ->
                     repo.updateJob(response)

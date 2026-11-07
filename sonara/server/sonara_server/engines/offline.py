@@ -431,7 +431,9 @@ class OfflineEngine(Engine):
 
         def build() -> np.ndarray:
             if voice == "kick":
-                tune = 44.0 if profile.kit == "trap" else 52.0
+                # ~44 Hz for trap, ~55 Hz otherwise: a kick's fundamental belongs in
+                # the sub, not two octaves above it.
+                tune = 29.0 if profile.kit == "trap" else 33.0
                 length = int(SR * (0.75 if profile.kit == "trap" else 0.42))
                 return dsp.kick(length, tune=tune, punch=1.0)
             if voice == "snare":
@@ -478,8 +480,14 @@ class OfflineEngine(Engine):
                     tone = dsp.filt(tone, "lowpass", 180.0, q=0.9)
                     env = dsp.adsr(length, 0.004, 0.05, 0.85, 0.28)
                 else:
-                    tone = dsp.osc_saw(freq, length) * 0.6 + dsp.osc_square(freq, length, 0.45) * 0.3
-                    tone = dsp.filt(tone, "lowpass", 420.0, q=1.1)
+                    # Acoustic-style basses still need a sine under the harmonics,
+                    # otherwise the mix has no weight below 80 Hz.
+                    tone = (
+                        dsp.osc_saw(freq, length) * 0.5
+                        + dsp.osc_square(freq, length, 0.45) * 0.22
+                        + dsp.osc_sine(freq, length) * 0.55
+                    )
+                    tone = dsp.filt(tone, "lowpass", 520.0, q=1.1)
                     env = dsp.adsr(length, 0.006, 0.08, 0.6, 0.12)
                 return (tone * env).astype(np.float32)
 
@@ -779,8 +787,8 @@ class OfflineEngine(Engine):
 
         # Master chain: trim the inaudible sub, open the mids, add air, then glue.
         mono = dsp.filt(mono, "highpass", 32.0, q=0.7)
-        mono = dsp.filt(mono, "peak", 55.0, q=0.7, gain_db=-1.5)
-        mono = dsp.filt(mono, "peak", 150.0, q=0.55, gain_db=4.5)
+        mono = dsp.filt(mono, "peak", 60.0, q=0.7, gain_db=1.5)
+        mono = dsp.filt(mono, "peak", 150.0, q=0.55, gain_db=1.5)
         mono = dsp.filt(mono, "peak", 2800.0, q=0.7, gain_db=0.5)
         mono = dsp.filt(mono, "peak", 9000.0, q=0.55, gain_db=7.0)
         mono = dsp.filt(mono, "peak", 14000.0, q=0.6, gain_db=6.0)

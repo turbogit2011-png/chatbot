@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sonara.studio.data.prefs.EngineMode
 import com.sonara.studio.data.prefs.SonaraSettings
 import com.sonara.studio.ui.components.GlassCard
 import com.sonara.studio.ui.components.GradientButton
@@ -75,7 +76,7 @@ fun OnboardingScreen(
             }
             Text("Sonara Studio", style = MaterialTheme.typography.displaySmall)
             Text(
-                "Write a line, get a finished song — vocals, lyrics, arrangement and master — " +
+                "Write a line, get a finished song — lyrics, arrangement, vocals and master — " +
                     "then extend it, cover it, split the stems and keep everything offline.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -83,12 +84,37 @@ fun OnboardingScreen(
 
             GlassCard {
                 Column {
-                    SectionLabel("Point Sonara at an engine")
-                    Spacer(Modifier.height(10.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.secondary)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Ready to use right now", style = MaterialTheme.typography.titleSmall)
+                    }
+                    Spacer(Modifier.height(8.dp))
                     Text(
-                        "Sonara renders music on a server you control. Start the bundled Sonara server " +
-                            "(see server/README.md) and paste its address below. On an emulator use " +
-                            "${SonaraSettings.DEFAULT_SERVER_URL}; on a phone use your computer's LAN address.",
+                        "Sonara renders music on this phone. No server, no account, no internet — " +
+                            "nothing you write or generate leaves the device.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            GradientButton(
+                text = "Start creating",
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                viewModel.completeOnboarding()
+                onDone()
+            }
+
+            GlassCard {
+                Column {
+                    SectionLabel("Optional · use a Sonara server")
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "A server with a GPU engine gives real sung vocals. Run it on your computer " +
+                            "(see server/README.md) and give the phone an address it can reach — the same Wi-Fi, " +
+                            "or a tunnel. You can also set this later in Settings.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -98,6 +124,7 @@ fun OnboardingScreen(
                         onValueChange = { server = it },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text("Server address") },
+                        placeholder = { Text(SonaraSettings.DEFAULT_SERVER_URL) },
                         shape = RoundedCornerShape(14.dp),
                         singleLine = true,
                     )
@@ -105,8 +132,9 @@ fun OnboardingScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         OutlinedButton(onClick = {
                             viewModel.setServerUrl(server)
+                            viewModel.setEngineMode(EngineMode.Server)
                             viewModel.testConnection()
-                        }) { Text("Test connection") }
+                        }) { Text("Use this server") }
                         Spacer(Modifier.width(12.dp))
                         when {
                             ui.checking -> CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
@@ -123,7 +151,7 @@ fun OnboardingScreen(
                                 Icon(Icons.Filled.Close, null, tint = MaterialTheme.colorScheme.error)
                                 Spacer(Modifier.width(6.dp))
                                 Text(
-                                    "Not reachable yet",
+                                    "Not reachable",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.error,
                                 )
@@ -131,21 +159,6 @@ fun OnboardingScreen(
                         }
                     }
                 }
-            }
-
-            GradientButton(
-                text = "Start creating",
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                viewModel.setServerUrl(server)
-                viewModel.completeOnboarding()
-                onDone()
-            }
-            TextButton(onClick = {
-                viewModel.completeOnboarding()
-                onDone()
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text("Set this up later")
             }
             Spacer(Modifier.height(24.dp))
         }

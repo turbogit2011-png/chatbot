@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "sonara_settings")
 
+enum class EngineMode { Device, Server }
+
 data class SonaraSettings(
+    val engineMode: EngineMode = EngineMode.Device,
     val serverUrl: String = DEFAULT_SERVER_URL,
     val apiKey: String = "",
     val engine: String = "",
@@ -35,6 +38,7 @@ const val DEFAULT_SERVER_URL = SonaraSettings.DEFAULT_SERVER_URL
 class SettingsRepository(private val context: Context) {
 
     private object Keys {
+        val engineMode = stringPreferencesKey("engine_mode")
         val serverUrl = stringPreferencesKey("server_url")
         val apiKey = stringPreferencesKey("api_key")
         val engine = stringPreferencesKey("engine")
@@ -50,6 +54,10 @@ class SettingsRepository(private val context: Context) {
     val settings: Flow<SonaraSettings> = context.dataStore.data.map { it.toSettings() }
 
     private fun Preferences.toSettings() = SonaraSettings(
+        engineMode = when (this[Keys.engineMode]) {
+            "server" -> EngineMode.Server
+            else -> EngineMode.Device
+        },
         serverUrl = this[Keys.serverUrl] ?: DEFAULT_SERVER_URL,
         apiKey = this[Keys.apiKey] ?: "",
         engine = this[Keys.engine] ?: "",
@@ -64,6 +72,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun snapshot(): SonaraSettings = settings.first()
 
+    suspend fun setEngineMode(value: EngineMode) = edit {
+        it[Keys.engineMode] = if (value == EngineMode.Server) "server" else "device"
+    }
     suspend fun setServerUrl(value: String) = edit { it[Keys.serverUrl] = value.trim() }
     suspend fun setApiKey(value: String) = edit { it[Keys.apiKey] = value.trim() }
     suspend fun setEngine(value: String) = edit { it[Keys.engine] = value.trim() }

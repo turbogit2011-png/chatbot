@@ -36,6 +36,9 @@ interface SongDao {
     @Query("SELECT * FROM songs WHERE id = :id")
     suspend fun byId(id: String): SongEntity?
 
+    @Query("SELECT * FROM songs")
+    suspend fun all(): List<SongEntity>
+
     @Query("SELECT * FROM songs WHERE jobId = :jobId ORDER BY variant ASC")
     fun observeByJob(jobId: String): Flow<List<SongEntity>>
 
@@ -56,6 +59,9 @@ interface SongDao {
 
     @Query("UPDATE songs SET playCount = playCount + 1, lastPlayedAt = :now WHERE id = :id")
     suspend fun markPlayed(id: String, now: Long = System.currentTimeMillis())
+
+    @Query("UPDATE songs SET specJson = :spec WHERE id = :id")
+    suspend fun setSpec(id: String, spec: String?)
 
     @Query("DELETE FROM songs WHERE id = :id")
     suspend fun delete(id: String)

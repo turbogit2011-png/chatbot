@@ -211,8 +211,13 @@ fun SongScreen(
                         context.packageName + ".fileprovider",
                         file,
                     )
+                    val mime = when (file.extension.lowercase()) {
+                        "m4a", "mp4", "aac" -> "audio/mp4"
+                        "wav" -> "audio/wav"
+                        else -> "audio/mpeg"
+                    }
                     val intent = Intent(Intent.ACTION_SEND).apply {
-                        type = "audio/mpeg"
+                        type = mime
                         putExtra(Intent.EXTRA_STREAM, uri)
                         putExtra(Intent.EXTRA_SUBJECT, current.title)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

@@ -1,11 +1,15 @@
 # Sonara Studio
 
 Aplikacja na Androida do generowania całych utworów z opisu tekstowego — z wokalem,
-tekstem, aranżacją i masteringiem — plus serwer, który te utwory renderuje.
+tekstem, aranżacją i masteringiem.
+
+**Działa sama, bez serwera i bez internetu.** Silnik renderujący jest wbudowany w APK:
+komponuje, gra, miksuje i masteruje utwór na procesorze telefonu, a plik zapisuje
+lokalnie. Opcjonalnie można ją przełączyć na serwer z silnikiem GPU, gdy chcesz
+prawdziwy śpiewany wokal.
 
 Klient jest w pełni natywny (Kotlin + Jetpack Compose + Media3), serwer w Pythonie
-(FastAPI) i obsługuje kilka silników generujących. Wszystko, co wygenerujesz, zostaje
-na Twoim urządzeniu i na Twoim serwerze.
+(FastAPI). Nic nie opuszcza Twojego urządzenia.
 
 ```
 sonara/
@@ -18,6 +22,7 @@ sonara/
 
 | Funkcja | Opis |
 |---|---|
+| Praca offline | silnik w aplikacji — zero konfiguracji, zero serwera, zero internetu |
 | Tryb „Describe it” | jedno zdanie opisu → gotowy utwór |
 | Tryb „Full control” | własny tekst z tagami `[Verse]`/`[Chorus]`, tytuł, style tagi, wykluczenia |
 | Pisanie tekstów | „Write for me” generuje tekst z sekcjami w wybranym języku |
@@ -31,26 +36,9 @@ sonara/
 
 ## Szybki start
 
-### 1. Serwer
-
-```bash
-cd sonara/server
-./run.sh          # tworzy venv, instaluje zależności i startuje na :8000
-```
-
-Wymagane jest `ffmpeg` w systemie. Bez GPU serwer używa silnika **sonara-offline**
-(proceduralne studio na CPU) — działa od razu, utwór 3-minutowy renderuje w ~10 s.
-
-Docker:
-
-```bash
-cd sonara/server && docker build -t sonara-server . && docker run -p 8000:8000 -v sonara-data:/data sonara-server
-```
-
-### 2. Aplikacja
-
-Gotowe APK: `sonara/dist/sonara-studio-1.0.0-release.apk` (3,7 MB, podpisane).
-Skopiuj na telefon i zainstaluj (trzeba zezwolić na instalację z nieznanych źródeł).
+Zainstaluj `sonara/dist/sonara-studio-release.apk` na telefonie (trzeba zezwolić na
+instalację z nieznanych źródeł), otwórz, wpisz opis utworu i naciśnij **Create song**.
+To wszystko — żadnej konfiguracji, konta ani serwera.
 
 Budowa ze źródeł:
 
@@ -60,14 +48,29 @@ echo "sdk.dir=/ścieżka/do/Android/Sdk" > local.properties
 ./gradlew assembleRelease
 ```
 
-### 3. Połączenie
+### Opcjonalnie: serwer z lepszym wokalem
 
-Przy pierwszym uruchomieniu aplikacja pyta o adres serwera:
+Silnik w telefonie syntezuje wokal formantowo — słychać, że to nie człowiek. Po
+prawdziwy śpiew podłącz serwer z modelem na GPU:
 
-* emulator Androida → `http://10.0.2.2:8000`
-* telefon w tej samej sieci Wi-Fi → `http://ADRES-IP-KOMPUTERA:8000`
+```bash
+cd sonara/server
+./run.sh          # tworzy venv, instaluje zależności i startuje na :8000
+```
 
-Przycisk **Test connection** od razu pokazuje, czy silnik odpowiada.
+Wymagane jest `ffmpeg`. Potem w aplikacji: **Settings → Where songs are rendered →
+Sonara server** i adres, pod którym telefon naprawdę widzi komputer:
+
+* ten sam Wi-Fi → `http://ADRES-IP-KOMPUTERA:8000`
+* emulator → `http://10.0.2.2:8000`
+* dane komórkowe → serwer musi być wystawiony tunelem (Cloudflare Tunnel, Tailscale);
+  adres `10.0.2.2` ani LAN-owy nie zadziała z sieci operatora
+
+Docker:
+
+```bash
+cd sonara/server && docker build -t sonara-server . && docker run -p 8000:8000 -v sonara-data:/data sonara-server
+```
 
 ## Silniki generujące
 
@@ -75,6 +78,7 @@ Serwer wybiera silnik automatycznie (`SONARA_ENGINE=auto`) albo wskazujesz go r�
 
 | Silnik | Wokal | Sprzęt | Uwagi |
 |---|---|---|---|
+| **w aplikacji** | syntezator formantowy | sam telefon | domyślny, offline, bez konfiguracji; utwór 3-min renderuje się w kilkanaście sekund |
 | `sonara-offline` | syntezator formantowy | dowolny CPU | zawsze dostępny, pełna aranżacja i mastering, stemy |
 | `ace-step` | **śpiewany, modelowy** | GPU NVIDIA | ACE-Step, otwarte wagi (Apache-2.0) — najbliżej komercyjnej jakości |
 | `musicgen` | brak (instrumental) | GPU/CPU | Meta MusicGen, bardzo dobre instrumentale |
@@ -84,23 +88,30 @@ Szczegóły i konfiguracja: [`docs/ENGINES.md`](docs/ENGINES.md).
 
 ## Uczciwie o jakości
 
-Aplikacja, protokół, kolejka, biblioteka, odtwarzacz i eksport są kompletne i przetestowane.
-Jakość *samego dźwięku* zależy wyłącznie od wybranego silnika:
+Aplikacja, kolejka, biblioteka, odtwarzacz, extend/cover/stemy i eksport są kompletne
+i przetestowane. Jakość *samego dźwięku* zależy od wybranego silnika:
 
-* **sonara-offline** daje poprawnie zaaranżowany i zmiksowany utwór (perkusja, bas, harmonia,
-  lead, wokal formantowy), ale wokal brzmi syntetycznie — to nie jest model neuronowy.
-* **ace-step** daje prawdziwy śpiew generowany modelem. To jest ścieżka do jakości zbliżonej
-  do płatnych serwisów i wymaga karty GPU (praktycznie od ~8 GB VRAM).
-* Modelu klasy Suno v6 nie da się odtworzyć w kodzie aplikacji — to wytrenowany model
-  fundamentowy. Sonara daje za to całą resztę produktu i podłącza najlepszy dostępny
+* **silnik w aplikacji** daje poprawnie zaaranżowany i zmiksowany utwór — perkusja, bas,
+  harmonia, lead i wokal prowadzący tekst, z kompresją, EQ i limiterem. Wokal jest
+  syntezowany formantowo, więc brzmi syntetycznie. Do instrumentali, szkiców i demówek
+  nadaje się od ręki.
+* **ace-step** (serwer, GPU) daje prawdziwy śpiew generowany modelem. To jest ścieżka do
+  jakości zbliżonej do płatnych serwisów; wymaga karty NVIDIA (praktycznie od ~8 GB VRAM).
+* Modelu klasy Suno v6 nie da się zmieścić w kodzie aplikacji — to wytrenowany model
+  fundamentowy ważący gigabajty. Sonara daje całą resztę produktu i podłącza najlepszy
   silnik, jaki masz pod ręką.
 
 ## Testy
 
 ```bash
-cd sonara/server && ./.venv/bin/python -m pytest -q      # 17 testów: API + arranżer + DSP
-cd sonara/android && ./gradlew lintVitalRelease          # lint wydania
+cd sonara/android && ./gradlew testDebugUnitTest   # 18 testów silnika w telefonie (JVM)
+cd sonara/android && ./gradlew lintVitalRelease    # lint wydania
+cd sonara/server  && ./.venv/bin/python -m pytest -q   # 17 testów: API + aranżer + DSP
 ```
+
+Testy Androida renderują prawdziwe utwory na JVM i mierzą wynik: tempo zgodne z
+zamówionym, brak przesterowania, sensowny poziom w kilku gatunkach, zgodność
+renderu blokowego z jednoprzebiegowym oraz 5-minutowy utwór w budżecie 384 MB pamięci.
 
 ## Licencja i treści
 

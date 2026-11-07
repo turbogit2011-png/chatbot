@@ -27,15 +27,36 @@ export SONARA_STORE_PASSWORD=... SONARA_KEY_ALIAS=sonara SONARA_KEY_PASSWORD=...
 
 ```
 com.sonara.studio
+├── engine/    silnik renderujący w telefonie (DSP, aranżer, miks, AAC, okładki, teksty)
 ├── data/      remote (Retrofit+DTO), local (Room), prefs (DataStore), audio, repo
-├── work/      GenerationWorker — polling zadań w tle
+├── work/      LocalRenderWorker (render na telefonie) + GenerationWorker (polling serwera)
 ├── player/    PlaybackService (Media3) + PlayerController
 ├── ui/        create, library, player, settings, onboarding, components, theme
 └── di/        ServiceLocator
 ```
 
+## Silnik w aplikacji
+
+Pakiet `engine/` to kompletny renderer: komponuje aranż, gra go, miksuje i masteruje,
+a potem koduje do AAC (.m4a) przez `MediaCodec`. Poza `AacEncoder` i `CoverArtist` jest
+to czysty Kotlin bez zależności od Androida, dzięki czemu cały łańcuch testuje się na
+JVM — `./gradlew testDebugUnitTest` renderuje prawdziwe utwory do `build/test-audio/`
+i mierzy tempo, poziom, przesterowanie i zużycie pamięci.
+
+Szczegóły projektowe (render blokowy, szacowanie poziomów, extend bez dekodera):
+[`../docs/ENGINES.md`](../docs/ENGINES.md).
+
+## Testy
+
+```bash
+./gradlew testDebugUnitTest     # 18 testów silnika na JVM
+./gradlew lintVitalRelease      # lint wydania
+```
+
 ## Uwagi
 
+* Domyślnie aplikacja renderuje na telefonie i nie potrzebuje żadnej sieci. Tryb
+  serwerowy włącza się w Ustawieniach.
 * Adres serwera i klucz API ustawia się w aplikacji (Ustawienia / onboarding) — nie są
   wkompilowane. `DynamicHostInterceptor` przepisuje każde żądanie na aktualny adres.
 * `usesCleartextTraffic` jest włączone, bo typowy serwer w sieci lokalnej działa po HTTP.

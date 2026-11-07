@@ -164,7 +164,7 @@ def noise(length: int, seed: int = 0) -> np.ndarray:
     return rng.standard_normal(length).astype(np.float32)
 
 
-def kick(length: int, tune: float = 52.0, punch: float = 1.0) -> np.ndarray:
+def kick(length: int, tune: float = 33.0, punch: float = 1.0) -> np.ndarray:
     t = np.arange(length, dtype=np.float32) / SR
     pitch = midi_to_hz(tune) * (1.0 + 6.0 * np.exp(-55.0 * t))
     body = np.sin(2 * np.pi * np.cumsum(pitch) / SR)

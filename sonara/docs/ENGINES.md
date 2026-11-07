@@ -1,5 +1,45 @@
 # Silniki generujące
 
+## Silnik w aplikacji (domyślny, bez serwera)
+
+Cały renderer działa w APK, na procesorze telefonu — bez sieci, bez konta, bez
+konfiguracji. Kod: `android/app/src/main/java/com/sonara/studio/engine/`.
+
+| Plik | Rola |
+|---|---|
+| `Dsp.kt` | oscylatory, obwiednie, biquady, perkusja, comb/allpass reverb, kompresor, limiter |
+| `Music.kt` | skale, progresje, tabela ~50 gatunków i 19 nastrojów, plan sekcji, parser tekstu, wokal formantowy |
+| `Composer.kt` | aranżer i wykonawca: zamienia utwór na listę zdarzeń i renderuje go blokami |
+| `MixChains.kt` | miks i mastering (EQ, kompresja, reverb, ducking pod wokal, stereo, limiter) |
+| `AacEncoder.kt` | strumieniowy enkoder AAC/.m4a przez MediaCodec, z awaryjnym zapisem do .wav |
+| `LocalEngine.kt` | spina render, enkoder i okładki; obsługuje też extend, cover i stemy |
+| `LyricsWriter.kt` | pisanie tekstów offline, z tagami sekcji |
+
+**Dlaczego renderuje blokami.** Pięć szyn po 3 minuty audio w 44,1 kHz to ponad 150 MB
+floatów — za dużo dla telefonu. Composer buduje listę zdarzeń, przechodzi oś czasu po
+kilka taktów, a stan filtrów i ogony nut przenosi między blokami. Pamięć jest stała
+niezależnie od długości utworu; test `a five minute render stays within a small memory
+budget` renderuje 5 minut w budżecie 384 MB.
+
+**Poziomy bez normalizacji.** Strumieniowy renderer nigdy nie widzi całego utworu, więc
+nie może go znormalizować. Zamiast tego poziom każdej szyny jest wyliczany z aranżacji:
+każde zdarzenie dokłada swój peak do kubełków czasowych, a wysoki percentyl tych
+kubełków jest stabilnym oszacowaniem. Jeden empiryczny współczynnik (`COHERENCE`)
+przelicza to na realny poziom. Dzięki temu wszystkie gatunki wychodzą równo głośne
+(zmierzone: peak 0,86–0,89, RMS 0,22–0,27).
+
+**Extend / cover / stemy bez dekodera.** Każdy utwór zapisuje swój `SongSpec`, więc
+oryginał można odtworzyć bit w bit. Extend renderuje oryginał i kontynuację do plików
+WAV, po czym skleja je strumieniowo z crossfadem; stemy to ponowny render z zapisem
+każdej szyny osobno.
+
+**Ograniczenie:** wokal jest syntezowany formantowo — prowadzi melodię i sylaby tekstu,
+ale nie brzmi jak człowiek. Po prawdziwy śpiew użyj ACE-Step na serwerze.
+
+---
+
+## Silniki serwerowe
+
 Serwer Sonary ma jeden interfejs (`sonara_server/engines/base.py`) i kilka implementacji.
 `SONARA_ENGINE=auto` wybiera pierwszy dostępny w kolejności: `remote` → `ace-step` →
 `musicgen` → `sonara-offline`. Aplikacja może nadpisać wybór nagłówkiem `X-Sonara-Engine`.

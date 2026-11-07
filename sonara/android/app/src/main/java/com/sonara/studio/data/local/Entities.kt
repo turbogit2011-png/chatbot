@@ -24,6 +24,8 @@ data class SongEntity(
     val coverUrl: String? = null,
     val localCoverPath: String? = null,
     val seed: Long? = null,
+    /** The on-device render spec, so extend/cover/stems can reproduce this track exactly. */
+    val specJson: String? = null,
     val createdAt: Long = System.currentTimeMillis(),
     val favorite: Boolean = false,
     val playCount: Int = 0,

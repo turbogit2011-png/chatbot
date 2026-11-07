@@ -50,6 +50,14 @@ class AudioStore(
         }
     }
 
+    fun mimeFor(extension: String): String = when (extension.lowercase()) {
+        "m4a", "mp4", "aac" -> "audio/mp4"
+        "wav" -> "audio/wav"
+        "ogg", "opus" -> "audio/ogg"
+        "flac" -> "audio/flac"
+        else -> "audio/mpeg"
+    }
+
     fun deleteLocal(song: SongEntity) {
         song.localPath?.let { runCatching { File(it).delete() } }
         song.localCoverPath?.let { runCatching { File(it).delete() } }
@@ -68,9 +76,10 @@ class AudioStore(
     suspend fun exportToMusic(song: SongEntity): Uri? = withContext(Dispatchers.IO) {
         val source = song.localPath?.let(::File)?.takeIf { it.exists() } ?: return@withContext null
         val safeTitle = song.title.replace(Regex("[^\\p{L}\\p{N} _.-]"), "").trim().ifBlank { "Sonara track" }
+        val extension = source.extension.ifBlank { "mp3" }
         val values = ContentValues().apply {
-            put(MediaStore.Audio.Media.DISPLAY_NAME, "$safeTitle.mp3")
-            put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg")
+            put(MediaStore.Audio.Media.DISPLAY_NAME, "$safeTitle.$extension")
+            put(MediaStore.Audio.Media.MIME_TYPE, mimeFor(extension))
             put(MediaStore.Audio.Media.TITLE, song.title)
             put(MediaStore.Audio.Media.ARTIST, "Sonara Studio")
             put(MediaStore.Audio.Media.ALBUM, "Sonara generations")

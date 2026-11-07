@@ -7,6 +7,7 @@ import com.sonara.studio.data.prefs.SettingsRepository
 import com.sonara.studio.data.remote.ApiFactory
 import com.sonara.studio.data.remote.SonaraApi
 import com.sonara.studio.data.repo.MusicRepository
+import com.sonara.studio.engine.LocalEngine
 import com.sonara.studio.player.PlayerController
 import okhttp3.OkHttpClient
 
@@ -23,6 +24,7 @@ object ServiceLocator {
     @Volatile private var store: AudioStore? = null
     @Volatile private var repo: MusicRepository? = null
     @Volatile private var player: PlayerController? = null
+    @Volatile private var local: LocalEngine? = null
 
     fun settings(context: Context): SettingsRepository = settingsRepo ?: synchronized(this) {
         settingsRepo ?: SettingsRepository(context.applicationContext).also { settingsRepo = it }
@@ -44,6 +46,10 @@ object ServiceLocator {
         store ?: AudioStore(context.applicationContext, okHttp(context)).also { store = it }
     }
 
+    fun localEngine(context: Context): LocalEngine = local ?: synchronized(this) {
+        local ?: LocalEngine(context.applicationContext).also { local = it }
+    }
+
     fun musicRepository(context: Context): MusicRepository = repo ?: synchronized(this) {
         repo ?: MusicRepository(
             context = context.applicationContext,
@@ -52,6 +58,7 @@ object ServiceLocator {
             jobDao = database(context).jobDao(),
             audioStore = audioStore(context),
             settings = settings(context),
+            localEngine = localEngine(context),
         ).also { repo = it }
     }
 

@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.sonara.studio.data.prefs.EngineMode
 import com.sonara.studio.data.prefs.SonaraSettings
 import com.sonara.studio.ui.components.GlassCard
 import com.sonara.studio.ui.components.SectionLabel
@@ -78,7 +79,37 @@ fun SettingsScreen(
         item {
             GlassCard {
                 Column {
-                    SectionLabel("Generation engine")
+                    SectionLabel("Where songs are rendered")
+                    Spacer(Modifier.height(10.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TagChip("On this phone", selected = config.engineMode == EngineMode.Device) {
+                            viewModel.setEngineMode(EngineMode.Device)
+                        }
+                        TagChip("Sonara server", selected = config.engineMode == EngineMode.Server) {
+                            viewModel.setEngineMode(EngineMode.Server)
+                        }
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        if (config.engineMode == EngineMode.Device) {
+                            "Everything is generated on this device. No server, no internet, nothing leaves the phone. " +
+                                "Vocals are synthesised rather than modelled — switch to a server with a GPU engine for sung vocals."
+                        } else {
+                            "Songs are rendered by a Sonara server you run. Give it an address the phone can actually reach: " +
+                                "the same Wi-Fi as your computer, or a tunnel if you are on mobile data."
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+
+        if (config.engineMode == EngineMode.Server) {
+        item {
+            GlassCard {
+                Column {
+                    SectionLabel("Server engine")
                     Spacer(Modifier.height(10.dp))
                     OutlinedTextField(
                         value = serverDraft,
@@ -141,6 +172,7 @@ fun SettingsScreen(
                     }
                 }
             }
+        }
         }
 
         if (ui.models.isNotEmpty()) {
@@ -219,14 +251,15 @@ fun SettingsScreen(
                     Spacer(Modifier.height(10.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Offline files", style = MaterialTheme.typography.titleSmall)
+                            Text("Audio on this device", style = MaterialTheme.typography.titleSmall)
                             Text(
-                                "${formatBytes(ui.cacheBytes)} · $count tracks in library",
+                                "${formatBytes(ui.cacheBytes)} · $count tracks. Clearing frees only " +
+                                    "tracks downloaded from a server — songs made on this phone are kept.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        OutlinedButton(onClick = viewModel::clearCache) { Text("Clear") }
+                        OutlinedButton(onClick = viewModel::clearDownloads) { Text("Free space") }
                     }
                 }
             }

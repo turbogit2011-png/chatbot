@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.sonara.studio.data.prefs.EngineMode
 import com.sonara.studio.data.prefs.SettingsRepository
 import com.sonara.studio.data.prefs.SonaraSettings
 import com.sonara.studio.data.remote.ModelDto
@@ -46,6 +47,11 @@ class SettingsViewModel(
         testConnection()
     }
 
+    fun setEngineMode(mode: EngineMode) = viewModelScope.launch {
+        settings.setEngineMode(mode)
+        testConnection()
+    }
+
     fun setServerUrl(value: String) = viewModelScope.launch { settings.setServerUrl(value) }
     fun setApiKey(value: String) = viewModelScope.launch { settings.setApiKey(value) }
     fun setEngine(value: String) = viewModelScope.launch { settings.setEngine(value) }
@@ -65,12 +71,18 @@ class SettingsViewModel(
         _ui.value = _ui.value.copy(cacheBytes = repo.cacheBytes())
     }
 
-    fun clearCache() {
+    fun clearDownloads() {
         viewModelScope.launch {
-            repo.clearCache()
+            val removed = repo.clearDownloads()
+            val kept = repo.deviceSongCount()
             _ui.value = _ui.value.copy(
                 cacheBytes = repo.cacheBytes(),
-                message = "Offline files removed. Tracks will stream or re-download.",
+                message = when {
+                    removed == 0 && kept > 0 ->
+                        "Nothing to free — all $kept tracks were made on this phone and are kept."
+                    removed == 0 -> "Nothing to free."
+                    else -> "Freed $removed downloaded track(s); $kept made on this phone were kept."
+                },
             )
         }
     }

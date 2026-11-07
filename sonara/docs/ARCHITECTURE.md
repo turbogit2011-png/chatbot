@@ -1,6 +1,29 @@
 # Architektura
 
-## Przepływ jednego utworu
+## Dwie drogi renderu
+
+Aplikacja ma dwa tryby, przełączane w Ustawieniach, za tym samym interfejsem
+`MusicRepository`:
+
+```
+tryb „On this phone” (domyślny)        tryb „Sonara server”
+  CreateViewModel                        CreateViewModel
+        │                                      │
+  MusicRepository.submitGenerate ──────────────┤
+        │                                      │
+  LocalRenderWorker                      POST /v1/generate
+        │                                      │
+  Composer → AacEncoder → plik           GenerationWorker (polling)
+        │                                      │
+        └────────► SongEntity (Room) ◄─────────┘
+                         │
+              Biblioteka / PlaybackService
+```
+
+Reszta aplikacji nie wie, który tryb jest aktywny: zadania, postęp, biblioteka,
+odtwarzacz i eksport są wspólne.
+
+## Przepływ jednego utworu (tryb serwerowy)
 
 ```
 CreateScreen ──► CreateViewModel ──► MusicRepository ──► POST /v1/generate
@@ -33,6 +56,7 @@ zadań, które były jeszcze w toku.
 | `work` | `GenerationWorker` — polling zadania z backoffem, powiadomienia o postępie |
 | `player` | `PlaybackService` (Media3 `MediaSessionService`) + `PlayerController` wystawiający `StateFlow<PlaybackState>` |
 | `ui` | Compose Material 3; ekrany Create / Library / Song / Settings / Onboarding, mini-odtwarzacz w `bottomBar` |
+| `engine` | silnik w aplikacji: DSP, aranżer, miks, enkoder AAC, okładki, teksty (czysty Kotlin poza enkoderem i okładkami, więc testowalny na JVM) |
 | `di` | `ServiceLocator` — ręczny graf zależności; wszystkie obiekty i tak są singletonami na proces |
 
 Bez Hilta celowo: graf ma siedem węzłów, a brak procesora adnotacji to krótszy build
@@ -52,7 +76,15 @@ i mniej ruchomych części.
 | `covers.py` | generowanie okładek (Pillow) |
 | `lyrics.py` | pisanie tekstów: endpoint zgodny z OpenAI albo generator offline |
 
-### Wydajność renderu
+### Wydajność renderu (silnik w telefonie)
+
+Pięć szyn audio po 3 minuty to >150 MB floatów, więc renderer nigdy nie trzyma całego
+utworu: aranżacja zamienia się w listę zdarzeń, oś czasu idzie blokami po kilka taktów,
+a stan filtrów przenosi się między blokami (test `block rendering matches single pass
+rendering` pilnuje, żeby granice bloków były niesłyszalne). Pamięć jest stała; 5-minutowy
+render mieści się w 384 MB sterty testowej.
+
+### Wydajność renderu (serwer)
 
 Pierwsza wersja reverbu liczyła filtry grzebieniowe przez `lfilter` z tysiącami
 współczynników — 31 s na 45 s muzyki. Po przepisaniu na blokowe sprzężenie zwrotne

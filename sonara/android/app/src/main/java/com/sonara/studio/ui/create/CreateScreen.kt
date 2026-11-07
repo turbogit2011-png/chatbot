@@ -144,10 +144,13 @@ private fun Header(state: CreateUiState, onRefresh: () -> Unit) {
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text("Sonara Studio", style = MaterialTheme.typography.headlineSmall)
-                val status = when (state.backendOnline) {
-                    true -> "Engine online" + if (state.backendLabel.isNotBlank()) " · ${state.backendLabel}" else ""
-                    false -> "Engine offline — check Settings"
-                    null -> "Connecting to engine…"
+                val status = when {
+                    state.backendLabel.startsWith("on-device") ->
+                        "Renders on this phone · offline ready"
+                    state.backendOnline == true ->
+                        "Engine online" + if (state.backendLabel.isNotBlank()) " · ${state.backendLabel}" else ""
+                    state.backendOnline == false -> "Server engine offline — check Settings"
+                    else -> "Checking the engine…"
                 }
                 Text(
                     status,
@@ -155,7 +158,7 @@ private fun Header(state: CreateUiState, onRefresh: () -> Unit) {
                     color = when (state.backendOnline) {
                         true -> MaterialTheme.colorScheme.secondary
                         false -> MaterialTheme.colorScheme.error
-                        null -> MaterialTheme.colorScheme.onSurfaceVariant
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
                     },
                 )
             }

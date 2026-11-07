@@ -1,6 +1,7 @@
 package com.sonara.studio.data.repo
 
 import android.content.Context
+import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -10,6 +11,7 @@ import com.sonara.studio.data.local.JobDao
 import com.sonara.studio.data.local.JobEntity
 import com.sonara.studio.data.local.SongDao
 import com.sonara.studio.data.local.SongEntity
+import com.sonara.studio.data.prefs.EngineMode
 import com.sonara.studio.data.prefs.SettingsRepository
 import com.sonara.studio.data.remote.ClipDto
 import com.sonara.studio.data.remote.CoverRequest
@@ -22,8 +24,13 @@ import com.sonara.studio.data.remote.LyricsResponse
 import com.sonara.studio.data.remote.ModelDto
 import com.sonara.studio.data.remote.SonaraApi
 import com.sonara.studio.data.remote.StemsRequest
+import com.sonara.studio.data.remote.ModelsResponse
 import com.sonara.studio.data.remote.parseServerUrl
+import com.sonara.studio.engine.LocalClip
+import com.sonara.studio.engine.LocalEngine
+import com.sonara.studio.engine.SongSpec
 import com.sonara.studio.work.GenerationWorker
+import com.sonara.studio.work.LocalRenderWorker
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -34,7 +41,10 @@ class MusicRepository(
     private val jobDao: JobDao,
     private val audioStore: AudioStore,
     private val settings: SettingsRepository,
+    private val localEngine: LocalEngine,
 ) {
+
+    private suspend fun onDevice(): Boolean = settings.snapshot().engineMode == EngineMode.Device
 
     // ---------------- library ----------------
 
@@ -73,23 +83,76 @@ class MusicRepository(
 
     fun cacheBytes(): Long = audioStore.cacheBytes()
 
-    suspend fun clearCache() {
-        audioStore.clearCache()
-        songDao.observeDownloaded()
-        // local paths are no longer valid
-        songDao.observeAll()
+    /**
+     * Frees space without destroying work.
+     *
+     * Only tracks that came from a server are removed, because those can be fetched
+     * again. Songs rendered on this device exist nowhere else, so they are kept.
+     */
+    suspend fun clearDownloads(): Int {
+        var removed = 0
+        for (song in songDao.all()) {
+            if (song.remoteAudioUrl.isNullOrBlank()) continue
+            audioStore.deleteLocal(song)
+            songDao.setLocalPath(song.id, null)
+            songDao.setLocalCover(song.id, null)
+            removed++
+        }
+        return removed
     }
+
+    suspend fun deviceSongCount(): Int = songDao.all().count { it.remoteAudioUrl.isNullOrBlank() }
 
     // ---------------- backend ----------------
 
-    suspend fun health(): Result<HealthResponse> = runCatching { api.health() }
+    suspend fun health(): Result<HealthResponse> {
+        if (onDevice()) {
+            return Result.success(
+                HealthResponse(
+                    status = "ok",
+                    engine = "on-device",
+                    version = "1.1.0",
+                    device = android.os.Build.MODEL ?: "this phone",
+                    queueDepth = jobDao.activeNow().size,
+                )
+            )
+        }
+        return runCatching { api.health() }
+    }
 
-    suspend fun models(): Result<List<ModelDto>> = runCatching { api.models().models }
+    suspend fun models(): Result<List<ModelDto>> {
+        if (onDevice()) return Result.success(listOf(DEVICE_MODEL))
+        return runCatching { api.models().models }
+    }
 
-    suspend fun writeLyrics(prompt: String, language: String, style: String?): Result<LyricsResponse> =
-        runCatching { api.lyrics(LyricsRequest(prompt = prompt, language = language, style = style)) }
+    suspend fun writeLyrics(prompt: String, language: String, style: String?): Result<LyricsResponse> {
+        if (onDevice()) {
+            val written = localEngine.writeLyrics(prompt, style, language)
+            return Result.success(
+                LyricsResponse(
+                    title = written.title,
+                    lyrics = written.lyrics,
+                    styleTags = written.styleTags,
+                )
+            )
+        }
+        return runCatching { api.lyrics(LyricsRequest(prompt = prompt, language = language, style = style)) }
+    }
 
     suspend fun submitGenerate(request: GenerateRequest): Result<String> = runCatching {
+        if (onDevice()) {
+            val spec = request.toSpec()
+            return@runCatching startLocalJob(
+                kind = "generate",
+                spec = spec,
+                title = request.title,
+                prompt = request.prompt,
+                style = request.style,
+                lyrics = request.lyrics,
+                instrumental = request.instrumental,
+                variations = request.numVariations,
+            )
+        }
         val response = api.generate(request)
         jobDao.insert(
             JobEntity(
@@ -112,6 +175,28 @@ class MusicRepository(
     }
 
     suspend fun submitExtend(request: ExtendRequest): Result<String> = runCatching {
+        if (onDevice()) {
+            val parent = songDao.byId(request.clipId)
+            val spec = localEngine.specFromJson(parent?.specJson)
+                ?: throw IllegalStateException("This track was not made on this device, so it cannot be extended here")
+            return@runCatching startLocalJob(
+                kind = "extend",
+                spec = spec,
+                title = "Extension",
+                prompt = parent?.prompt,
+                style = request.style,
+                lyrics = request.lyrics,
+                instrumental = spec.instrumental,
+                variations = 1,
+                parentId = request.clipId,
+                extras = mapOf(
+                    LocalRenderWorker.KEY_EXTEND_AT to request.continueAtSeconds,
+                    LocalRenderWorker.KEY_EXTEND_LYRICS to request.lyrics.orEmpty(),
+                    LocalRenderWorker.KEY_EXTEND_STYLE to request.style.orEmpty(),
+                    LocalRenderWorker.KEY_EXTEND_SECONDS to request.durationSeconds,
+                ),
+            )
+        }
         val response = api.extend(request)
         jobDao.insert(
             JobEntity(
@@ -131,6 +216,23 @@ class MusicRepository(
     }
 
     suspend fun submitCover(request: CoverRequest): Result<String> = runCatching {
+        if (onDevice()) {
+            val parent = request.clipId?.let { songDao.byId(it) }
+            val spec = localEngine.specFromJson(parent?.specJson)
+                ?: throw IllegalStateException("This track was not made on this device, so it cannot be covered here")
+            return@runCatching startLocalJob(
+                kind = "cover",
+                spec = spec,
+                title = "Cover",
+                prompt = request.style,
+                style = request.style,
+                lyrics = request.lyrics,
+                instrumental = spec.instrumental,
+                variations = request.numVariations,
+                parentId = request.clipId,
+                extras = mapOf(LocalRenderWorker.KEY_COVER_STYLE to request.style),
+            )
+        }
         val response = api.cover(request)
         jobDao.insert(
             JobEntity(
@@ -150,6 +252,22 @@ class MusicRepository(
     }
 
     suspend fun submitStems(clipId: String, mode: String): Result<String> = runCatching {
+        if (onDevice()) {
+            val parent = songDao.byId(clipId)
+            val spec = localEngine.specFromJson(parent?.specJson)
+                ?: throw IllegalStateException("This track was not made on this device, so its stems are not available")
+            return@runCatching startLocalJob(
+                kind = "stems",
+                spec = spec,
+                title = "Stems",
+                prompt = parent?.prompt,
+                style = parent?.style,
+                lyrics = null,
+                instrumental = true,
+                variations = 1,
+                parentId = clipId,
+            )
+        }
         val response = api.stems(StemsRequest(clipId = clipId, mode = mode))
         jobDao.insert(
             JobEntity(
@@ -185,7 +303,9 @@ class MusicRepository(
 
     suspend fun pruneJobs() = jobDao.pruneOlderThan(System.currentTimeMillis() - 7L * 24 * 3600 * 1000)
 
-    suspend fun activeJobIds(): List<String> = jobDao.activeNow().map { it.id }
+    /** Server-side jobs only; on-device renders are owned by their worker. */
+    suspend fun activeJobIds(): List<String> =
+        jobDao.activeNow().map { it.id }.filterNot { it.startsWith("local-") }
 
     /** Persists whatever clips the backend has produced so far; downloads audio when enabled. */
     suspend fun ingest(
@@ -230,6 +350,97 @@ class MusicRepository(
         return base.newBuilder().encodedPath("/" + url.trimStart('/')).build().toString()
     }
 
+    // ------------------------------------------------- on-device rendering
+
+    private suspend fun startLocalJob(
+        kind: String,
+        spec: SongSpec,
+        title: String?,
+        prompt: String?,
+        style: String?,
+        lyrics: String?,
+        instrumental: Boolean,
+        variations: Int,
+        parentId: String? = null,
+        extras: Map<String, Any> = emptyMap(),
+    ): String {
+        val jobId = "local-" + java.util.UUID.randomUUID().toString().take(12)
+        jobDao.insert(
+            JobEntity(
+                id = jobId,
+                status = "running",
+                progress = 0f,
+                stage = "queued",
+                title = title,
+                prompt = prompt,
+                style = style,
+                lyrics = lyrics,
+                instrumental = instrumental,
+                model = DEVICE_MODEL.id,
+                kind = kind,
+            )
+        )
+        val builder = Data.Builder()
+            .putString(LocalRenderWorker.KEY_JOB_ID, jobId)
+            .putString(LocalRenderWorker.KEY_KIND, kind)
+            .putString(LocalRenderWorker.KEY_SPEC, localEngine.specToJson(spec))
+            .putInt(LocalRenderWorker.KEY_VARIATIONS, variations.coerceIn(1, 4))
+            .putString(LocalRenderWorker.KEY_PARENT_ID, parentId)
+        extras.forEach { (key, value) ->
+            when (value) {
+                is Int -> builder.putInt(key, value)
+                is Float -> builder.putFloat(key, value)
+                is String -> builder.putString(key, value)
+            }
+        }
+        val request = OneTimeWorkRequestBuilder<LocalRenderWorker>()
+            .setInputData(builder.build())
+            .addTag(LocalRenderWorker.TAG)
+            .build()
+        WorkManager.getInstance(context)
+            .enqueueUniqueWork("sonara-local-$jobId", ExistingWorkPolicy.KEEP, request)
+        return jobId
+    }
+
+    suspend fun updateLocalJob(jobId: String, progress: Float, stage: String) {
+        jobDao.updateProgress(jobId, "running", progress.coerceIn(0f, 1f), stage, null)
+    }
+
+    suspend fun storeLocalClips(
+        jobId: String,
+        clips: List<LocalClip>,
+        parentId: String?,
+        prompt: String?,
+        style: String?,
+    ): List<SongEntity> {
+        val entities = clips.map { clip ->
+            SongEntity(
+                id = clip.id,
+                jobId = jobId,
+                title = clip.title,
+                prompt = prompt,
+                lyrics = clip.lyrics,
+                style = style,
+                styleTags = clip.tags,
+                model = DEVICE_MODEL.id,
+                durationSeconds = clip.durationSeconds,
+                instrumental = clip.instrumental,
+                variant = clip.variant,
+                role = clip.role,
+                parentId = parentId,
+                remoteAudioUrl = null,
+                localPath = clip.file.absolutePath,
+                coverUrl = null,
+                localCoverPath = clip.coverFile?.absolutePath,
+                seed = clip.seed,
+                specJson = clip.specJson,
+            )
+        }
+        songDao.upsert(entities)
+        jobDao.updateProgress(jobId, "succeeded", 1f, "done", null)
+        return entities
+    }
+
     private fun enqueueWatcher(jobId: String, parentId: String? = null, role: String? = null) {
         val request = OneTimeWorkRequestBuilder<GenerationWorker>()
             .setInputData(
@@ -243,6 +454,34 @@ class MusicRepository(
             .build()
         WorkManager.getInstance(context)
             .enqueueUniqueWork("sonara-job-$jobId", ExistingWorkPolicy.KEEP, request)
+    }
+
+    private fun GenerateRequest.toSpec(): SongSpec = SongSpec(
+        prompt = prompt.orEmpty(),
+        style = style.orEmpty(),
+        lyrics = if (instrumental) "" else lyrics.orEmpty(),
+        title = title,
+        durationSeconds = durationSeconds.coerceIn(20, DEVICE_MODEL.maxDurationSeconds),
+        instrumental = instrumental,
+        weirdness = weirdness,
+        styleWeight = styleWeight,
+        lyricsWeight = lyricsWeight,
+        tempoBpm = tempoBpm,
+        vocalGender = vocalGender,
+        seed = seed ?: 0L,
+    )
+
+    companion object {
+        val DEVICE_MODEL = ModelDto(
+            id = "sonara-device-v1",
+            name = "On-device engine",
+            description = "Renders on this phone — no server, no internet, works offline",
+            maxDurationSeconds = 600,
+            supportsVocals = true,
+            supportsExtend = true,
+            supportsStems = true,
+            engine = "on-device",
+        )
     }
 }
 
