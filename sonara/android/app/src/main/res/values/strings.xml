@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Sonara Studio</string>
-    <string name="tab_create">Create</string>
-    <string name="tab_library">Library</string>
-    <string name="tab_settings">Settings</string>
-</resources>

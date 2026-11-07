@@ -1,0 +1,6 @@
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.**
+-keep,includedescriptorclasses class com.pulse.studio.**$$serializer { *; }
+-keepclassmembers class com.pulse.studio.** { *** Companion; }
+-keepclasseswithmembers class com.pulse.studio.** { kotlinx.serialization.KSerializer serializer(...); }
+-keep class androidx.media3.** { *; }
