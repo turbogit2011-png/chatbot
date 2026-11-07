@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Sonara" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/sonara_background</item>
+    </style>
+    <style name="Theme.Sonara.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/sonara_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Sonara</item>
+    </style>
+</resources>
