@@ -57,6 +57,8 @@ import com.pulse.studio.ui.theme.PulseBrush
 import com.pulse.studio.util.formatDuration
 import com.pulse.studio.visual.AspectRatio
 import com.pulse.studio.visual.Director
+import com.pulse.studio.visual.Look
+import com.pulse.studio.visual.LyricStyle
 import com.pulse.studio.visual.Palette
 import com.pulse.studio.visual.Quality
 
@@ -77,6 +79,10 @@ fun CreateScreen(
     val imagePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent(),
     ) { uri -> uri?.let(viewModel::pickCover) }
+
+    val mediaPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetMultipleContents(),
+    ) { uris -> viewModel.addMedia(uris) }
 
     LaunchedEffect(state.message) {
         state.message?.let {
@@ -100,8 +106,11 @@ fun CreateScreen(
         }
 
         if (state.audioUri != null) {
+            item { MediaCard(state, viewModel, onPickMedia = { mediaPicker.launch("image/*") }) }
             item { StylePicker(state, viewModel) }
             item { PalettePicker(state, viewModel) }
+            item { LookPicker(state, viewModel) }
+            item { LyricsCard(state, viewModel) }
             item { FormatCard(state, viewModel) }
             item { TextCard(state, viewModel, onPickImage = { imagePicker.launch("image/*") }) }
             item { LengthCard(state, viewModel) }
@@ -189,6 +198,137 @@ private fun TrackCard(state: CreateUiState, onPick: () -> Unit) {
 }
 
 @Composable
+private fun MediaCard(state: CreateUiState, viewModel: CreateViewModel, onPickMedia: () -> Unit) {
+    GlassCard {
+        Column {
+            SectionLabel("Your photos") {
+                if (state.hasMedia) {
+                    TextButton(onClick = viewModel::clearMedia) { Text("Clear") }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                if (state.hasMedia) {
+                    "${state.mediaPaths.size} photo(s). Shots cut on the downbeat; the grid and " +
+                        "cut templates are built around them."
+                } else {
+                    "Add photos and the clip is cut from them instead of generated shapes. " +
+                        "Up to 12."
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (state.hasMedia) {
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    Modifier.horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    state.mediaPaths.forEach { path ->
+                        coil.compose.AsyncImage(
+                            model = java.io.File(path),
+                            contentDescription = null,
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = onPickMedia, enabled = !state.importingMedia) {
+                    if (state.importingMedia) {
+                        CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
+                        Spacer(Modifier.width(8.dp))
+                    } else {
+                        Icon(Icons.Filled.Image, null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                    }
+                    Text(if (state.hasMedia) "Add more" else "Choose photos")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LookPicker(state: CreateUiState, viewModel: CreateViewModel) {
+    GlassCard {
+        Column {
+            SectionLabel("Finish")
+            Spacer(Modifier.height(10.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Look.entries.forEach { look ->
+                    TagChip(look.label, selected = state.lookId == look.id) { viewModel.setLook(look.id) }
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            Text(
+                "Bloom, lens aberration, grain and grading, applied over the whole frame.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun LyricsCard(state: CreateUiState, viewModel: CreateViewModel) {
+    GlassCard {
+        Column {
+            SectionLabel("Lyrics")
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Paste the words and they are set large, in time with the beat. " +
+                    "Timestamped lines ([00:14.20] …) are used exactly as written.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(10.dp))
+            OutlinedTextField(
+                value = state.lyrics,
+                onValueChange = viewModel::setLyrics,
+                modifier = Modifier.fillMaxWidth().height(170.dp),
+                placeholder = { Text("One line per line of the song") },
+                shape = RoundedCornerShape(16.dp),
+            )
+            if (state.hasLyrics) {
+                Spacer(Modifier.height(12.dp))
+                SectionLabel("How they appear")
+                Spacer(Modifier.height(8.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TagChip("Match template", selected = state.lyricStyleId == "auto") {
+                        viewModel.setLyricStyle("auto")
+                    }
+                    LyricStyle.entries.filter { it != LyricStyle.None }.forEach { style ->
+                        TagChip(style.label, selected = state.lyricStyleId == style.id) {
+                            viewModel.setLyricStyle(style.id)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "Nudge: ${"%+.1f".format(state.lyricOffset)}s",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.width(110.dp),
+                    )
+                    androidx.compose.material3.Slider(
+                        value = state.lyricOffset,
+                        onValueChange = viewModel::setLyricOffset,
+                        valueRange = -5f..5f,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun StylePicker(state: CreateUiState, viewModel: CreateViewModel) {
     Column {
         SectionLabel("Style")
@@ -200,9 +340,11 @@ private fun StylePicker(state: CreateUiState, viewModel: CreateViewModel) {
             StyleTile(
                 label = "Auto",
                 selected = state.styleId == "auto",
-                styleId = "radial",
+                styleId = Director.available().first().id,
                 paletteId = state.paletteId,
                 aspect = state.aspect,
+                lookId = state.lookId,
+                mediaPaths = state.mediaPaths,
                 caption = "changes with the song",
             ) { viewModel.setStyle("auto") }
 
@@ -213,6 +355,8 @@ private fun StylePicker(state: CreateUiState, viewModel: CreateViewModel) {
                     styleId = scene.id,
                     paletteId = state.paletteId,
                     aspect = state.aspect,
+                    lookId = state.lookId,
+                    mediaPaths = state.mediaPaths,
                 ) { viewModel.setStyle(scene.id) }
             }
         }
@@ -226,6 +370,8 @@ private fun StyleTile(
     styleId: String,
     paletteId: String,
     aspect: AspectRatio,
+    lookId: String = "auto",
+    mediaPaths: List<String> = emptyList(),
     caption: String? = null,
     onClick: () -> Unit,
 ) {
@@ -245,6 +391,8 @@ private fun StyleTile(
             styleId = styleId,
             paletteId = paletteId,
             aspect = aspect,
+            lookId = lookId,
+            mediaPaths = mediaPaths,
             modifier = Modifier.fillMaxWidth().height(if (aspect == AspectRatio.Landscape) 54.dp else 150.dp),
         )
         Spacer(Modifier.height(8.dp))

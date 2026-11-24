@@ -33,6 +33,7 @@ class ClipRepository(
 
     private val clipsDir: File get() = File(context.filesDir, "clips").apply { mkdirs() }
     private val coversDir: File get() = File(context.filesDir, "covers").apply { mkdirs() }
+    private val mediaDir: File get() = File(context.filesDir, "media").apply { mkdirs() }
 
     fun observeAll(): Flow<List<ClipEntity>> = dao.observeAll()
     fun observeFavorites(): Flow<List<ClipEntity>> = dao.observeFavorites()
@@ -75,6 +76,55 @@ class ClipRepository(
 
     fun loadCover(path: String?): Bitmap? =
         path?.takeIf { File(it).exists() }?.let { BitmapFactory.decodeFile(it) }
+
+    /**
+     * Copies picked photos into the app, scaled to the clip's own resolution.
+     *
+     * A modern phone photo is 12 megapixels; a dozen of those decoded at full size
+     * would exhaust the heap long before the first frame is drawn. Importing at the
+     * output's long edge costs nothing visually and keeps the render bounded.
+     */
+    suspend fun importMedia(uris: List<Uri>, longEdge: Int): List<String> = withContext(Dispatchers.IO) {
+        val stamp = System.currentTimeMillis()
+        uris.take(MAX_MEDIA).mapIndexedNotNull { index, uri ->
+            runCatching {
+                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                context.contentResolver.openInputStream(uri)?.use {
+                    BitmapFactory.decodeStream(it, null, bounds)
+                }
+                val source = maxOf(bounds.outWidth, bounds.outHeight)
+                var sample = 1
+                while (source / sample > longEdge * 2) sample *= 2
+                val options = BitmapFactory.Options().apply { inSampleSize = sample }
+                val decoded = context.contentResolver.openInputStream(uri)?.use {
+                    BitmapFactory.decodeStream(it, null, options)
+                } ?: return@runCatching null
+                val scale = longEdge.toFloat() / maxOf(decoded.width, decoded.height)
+                val bitmap = if (scale < 1f) {
+                    Bitmap.createScaledBitmap(
+                        decoded,
+                        (decoded.width * scale).toInt().coerceAtLeast(1),
+                        (decoded.height * scale).toInt().coerceAtLeast(1),
+                        true,
+                    ).also { if (it !== decoded) decoded.recycle() }
+                } else {
+                    decoded
+                }
+                val file = File(mediaDir, "m-$stamp-$index.jpg")
+                file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.JPEG, 88, it) }
+                bitmap.recycle()
+                file.absolutePath
+            }.getOrNull()
+        }
+    }
+
+    fun loadMedia(paths: List<String>): List<Bitmap> = paths.mapNotNull { path ->
+        runCatching { BitmapFactory.decodeFile(path) }.getOrNull()
+    }
+
+    fun deleteMedia(paths: List<String>) {
+        paths.forEach { runCatching { File(it).delete() } }
+    }
 
     suspend fun enqueue(
         sourceUri: Uri,
@@ -143,11 +193,16 @@ class ClipRepository(
         )
     }
 
-    fun storageBytes(): Long = (clipsDir.walkTopDown() + coversDir.walkTopDown())
+    fun storageBytes(): Long = (clipsDir.walkTopDown() + coversDir.walkTopDown() + mediaDir.walkTopDown())
         .filter { it.isFile }
         .sumOf { it.length() }
 
     /** Copies a finished clip into the device's Movies folder so the gallery sees it. */
+    companion object {
+        /** Beyond this the grid templates stop reading as an edit and the heap suffers. */
+        const val MAX_MEDIA = 12
+    }
+
     suspend fun exportToGallery(clip: ClipEntity): Uri? = withContext(Dispatchers.IO) {
         val source = clip.filePath?.let(::File)?.takeIf { it.exists() } ?: return@withContext null
         val safeTitle = clip.title.replace(Regex("[^\\p{L}\\p{N} _.-]"), "").trim().ifBlank { "Pulse clip" }

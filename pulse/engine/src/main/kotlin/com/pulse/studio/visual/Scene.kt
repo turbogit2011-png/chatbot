@@ -14,6 +14,10 @@ class RenderContext(
     val artist: String,
     val cover: ImageSource?,
     val seed: Long,
+    /** Photos or video stills the clip is built from, in the order they were picked. */
+    val media: List<ImageSource> = emptyList(),
+    /** Lyrics already placed on the timeline, empty when the user supplied none. */
+    val lyrics: List<com.pulse.studio.text.TimedLine> = emptyList(),
 ) {
     var time: Float = 0f
         private set
@@ -44,6 +48,23 @@ class RenderContext(
     fun beatPulse(decay: Float = 7f): Float = features.beatPulse(time, decay)
     fun beatIndex(): Int = features.beatIndex(time)
 
+    /** The lyric line that should be on screen, or null. */
+    fun currentLine(): com.pulse.studio.text.TimedLine? {
+        if (lyrics.isEmpty()) return null
+        for (i in lyrics.indices.reversed()) {
+            val line = lyrics[i]
+            if (time >= line.start && time < line.end) return line
+        }
+        return null
+    }
+
+    fun lineIndex(): Int {
+        for (i in lyrics.indices.reversed()) {
+            if (time >= lyrics[i].start) return i
+        }
+        return -1
+    }
+
     /** 0..1 position inside the current bar, assuming four beats to the bar. */
     fun barPhase(): Float {
         val beats = features.beats
@@ -60,6 +81,22 @@ class RenderContext(
 interface Scene {
     val id: String
     val displayName: String
+
+    /** The finishing chain this style was designed around. */
+    val fx: com.pulse.studio.fx.FxSettings
+        get() = com.pulse.studio.fx.FxSettings.Clean
+
+    /** True when the style is built around the user's own photos. */
+    val wantsMedia: Boolean get() = false
+
+    /** How lyrics should be set when the user supplied some. */
+    val lyricStyle: LyricStyle get() = LyricStyle.WordPop
+
+    /**
+     * True when the template lays out the track credit itself. The director then
+     * skips its own, instead of stacking two titles in the same corner.
+     */
+    val drawsOwnCredits: Boolean get() = false
 
     /** Called once before the first frame. */
     fun reset(ctx: RenderContext) {}

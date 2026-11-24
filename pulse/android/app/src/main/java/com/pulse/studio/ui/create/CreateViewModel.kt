@@ -14,6 +14,8 @@ import com.pulse.studio.data.repo.ClipRepository
 import com.pulse.studio.di.ServiceLocator
 import com.pulse.studio.visual.AspectRatio
 import com.pulse.studio.visual.ClipSpec
+import com.pulse.studio.visual.Look
+import com.pulse.studio.visual.LyricStyle
 import com.pulse.studio.visual.Quality
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,6 +40,12 @@ data class CreateUiState(
     val showProgress: Boolean = true,
     val useCover: Boolean = true,
     val hasCover: Boolean = false,
+    val lookId: String = "auto",
+    val lyricStyleId: String = "auto",
+    val lyrics: String = "",
+    val lyricOffset: Float = 0f,
+    val mediaPaths: List<String> = emptyList(),
+    val importingMedia: Boolean = false,
     val wholeTrack: Boolean = true,
     val clipSeconds: Int = 30,
     val inspecting: Boolean = false,
@@ -50,6 +58,8 @@ data class CreateUiState(
     val renderSeconds: Float
         get() = if (wholeTrack || durationSeconds <= 0f) durationSeconds
         else minOf(durationSeconds, clipSeconds.toFloat())
+    val hasLyrics: Boolean get() = lyrics.isNotBlank()
+    val hasMedia: Boolean get() = mediaPaths.isNotEmpty()
 }
 
 class CreateViewModel(
@@ -138,7 +148,36 @@ class CreateViewModel(
     fun setShowText(value: Boolean) = update { it.copy(showText = value) }.also { persist { settings.setShowText(value) } }
     fun setShowProgress(value: Boolean) = update { it.copy(showProgress = value) }.also { persist { settings.setShowProgress(value) } }
     fun setUseCover(value: Boolean) = update { it.copy(useCover = value) }.also { persist { settings.setUseCover(value) } }
+    fun setLook(value: String) = update { it.copy(lookId = value) }
+    fun setLyricStyle(value: String) = update { it.copy(lyricStyleId = value) }
+    fun setLyrics(value: String) = update { it.copy(lyrics = value.take(6000)) }
+    fun setLyricOffset(value: Float) = update { it.copy(lyricOffset = value) }
     fun setWholeTrack(value: Boolean) = update { it.copy(wholeTrack = value) }
+
+    fun addMedia(uris: List<Uri>) {
+        if (uris.isEmpty()) return
+        update { it.copy(importingMedia = true) }
+        viewModelScope.launch {
+            val longEdge = _state.value.let { current ->
+                val (w, h) = current.aspect.sizeFor(current.quality.shortSide)
+                maxOf(w, h)
+            }
+            val imported = repo.importMedia(uris, longEdge)
+            update { current ->
+                current.copy(
+                    importingMedia = false,
+                    mediaPaths = (current.mediaPaths + imported).take(12),
+                    message = if (imported.isEmpty()) "Could not read those photos" else null,
+                )
+            }
+        }
+    }
+
+    fun clearMedia() {
+        val paths = _state.value.mediaPaths
+        update { it.copy(mediaPaths = emptyList()) }
+        viewModelScope.launch { repo.deleteMedia(paths) }
+    }
     fun setClipSeconds(value: Int) = update { it.copy(clipSeconds = value.coerceIn(10, 600)) }
     fun consumeMessage() = update { it.copy(message = null) }
 
@@ -152,12 +191,17 @@ class CreateViewModel(
                 paletteId = current.paletteId,
                 aspectId = current.aspectId,
                 qualityId = current.qualityId,
+                lookId = current.lookId,
+                lyricStyleId = current.lyricStyleId,
                 fps = current.fps,
                 title = current.title.trim(),
                 artist = current.artist.trim(),
+                lyrics = current.lyrics.trim(),
+                lyricOffsetSeconds = current.lyricOffset,
                 showText = current.showText,
                 showProgress = current.showProgress,
                 useCover = current.useCover && current.hasCover,
+                mediaUris = current.mediaPaths,
                 startSeconds = 0f,
                 endSeconds = if (current.wholeTrack) 0f else current.renderSeconds,
                 seed = System.currentTimeMillis(),
@@ -166,6 +210,8 @@ class CreateViewModel(
                 .onSuccess {
                     _state.value = _state.value.copy(
                         submitting = false,
+                        // the clip owns these files now; clearing the list here must not delete them
+                        mediaPaths = emptyList(),
                         message = "Rendering started — you can leave this screen.",
                     )
                     onQueued()

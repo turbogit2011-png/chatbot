@@ -167,6 +167,14 @@ class AndroidFrameCanvas(override val width: Int, override val height: Int) : Fr
         canvas.restore()
     }
 
+    override fun snapshot(into: IntArray) {
+        bitmap.getPixels(into, 0, width, 0, 0, width, height)
+    }
+
+    override fun blit(from: IntArray) {
+        bitmap.setPixels(from, 0, width, 0, 0, width, height)
+    }
+
     /** Copies the frame into [out] as packed ARGB, ready for colour conversion. */
     fun readPixels(out: IntArray) {
         bitmap.getPixels(out, 0, width, 0, 0, width, height)

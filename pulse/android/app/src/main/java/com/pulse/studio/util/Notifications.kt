@@ -29,6 +29,17 @@ object Notifications {
                 android.Manifest.permission.POST_NOTIFICATIONS,
             ) == PackageManager.PERMISSION_GRANTED
 
+    /** The notification a foreground render runs under. */
+    fun ongoing(context: Context, title: String, text: String): android.app.Notification =
+        NotificationCompat.Builder(context, CHANNEL_RENDER)
+            .setSmallIcon(R.drawable.ic_stat_pulse)
+            .setContentTitle(title.ifBlank { "Making your clip" })
+            .setContentText(text)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setProgress(100, 0, true)
+            .build()
+
     fun progress(context: Context, id: Int, title: String, text: String, percent: Int) {
         if (!allowed(context)) return
         val notification = NotificationCompat.Builder(context, CHANNEL_RENDER)

@@ -143,6 +143,14 @@ class AwtCanvas(override val width: Int, override val height: Int) : FrameCanvas
         g.transform = old
     }
 
+    override fun snapshot(into: IntArray) {
+        image.getRGB(0, 0, width, height, into, 0, width)
+    }
+
+    override fun blit(from: IntArray) {
+        image.setRGB(0, 0, width, height, from, 0, width)
+    }
+
     fun save(file: File) {
         file.parentFile?.mkdirs()
         ImageIO.write(image, "png", file)

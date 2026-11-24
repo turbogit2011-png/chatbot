@@ -39,6 +39,7 @@ class ClipRenderer(private val context: Context) {
         audioUri: Uri,
         spec: ClipSpec,
         coverBitmap: Bitmap?,
+        mediaBitmaps: List<Bitmap>,
         output: File,
         onProgress: (RenderStage, Float) -> Unit,
     ): RenderedClip {
@@ -61,7 +62,8 @@ class ClipRenderer(private val context: Context) {
 
             val (width, height) = spec.aspect.sizeFor(spec.quality.shortSide)
             val cover = coverBitmap?.let { AndroidImage(it) }
-            val director = Director(features, spec, width, height, cover)
+            val media = mediaBitmaps.map { AndroidImage(it) }
+            val director = Director(features, spec, width, height, cover, media)
 
             AudioTrackEncoder.encode(
                 pcm = pcmFile,

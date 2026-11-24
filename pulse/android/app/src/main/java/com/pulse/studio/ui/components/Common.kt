@@ -225,21 +225,34 @@ fun StylePreview(
     modifier: Modifier = Modifier,
     width: Int = 150,
     frame: Int = 30,
+    lookId: String = "auto",
+    mediaPaths: List<String> = emptyList(),
 ) {
     val features = remember { AudioFeatures.demo() }
-    val bitmap = remember(styleId, paletteId, aspect, width) {
+    // Photo-based templates are previewed with the user's own pictures, so the tile
+    // shows what this clip will look like rather than what the template can do.
+    val mediaKey = mediaPaths.take(3).joinToString()
+    val bitmap = remember(styleId, paletteId, aspect, width, lookId, mediaKey) {
         val (w, h) = aspect.sizeFor(width)
         val spec = ClipSpec(
             styleId = styleId,
             paletteId = paletteId,
             aspectId = aspect.id,
+            lookId = lookId,
             showText = false,
             showProgress = false,
             seed = 5L,
         )
+        val media = mediaPaths.take(3).mapNotNull { path ->
+            runCatching {
+                val options = android.graphics.BitmapFactory.Options().apply { inSampleSize = 4 }
+                android.graphics.BitmapFactory.decodeFile(path, options)?.let { AndroidImage(it) }
+            }.getOrNull()
+        }
         val canvas = AndroidFrameCanvas(w, h)
-        val director = Director(features, spec, w, h, null)
+        val director = Director(features, spec, w, h, media.firstOrNull(), media)
         for (i in 0..frame) director.renderFrame(canvas, i)
+        media.forEach { runCatching { it.bitmap.recycle() } }
         canvas.bitmap
     }
     Image(

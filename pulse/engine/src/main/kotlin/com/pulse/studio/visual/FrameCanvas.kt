@@ -23,6 +23,17 @@ interface FrameCanvas {
 
     /** Rotation in radians about (cx, cy) applied to everything drawn inside [block]. */
     fun withRotation(cx: Float, cy: Float, radians: Float, block: () -> Unit)
+
+    /**
+     * Copies the finished frame out as packed ARGB.
+     *
+     * Post-processing works on pixels, not draw calls, so the finishing chain needs a
+     * way in and out of whatever surface the backend is really using.
+     */
+    fun snapshot(into: IntArray)
+
+    /** Writes packed ARGB pixels back onto the surface. */
+    fun blit(from: IntArray)
 }
 
 enum class TextAlign { Left, Center, Right }

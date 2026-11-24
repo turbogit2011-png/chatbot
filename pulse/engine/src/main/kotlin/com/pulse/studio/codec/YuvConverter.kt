@@ -1,6 +1,8 @@
 package com.pulse.studio.codec
 
 import java.nio.ByteBuffer
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * Converts packed ARGB pixels into the YUV 4:2:0 planes a video encoder expects.
@@ -10,6 +12,41 @@ import java.nio.ByteBuffer
  * tested on the JVM. BT.601 limited range, which is what H.264 in an MP4 implies.
  */
 object YuvConverter {
+
+    private val workers = Runtime.getRuntime().availableProcessors().coerceIn(1, 8)
+    private val pool = if (workers > 1) {
+        Executors.newFixedThreadPool(workers) { task ->
+            Thread(task, "pulse-yuv").apply { isDaemon = true }
+        }
+    } else {
+        null
+    }
+
+    private fun parallel(rows: Int, block: (Int, Int) -> Unit) {
+        val pool = this.pool
+        if (pool == null || rows < workers * 8) {
+            block(0, rows)
+            return
+        }
+        val strip = (rows + workers - 1) / workers
+        val latch = java.util.concurrent.CountDownLatch(workers)
+        for (i in 0 until workers) {
+            val from = i * strip
+            val to = minOf(rows, from + strip)
+            if (from >= to) {
+                latch.countDown()
+                continue
+            }
+            pool.execute {
+                try {
+                    block(from, to)
+                } finally {
+                    latch.countDown()
+                }
+            }
+        }
+        latch.await(10, TimeUnit.SECONDS)
+    }
 
     /**
      * @param argb packed pixels, row-major, [width] * [height] entries
@@ -30,7 +67,8 @@ object YuvConverter {
     ) {
         require(argb.size >= width * height) { "pixel buffer too small" }
 
-        for (y in 0 until height) {
+        parallel(height) { fromRow, toRow ->
+        for (y in fromRow until toRow) {
             val rowStart = y * width
             var destination = y * yRowStride
             for (x in 0 until width) {
@@ -44,10 +82,12 @@ object YuvConverter {
                 destination++
             }
         }
+        }
 
         val chromaHeight = (height + 1) / 2
         val chromaWidth = (width + 1) / 2
-        for (cy in 0 until chromaHeight) {
+        parallel(chromaHeight) { fromRow, toRow ->
+        for (cy in fromRow until toRow) {
             val y0 = cy * 2
             val y1 = (y0 + 1).coerceAtMost(height - 1)
             for (cx in 0 until chromaWidth) {
@@ -75,6 +115,7 @@ object YuvConverter {
                 uPlane.put(offset, u.toByte())
                 vPlane.put(offset, v.toByte())
             }
+        }
         }
     }
 }

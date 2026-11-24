@@ -50,6 +50,18 @@ w miejscu.
 * **Sekcje** — nowość widmowa (różnica średniego widma przed i po), dociągana do
   downbeatów, z minimalnym odstępem, żeby cięcia nie leciały co dwie sekundy.
 
+## Warstwy jednej klatki
+
+```
+szablon (tło + treść)  ──►  typografia  ──►  podpisy i pasek  ──►  łańcuch pikselowy
+   Scene.render()           TypeLayer         Director              PostFx.apply()
+```
+
+Podział na warstwy jest tym, co pozwala temu samemu szablonowi nieść tekst albo nie,
+i co pozwala jednemu gradingowi obejmować wszystkie szablony. Trzy pierwsze warstwy
+rysują przez `FrameCanvas`; czwarta operuje na gotowych pikselach, bo bloom, ziarno
+i aberracja są operacjami na obrazie, nie na wywołaniach rysujących.
+
 ## Silnik wizualny (`engine/visual`)
 
 `FrameCanvas` to celowo mały zestaw prymitywów: prostokąt, zaokrąglony prostokąt,
@@ -62,6 +74,21 @@ addytywny. Mały zestaw da się wiernie zaimplementować dwa razy — raz na
 własny stan między klatkami (cząsteczki, wygładzane słupki) i dostają `RenderContext`
 z czasem, cechami audio i paletą.
 
+## Wykończenie (`engine/fx`)
+
+Łańcuch pikselowy jest tym, co odróżnia "wizualizer" od "wideo", i jest też
+najdroższą częścią renderu, więc jest napisany pod koszt:
+
+* **Jeden przebieg zamiast czterech.** Bloom, halacja, tone, saturacja, winieta,
+  scanlines i ziarno są składane w jednej pętli po pikselach. Rozbicie tego na osobne
+  przebiegi kosztowało 41 ms na klatkę przy 720p zamiast 35.
+* **Tablice zamiast arytmetyki.** Kontrast i lift to LUT 256-elementowy, winieta to
+  prekalkulowana maska 0..256, przesunięcia aberracji to tablice `Int` na wiersz
+  i kolumnę. Żadnego `pow()` ani mnożenia float na piksel.
+* **Rdzenie.** Przebiegi po wierszach idą na pulę wątków wielkości liczby rdzeni;
+  tak samo konwersja ARGB→YUV, która też dotyka każdego piksela.
+* **Nic nie alokuje w pętli klatek.** Wszystkie bufory powstają raz, przy tworzeniu.
+
 ## Kodowanie (`android/render`)
 
 Android nie pozwala rysować `Canvas` po powierzchni wejściowej enkodera, więc klatki
@@ -69,6 +96,10 @@ idą przez bufory: `AndroidFrameCanvas` oddaje ARGB, `YuvConverter` zamienia je 
 płaszczyzny YUV 4:2:0 z uwzględnieniem `rowStride` i `pixelStride`, które enkoder
 raportuje. Ta arytmetyka jest testowana na JVM, bo pomyłka o jeden bajt daje zielony
 film i nie widać jej w kodzie.
+
+Render chodzi jako usługa pierwszoplanowa (`setForeground`), bo zwykłe zadanie
+WorkManagera jest zatrzymywane po dziesięciu minutach, a kilkuminutowy klip w 1080p
+potrafi się w to wcelować.
 
 Dźwięk jest kodowany najpierw, do tymczasowego `.m4a`. Dzięki temu w momencie, gdy
 enkoder wideo zgłasza swój format, format audio jest już znany — a `MediaMuxer`

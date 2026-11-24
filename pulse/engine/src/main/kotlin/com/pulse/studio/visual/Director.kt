@@ -1,25 +1,25 @@
 package com.pulse.studio.visual
 
 import com.pulse.studio.audio.AudioFeatures
-import com.pulse.studio.visual.scenes.CoverScene
-import com.pulse.studio.visual.scenes.KaleidoScene
-import com.pulse.studio.visual.scenes.ParticlesScene
-import com.pulse.studio.visual.scenes.RadialScene
-import com.pulse.studio.visual.scenes.SpectrumScene
-import com.pulse.studio.visual.scenes.WaveScene
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.cos
+import com.pulse.studio.fx.FxSettings
+import com.pulse.studio.fx.PostFx
+import com.pulse.studio.text.Lyrics
+import com.pulse.studio.visual.templates.Bloomscape
+import com.pulse.studio.visual.templates.Editorial
+import com.pulse.studio.visual.templates.LyricSlam
+import com.pulse.studio.visual.templates.PhotoCut
+import com.pulse.studio.visual.templates.SplitGrid
+import com.pulse.studio.visual.templates.Strobe
+import com.pulse.studio.visual.templates.VhsTape
 import kotlin.math.max
-import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Turns a track plus the user's choices into a sequence of frames.
+ * Turns a track plus the user's choices into a sequence of finished frames.
  *
- * The director owns the background, decides which style plays over which section,
- * handles the cut between them and paints the text and progress overlays. Scenes
- * only have to draw themselves.
+ * Each frame is built in four passes — backdrop and template, typography, overlays,
+ * then the finishing chain over the pixels. Splitting it that way is what lets the
+ * same template carry lyrics or not, and lets one grade apply across all of them.
  */
 class Director(
     private val features: AudioFeatures,
@@ -27,9 +27,17 @@ class Director(
     val width: Int,
     val height: Int,
     cover: ImageSource?,
+    media: List<ImageSource> = emptyList(),
 ) {
     private val palette = spec.palette
     private val seed = if (spec.seed != 0L) spec.seed else features.hashCode().toLong()
+
+    private val timedLyrics = if (spec.hasLyrics) {
+        Lyrics.align(spec.lyrics, features, spec.lyricOffsetSeconds)
+    } else {
+        emptyList()
+    }
+
     private val ctx = RenderContext(
         features = features,
         palette = palette,
@@ -40,21 +48,25 @@ class Director(
         artist = spec.artist,
         cover = if (spec.useCover) cover else null,
         seed = seed,
+        media = media,
+        lyrics = timedLyrics,
     )
 
-    private val noise = Noise(seed)
     private val sceneBySection: List<Scene>
     private var activeScene: Scene? = null
     private var sinceCut = 10f
 
+    private val postFx = PostFx(width, height)
+    private val pixels = IntArray(width * height)
+    private var typeLayer: TypeLayer? = null
+
     init {
-        val catalogue = available()
+        val catalogue = available().filter { it.wantsMedia == false || media.isNotEmpty() }
+            .ifEmpty { available() }
         sceneBySection = if (spec.styleId != "auto") {
-            val chosen = catalogue.firstOrNull { it.id == spec.styleId } ?: catalogue.first()
+            val chosen = available().firstOrNull { it.id == spec.styleId } ?: catalogue.first()
             List(max(1, features.sections.size)) { chosen }
         } else {
-            // Shuffle once per track so two clips of the same song differ, but the
-            // same seed always gives the same cut list.
             val shuffled = catalogue.shuffled(Random(seed))
             List(max(1, features.sections.size)) { shuffled[it % shuffled.size] }
         }
@@ -76,127 +88,81 @@ class Director(
             scene.reset(ctx)
             activeScene = scene
             sinceCut = 0f
+            typeLayer = TypeLayer(resolveLyricStyle(scene))
+            postFx.reset()
         } else {
             sinceCut += 1f / spec.fps
         }
 
-        drawBackground(canvas)
         scene.render(canvas, ctx)
+        typeLayer?.render(canvas, ctx)
         drawCut(canvas)
-        drawVignette(canvas)
-        if (spec.showText) drawText(canvas)
+        if (spec.showText && !scene.drawsOwnCredits) drawText(canvas)
         if (spec.showProgress) drawProgress(canvas)
-    }
 
-    // ------------------------------------------------------------- background
-
-    private fun drawBackground(canvas: FrameCanvas) {
-        canvas.clear(palette.backgroundDeep)
-        canvas.fillRect(
-            0f, 0f, width.toFloat(), height.toFloat(),
-            Paint(
-                shader = Shader.Linear(
-                    0f, 0f, 0f, height.toFloat(),
-                    intArrayOf(palette.background, palette.backgroundDeep),
-                    floatArrayOf(0f, 1f),
-                ),
-            ),
-        )
-
-        // two slow blobs that breathe with the track
-        val t = ctx.time
-        val blobs = arrayOf(
-            Triple(
-                width * (0.3f + 0.22f * sin(t * 0.21f).toFloat()),
-                height * (0.3f + 0.18f * cos(t * 0.17f).toFloat()),
-                palette.primary,
-            ),
-            Triple(
-                width * (0.7f + 0.2f * cos(t * 0.13f + 1.7f).toFloat()),
-                height * (0.68f + 0.16f * sin(t * 0.19f + 0.6f).toFloat()),
-                palette.secondary,
-            ),
-        )
-        for ((bx, by, colour) in blobs) {
-            val radius = ctx.shortSide * (0.45f + 0.25f * ctx.level)
-            canvas.fillCircle(
-                bx, by, radius,
-                Paint(
-                    shader = Shader.Radial(
-                        bx, by, radius,
-                        intArrayOf(Col.withAlpha(colour, 0.16f), Col.withAlpha(colour, 0f)),
-                        floatArrayOf(0f, 1f),
-                    ),
-                    blend = BlendMode.Add,
-                ),
-            )
+        val fx = resolveFx(scene)
+        if (fx !== FxSettings.None) {
+            canvas.snapshot(pixels)
+            postFx.apply(pixels, fx, time, ctx.beatPulse(9f), seed.toInt())
+            canvas.blit(pixels)
         }
     }
 
-    /** A short bloom right after a style change, so cuts feel intentional. */
+    private fun resolveFx(scene: Scene): FxSettings = spec.look.settings ?: scene.fx
+
+    private fun resolveLyricStyle(scene: Scene): LyricStyle {
+        if (timedLyrics.isEmpty()) return LyricStyle.None
+        if (spec.lyricStyleId == "auto") return scene.lyricStyle
+        return LyricStyle.entries.firstOrNull { it.id == spec.lyricStyleId } ?: scene.lyricStyle
+    }
+
+    /** A short bloom right after a template change, so cuts feel intentional. */
     private fun drawCut(canvas: FrameCanvas) {
-        if (sinceCut > 0.45f) return
-        val strength = (1f - sinceCut / 0.45f).coerceIn(0f, 1f)
+        if (sinceCut > 0.4f) return
+        val strength = (1f - sinceCut / 0.4f).coerceIn(0f, 1f)
         canvas.fillRect(
             0f, 0f, width.toFloat(), height.toFloat(),
-            Paint(color = Col.withAlpha(palette.accent, 0.35f * strength * strength), blend = BlendMode.Add),
+            Paint(color = Col.withAlpha(palette.accent, 0.4f * strength * strength), blend = BlendMode.Add),
         )
     }
-
-    private fun drawVignette(canvas: FrameCanvas) {
-        val radius = max(width, height) * 0.78f
-        canvas.fillRect(
-            0f, 0f, width.toFloat(), height.toFloat(),
-            Paint(
-                shader = Shader.Radial(
-                    width * 0.5f, height * 0.5f, radius,
-                    intArrayOf(
-                        Col.argb(0, 0, 0, 0),
-                        Col.argb(0, 0, 0, 0),
-                        Col.argb(150, 0, 0, 0),
-                    ),
-                    floatArrayOf(0f, 0.55f, 1f),
-                ),
-            ),
-        )
-    }
-
-    // ----------------------------------------------------------------- overlay
 
     private fun drawText(canvas: FrameCanvas) {
         if (spec.title.isBlank() && spec.artist.isBlank()) return
+        // With lyrics on screen the credit steps aside so the two never fight.
+        val hasLyricsNow = timedLyrics.isNotEmpty() && ctx.currentLine() != null
+        val alpha = if (hasLyricsNow) 0.45f else 1f
         val kick = ctx.beatPulse(11f)
-        val margin = width * 0.07f
-        val bottom = height * (if (spec.aspect == AspectRatio.Landscape) 0.86f else 0.90f)
-
-        val titleSize = ctx.shortSide * 0.062f * (1f + 0.025f * kick)
-        val artistSize = ctx.shortSide * 0.034f
+        val margin = width * 0.06f
+        val bottom = height * (if (spec.aspect == AspectRatio.Landscape) 0.88f else 0.925f)
+        val titleSize = ctx.shortSide * 0.046f * (1f + 0.02f * kick)
+        val artistSize = ctx.shortSide * 0.028f
 
         if (spec.artist.isNotBlank()) {
             canvas.drawText(
                 spec.artist.uppercase(), margin, bottom, artistSize,
-                Paint(color = Col.withAlpha(palette.accent, 0.85f)), TextAlign.Left,
+                Paint(color = Col.withAlpha(palette.accent, 0.85f * alpha)), TextAlign.Left,
             )
         }
         if (spec.title.isNotBlank()) {
-            val y = if (spec.artist.isBlank()) bottom else bottom - artistSize * 1.5f
+            val y = if (spec.artist.isBlank()) bottom else bottom - artistSize * 1.6f
             canvas.drawText(
                 spec.title, margin, y, titleSize,
-                Paint(color = Col.argb(245, 255, 255, 255)), TextAlign.Left, bold = true,
+                Paint(color = Col.withAlpha(Col.argb(255, 255, 255, 255), 0.96f * alpha)),
+                TextAlign.Left, bold = true,
             )
         }
     }
 
     private fun drawProgress(canvas: FrameCanvas) {
-        val barHeight = ctx.unit * 0.45f
-        val y = height - barHeight * 2.2f
-        val margin = width * 0.07f
+        val barHeight = ctx.unit * 0.3f
+        val y = height - barHeight * 3f
+        val margin = width * 0.06f
         val full = width - margin * 2
         val played = full * ((ctx.time - startSeconds) / durationSeconds).coerceIn(0f, 1f)
 
         canvas.fillRoundRect(
             margin, y, full, barHeight, barHeight / 2,
-            Paint(color = Col.argb(70, 255, 255, 255)),
+            Paint(color = Col.argb(60, 255, 255, 255)),
         )
         canvas.fillRoundRect(
             margin, y, played, barHeight, barHeight / 2,
@@ -208,20 +174,17 @@ class Director(
                 ),
             ),
         )
-        canvas.fillCircle(
-            margin + played, y + barHeight / 2, barHeight * 1.5f,
-            Paint(color = Col.withAlpha(palette.accent, 0.95f)),
-        )
     }
 
     companion object {
         fun available(): List<Scene> = listOf(
-            SpectrumScene(),
-            RadialScene(),
-            ParticlesScene(),
-            WaveScene(),
-            KaleidoScene(),
-            CoverScene(),
+            LyricSlam(),
+            PhotoCut(),
+            VhsTape(),
+            Bloomscape(),
+            Editorial(),
+            Strobe(),
+            SplitGrid(),
         )
 
         fun styleOptions(): List<Pair<String, String>> =

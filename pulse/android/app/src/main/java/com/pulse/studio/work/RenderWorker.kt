@@ -33,6 +33,10 @@ class RenderWorker(
         val spec = repo.specOf(clip)
         val notificationId = clipId.hashCode() and 0x0FFFFFFF
 
+        // A few minutes of frames is normal, and WorkManager stops ordinary work after
+        // ten. Running in the foreground is what lets a long clip finish.
+        runCatching { setForeground(foregroundInfo(notificationId, clip.title)) }
+
         val published = MutableStateFlow(RenderStage.Decoding to 0f)
 
         return coroutineScope {
@@ -57,13 +61,19 @@ class RenderWorker(
                 }
             }
             try {
-                val rendered = ClipRenderer(applicationContext).render(
-                    audioUri = Uri.parse(clip.sourceUri),
-                    spec = spec,
-                    coverBitmap = if (spec.useCover) repo.loadCover(clip.coverPath) else null,
-                    output = repo.outputFileFor(clipId),
-                    onProgress = { stage, value -> published.value = stage to value },
-                )
+                val mediaBitmaps = repo.loadMedia(spec.mediaUris)
+                val rendered = try {
+                    ClipRenderer(applicationContext).render(
+                        audioUri = Uri.parse(clip.sourceUri),
+                        spec = spec,
+                        coverBitmap = if (spec.useCover) repo.loadCover(clip.coverPath) else null,
+                        mediaBitmaps = mediaBitmaps,
+                        output = repo.outputFileFor(clipId),
+                        onProgress = { stage, value -> published.value = stage to value },
+                    )
+                } finally {
+                    mediaBitmaps.forEach { runCatching { it.recycle() } }
+                }
                 repo.markReady(
                     id = clipId,
                     file = rendered.file,
@@ -117,6 +127,19 @@ class RenderWorker(
         RenderStage.Analysing -> "Finding the beat"
         RenderStage.Rendering -> "Painting frames"
         RenderStage.Finishing -> "Writing the video"
+    }
+
+    private fun foregroundInfo(id: Int, title: String): androidx.work.ForegroundInfo {
+        val notification = Notifications.ongoing(applicationContext, title, "Starting")
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            androidx.work.ForegroundInfo(
+                id,
+                notification,
+                android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+            )
+        } else {
+            androidx.work.ForegroundInfo(id, notification)
+        }
     }
 
     companion object {

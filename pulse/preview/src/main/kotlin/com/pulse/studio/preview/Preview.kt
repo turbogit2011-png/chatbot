@@ -51,21 +51,32 @@ object Preview {
             paletteId = options["palette"] ?: "neon",
             aspectId = options["aspect"] ?: "9:16",
             qualityId = options["quality"] ?: "540",
+            lookId = options["look"] ?: "auto",
+            lyricStyleId = options["lyricstyle"] ?: "auto",
             fps = options["fps"]?.toIntOrNull() ?: 30,
             title = options["title"] ?: title,
             artist = options["artist"] ?: "Pulse Studio",
+            lyrics = options["lyrics"]?.let { File(it).readText() } ?: "",
             seed = options["seed"]?.toLongOrNull() ?: 7L,
             endSeconds = options["seconds"]?.toFloatOrNull() ?: 0f,
         )
         val (width, height) = spec.aspect.sizeFor(spec.quality.shortSide)
         val cover = options["cover"]?.let { AwtImage(ImageIO.read(File(it))) }
+        val media = options["media"]?.let { path ->
+            File(path).listFiles()
+                ?.filter { it.extension.lowercase() in setOf("jpg", "jpeg", "png") }
+                ?.sortedBy { it.name }
+                ?.mapNotNull { runCatching { AwtImage(ImageIO.read(it)) }.getOrNull() }
+                .orEmpty()
+        }.orEmpty()
+        if (media.isNotEmpty()) println("loaded ${media.size} photos")
 
         if (stills != null) {
-            writeStills(features, spec, width, height, cover, File(stills))
+            writeStills(features, spec, width, height, cover, media, File(stills))
             return
         }
 
-        val director = Director(features, spec, width, height, cover)
+        val director = Director(features, spec, width, height, cover, media)
         val out = options["out"] ?: "build/preview.mp4"
         File(out).parentFile?.mkdirs()
 
@@ -123,17 +134,19 @@ object Preview {
         width: Int,
         height: Int,
         cover: AwtImage?,
+        media: List<AwtImage>,
         dir: File,
     ) {
         dir.mkdirs()
+        val at = System.getenv("PULSE_STILL_FRAME")?.toIntOrNull() ?: 150
         for (scene in Director.available()) {
             val styled = spec.copy(styleId = scene.id)
-            val director = Director(features, styled, width, height, cover)
+            val director = Director(features, styled, width, height, cover, media)
             val canvas = AwtCanvas(width, height)
-            for (frame in 0 until 150) director.renderFrame(canvas, frame)
+            for (frame in 0 until at) director.renderFrame(canvas, frame)
             canvas.save(File(dir, "${scene.id}.png"))
             canvas.dispose()
-            println("still ${scene.id} → ${File(dir, "${scene.id}.png")}")
+            println("still ${scene.id} -> ${File(dir, "${scene.id}.png")}")
         }
     }
 
